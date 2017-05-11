@@ -35,8 +35,8 @@ import com.ihsinformatics.util.DateTimeUtil;
  */
 public class SmsController {
 
-	private String serverAddress; // http://202.125.133.156/ihs/api/send_sms/
-	private String apiKey; // aWhzc21zOnVsNjJ6eDM=
+	private String serverAddress;
+	private String apiKey;
 	private boolean useSsl;
 
 	public SmsController(final String serverAddress, final String apiKey, boolean useSsl) {
@@ -64,9 +64,9 @@ public class SmsController {
 		content.append("project_id=" + projectId + "&");
 		String response = null;
 		if (useSsl) {
-			response = postInsecure(serverAddress, content.toString());
-		} else {
 			response = postSecure(serverAddress, content.toString());
+		} else {
+			response = postInsecure(serverAddress, content.toString());
 		}
 		return response;
 	}

@@ -12,12 +12,16 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications;
 
-import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 
+import org.joda.time.DateTime;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import com.ihsinformatics.gfatmnotifications.model.Encounter;
 import com.ihsinformatics.util.DatabaseUtil;
 
 /**
@@ -26,18 +30,43 @@ import com.ihsinformatics.util.DatabaseUtil;
  */
 public class SmsNotificationsJob implements Job {
 
+	private static final Logger log = Logger.getLogger(Class.class.getName());
 	private DatabaseUtil localDb;
+	private OpenMrsUtil openmrs;
 	private SmsController smsController;
 
-	private boolean filterDate = true;
-	private Date dateFrom;
-	private Date dateTo;
+	private DateTime dateFrom;
+	private DateTime dateTo;
 
+	public SmsNotificationsJob() {
+	}
+	
+	private void initialize(SmsNotificationsJob smsJob) {
+		setLocalDb(smsJob.getLocalDb());
+		setOpenmrs(smsJob.getOpenmrs());
+		setDateFrom(smsJob.getDateFrom());
+		setDateTo(smsJob.getDateTo());
+		setSmsController(smsJob.getSmsController());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
+		JobDataMap dataMap = context.getMergedJobDataMap();
+		SmsNotificationsJob smsJob = (SmsNotificationsJob) dataMap.get("smsJob");
+		initialize(smsJob);
+		dateFrom = dateFrom.withMonthOfYear(3);
+		sendFastSms(dateFrom, dateTo);
+	}
+
+	public static void main(String[] args) {
+	}
+	
+	private void sendFastSms(DateTime dateFrom, DateTime dateTo) {
+		int type = 0;
+		List<Encounter> encounters = getOpenmrs().getEncounters(dateFrom, dateTo, type);
 	}
 
 	public DatabaseUtil getLocalDb() {
@@ -48,27 +77,27 @@ public class SmsNotificationsJob implements Job {
 		this.localDb = localDb;
 	}
 
-	public boolean isFilterDate() {
-		return filterDate;
+	public OpenMrsUtil getOpenmrs() {
+		return openmrs;
 	}
 
-	public void setFilterDate(boolean filterDate) {
-		this.filterDate = filterDate;
+	public void setOpenmrs(OpenMrsUtil openmrs) {
+		this.openmrs = openmrs;
 	}
 
-	public Date getDateFrom() {
+	public DateTime getDateFrom() {
 		return dateFrom;
 	}
 
-	public void setDateFrom(Date dateFrom) {
+	public void setDateFrom(DateTime dateFrom) {
 		this.dateFrom = dateFrom;
 	}
 
-	public Date getDateTo() {
+	public DateTime getDateTo() {
 		return dateTo;
 	}
 
-	public void setDateTo(Date dateTo) {
+	public void setDateTo(DateTime dateTo) {
 		this.dateTo = dateTo;
 	}
 

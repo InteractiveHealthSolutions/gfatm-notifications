@@ -10,23 +10,31 @@ You can also access the license on the internet at the address: http://www.gnu.o
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
  */
 
-package com.ihsinformatics.gfatmnotifications;
+package com.ihsinformatics.gfatmnotifications.model;
+
 
 /**
  * @author owais.hussain@ihsinformatics.com
  *
  */
-public final class Constants {
+public class EncounterType {
 
-	// Link to the SMS service API
-	public static final String SMS_SERVER_ADDRESS = "https://ccms.trg.com.pk/ihs/api/send_sms/";
-	// API Key
-	public static final String SMS_API_KEY = "aWhzc21zOnVsNjJ6eDM=";
-	// Whether or not to use SSL encryption
-	public static final boolean SMS_USE_SSL = false;
-	// How often to check for new SMS notifications in DB
-	public static final int SMS_SCHEDULE_INTERVAL_IN_HOURS = 1;
+	private Integer encounterTypeId;
+	private String name;
 
-	// How often to check for new Call notifications in DB
-	public static final int CALL_SCHEDULE_INTERVAL_IN_HOURS = 24;
+	public Integer getEncounterTypeId() {
+		return encounterTypeId;
+	}
+
+	public void setEncounterTypeId(Integer encounterTypeId) {
+		this.encounterTypeId = encounterTypeId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

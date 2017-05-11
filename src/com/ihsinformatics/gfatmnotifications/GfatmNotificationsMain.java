@@ -16,12 +16,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Calendar;
 import java.util.Properties;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import org.joda.time.DateTime;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -57,6 +57,7 @@ public class GfatmNotificationsMain {
 	public static void main(String[] args) {
 		GfatmNotificationsMain gfatmNotifiactions = new GfatmNotificationsMain();
 		try {
+			
 			gfatmNotifiactions.createSmsJob();
 			gfatmNotifiactions.createCallJob();
 		} catch (SchedulerException e) {
@@ -68,6 +69,17 @@ public class GfatmNotificationsMain {
 		System.out.println("*** Starting up " + title + " ***");
 		System.out.println("Reading properties...");
 		readProperties(propFilePath);
+		String url = props.getProperty("local.connection.url");
+		String driverName = props.getProperty("local.connection.driver_class");
+		String dbName = props.getProperty("local.connection.database");
+		String userName = props.getProperty("local.connection.username");
+		String password = props.getProperty("local.connection.password");
+		localDb = new DatabaseUtil(url, dbName, driverName, userName, password);
+		if (!localDb.tryConnection()) {
+			System.out
+					.println("Failed to connect with local database. Exiting");
+			System.exit(-1);
+		}
 	}
 
 	/**
@@ -100,41 +112,46 @@ public class GfatmNotificationsMain {
 	}
 
 	public void createSmsJob() throws SchedulerException {
-		Calendar from = Calendar.getInstance();
-		Calendar to = Calendar.getInstance();
+		DateTime from = new DateTime();
+		from.minusHours(Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS);
+		DateTime to = new DateTime();
 		smsScheduler = StdSchedulerFactory.getDefaultScheduler();
 		JobDetail smsJob = JobBuilder.newJob(SmsNotificationsJob.class)
-				.withIdentity("smsJob", "notificationsGroup").build();
+				.withIdentity("smsJob", "smsGroup").build();
 		SmsNotificationsJob smsJobObj = new SmsNotificationsJob();
+		smsJobObj.setLocalDb(localDb);
+		smsJobObj.setOpenmrs(new OpenMrsUtil(localDb));
+		smsJobObj.setDateFrom(from);
+		smsJobObj.setDateTo(to);
 		smsJobObj.setSmsController(new SmsController(
 				Constants.SMS_SERVER_ADDRESS, Constants.SMS_API_KEY,
 				Constants.SMS_USE_SSL));
-		smsJobObj.setLocalDb(localDb);
-		smsJobObj.setDateFrom(from.getTime());
-		smsJobObj.setDateTo(to.getTime());
 		smsJob.getJobDataMap().put("smsJob", smsJobObj);
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
-				.simpleSchedule().withIntervalInMinutes(60);
+				.simpleSchedule().withIntervalInMinutes(
+						Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS);
 		Trigger trigger = TriggerBuilder.newTrigger()
-				.withIdentity("smsTrigger", "notificationsGroup")
+				.withIdentity("smsTrigger", "smsGroup")
 				.withSchedule(scheduleBuilder).build();
 		smsScheduler.scheduleJob(smsJob, trigger);
 		smsScheduler.start();
 	}
 
 	public void createCallJob() throws SchedulerException {
-		Calendar from = Calendar.getInstance();
-		Calendar to = Calendar.getInstance();
+		DateTime from = new DateTime();
+		from.minusHours(Constants.CALL_SCHEDULE_INTERVAL_IN_HOURS);
+		DateTime to = new DateTime();
 		callScheduler = StdSchedulerFactory.getDefaultScheduler();
 		JobDetail callJob = JobBuilder.newJob(CallNotificationsJob.class)
-				.withIdentity("callJob", "notificationsGroup").build();
-		SmsNotificationsJob callJobObj = new SmsNotificationsJob();
+				.withIdentity("callJob", "callGroup").build();
+		CallNotificationsJob callJobObj = new CallNotificationsJob();
 		callJobObj.setLocalDb(localDb);
-		callJobObj.setDateFrom(from.getTime());
-		callJobObj.setDateTo(to.getTime());
+		callJobObj.setDateFrom(from);
+		callJobObj.setDateTo(to);
 		callJob.getJobDataMap().put("callJob", callJobObj);
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
-				.simpleSchedule().withIntervalInHours(24);
+				.simpleSchedule().withIntervalInHours(
+						Constants.CALL_SCHEDULE_INTERVAL_IN_HOURS);
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("callTrigger", "notificationsGroup")
 				.withSchedule(scheduleBuilder).build();

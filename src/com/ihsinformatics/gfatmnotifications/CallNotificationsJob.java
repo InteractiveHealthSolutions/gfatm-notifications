@@ -12,8 +12,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications;
 
-import java.util.Date;
-
+import org.joda.time.DateTime;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -27,12 +26,14 @@ import com.ihsinformatics.util.DatabaseUtil;
 public class CallNotificationsJob implements Job {
 
 	private DatabaseUtil localDb;
-	private DatabaseUtil remoteDb;
 
 	private boolean filterDate = true;
-	private Date dateFrom;
-	private Date dateTo;
+	private DateTime dateFrom;
+	private DateTime dateTo;
 
+	public CallNotificationsJob() {
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
@@ -50,14 +51,6 @@ public class CallNotificationsJob implements Job {
 		this.localDb = localDb;
 	}
 
-	public DatabaseUtil getRemoteDb() {
-		return remoteDb;
-	}
-
-	public void setRemoteDb(DatabaseUtil remoteDb) {
-		this.remoteDb = remoteDb;
-	}
-
 	public boolean isFilterDate() {
 		return filterDate;
 	}
@@ -66,19 +59,19 @@ public class CallNotificationsJob implements Job {
 		this.filterDate = filterDate;
 	}
 
-	public Date getDateFrom() {
+	public DateTime getDateFrom() {
 		return dateFrom;
 	}
 
-	public void setDateFrom(Date dateFrom) {
+	public void setDateFrom(DateTime dateFrom) {
 		this.dateFrom = dateFrom;
 	}
 
-	public Date getDateTo() {
+	public DateTime getDateTo() {
 		return dateTo;
 	}
 
-	public void setDateTo(Date dateTo) {
+	public void setDateTo(DateTime dateTo) {
 		this.dateTo = dateTo;
 	}
 }
