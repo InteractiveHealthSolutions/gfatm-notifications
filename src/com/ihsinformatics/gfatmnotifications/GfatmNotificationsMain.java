@@ -50,16 +50,17 @@ public class GfatmNotificationsMain {
 	private static DatabaseUtil localDb;
 	private Scheduler smsScheduler;
 	private Scheduler callScheduler;
+	private Scheduler emailScheduler;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		GfatmNotificationsMain gfatmNotifiactions = new GfatmNotificationsMain();
+		GfatmNotificationsMain gfatm = new GfatmNotificationsMain();
 		try {
-			
-			gfatmNotifiactions.createSmsJob();
-			gfatmNotifiactions.createCallJob();
+			gfatm.createSmsJob();
+			gfatm.createCallJob();
+			gfatm.createEmailJob();
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
@@ -157,5 +158,27 @@ public class GfatmNotificationsMain {
 				.withSchedule(scheduleBuilder).build();
 		callScheduler.scheduleJob(callJob, trigger);
 		callScheduler.start();
+	}
+
+	public void createEmailJob() throws SchedulerException {
+		DateTime from = new DateTime();
+		from.minusHours(Constants.EMAIL_SCHEDULE_INTERVAL_IN_HOURS);
+		DateTime to = new DateTime();
+		emailScheduler = StdSchedulerFactory.getDefaultScheduler();
+		JobDetail emailJob = JobBuilder.newJob(EmailNotificationsJob.class)
+				.withIdentity("emailJob", "emailGroup").build();
+		EmailNotificationsJob emailJobObj = new EmailNotificationsJob();
+		emailJobObj.setLocalDb(localDb);
+		emailJobObj.setDateFrom(from);
+		emailJobObj.setDateTo(to);
+		emailJob.getJobDataMap().put("emailJob", emailJobObj);
+		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
+				.simpleSchedule().withIntervalInHours(
+						Constants.EMAIL_SCHEDULE_INTERVAL_IN_HOURS);
+		Trigger trigger = TriggerBuilder.newTrigger()
+				.withIdentity("emailTrigger", "notificationsGroup")
+				.withSchedule(scheduleBuilder).build();
+		emailScheduler.scheduleJob(emailJob, trigger);
+		emailScheduler.start();
 	}
 }

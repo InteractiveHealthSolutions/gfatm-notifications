@@ -12,8 +12,10 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications;
 
-import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
@@ -60,7 +62,7 @@ public class OpenMrsUtil {
 			filter.append(" and e.encounter_type=" + type);
 		}
 		StringBuilder query = new StringBuilder();
-		query.append("select e.encounter_id, et.name as encounter_type, pi.identifier, concat(pn.given_name, ' ', pn.family_name) as patient_name, e.encounter_datetime, l.name as encounter_location, pc.value as patient_contact, la.value_reference as location_contact, pr.identifier as provider, upc.value as provider_contact, u.username, e.date_created, e.uuid from encounter as e ");
+		query.append("select e.encounter_id, et.name as encounter_type, pi.identifier, concat(pn.given_name, ' ', pn.family_name) as patient_name, e.encounter_datetime, l.description as encounter_location, pc.value as patient_contact, la.value_reference as location_contact, pr.identifier as provider, upc.value as provider_contact, u.username, e.date_created, e.uuid from encounter as e ");
 		query.append("inner join encounter_type as et on et.encounter_type_id = e.encounter_type ");
 		query.append("inner join patient as p on p.patient_id = e.patient_id ");
 		query.append("inner join patient_identifier as pi on pi.patient_id = p.patient_id and pi.identifier_type = 3 ");
@@ -70,35 +72,65 @@ public class OpenMrsUtil {
 		query.append("left outer join location_attribute as la on la.location_id = l.location_id and la.attribute_type_id = 2 ");
 		query.append("left outer join encounter_provider as ep on ep.encounter_id = e.encounter_id ");
 		query.append("left outer join provider as pr on pr.provider_id = ep.encounter_id ");
+		query.append("left outer join person_attribute as upc on upc.person_id = pr.person_id and upc.person_attribute_type_id = 8 ");
 		query.append("left outer join users as u on u.system_id = pr.identifier ");
-		query.append("where e.voided = false");
+		query.append("where e.voided = 0");
 		Object[][] data = db.getTableData(query.toString());
+		List<Encounter> encounters = new ArrayList<Encounter>();
 		for (Object[] row : data) {
 			int k = 0;
 			try {
 				int encounterId = Integer.parseInt(row[k++].toString());
-				String encounterType = row[k++].toString();
-				String patientId = row[k++].toString();
-				String patientName = row[k++].toString();
+				String encounterType = convertToString(row[k++]);
+				String patientId = convertToString(row[k++]);
+				String patientName = convertToString(row[k++]);
 				DateTime encounterDate = new DateTime(DateTimeUtil.getDateFromString(row[k++].toString(), DateTimeUtil.SQL_DATETIME));
-				String locationName = row[k++].toString();
-				String patientContact = row[k++].toString();
-				String locationContact = row[k++].toString();
-				String providerId = row[k++].toString();
-				String providerContact = row[k++].toString();
-				String user = row[k++].toString();
+				String locationName = convertToString(row[k++]);
+				String patientContact = convertToString(row[k++]);
+				String locationContact = convertToString(row[k++]);
+				String providerId = convertToString(row[k++]);
+				String providerContact = convertToString(row[k++]);
+				String user = convertToString(row[k++]);
 				DateTime dateCreated = new DateTime(DateTimeUtil.getDateFromString(row[k++].toString(), DateTimeUtil.SQL_DATETIME));
-				String uuid = row[k++].toString();
+				String uuid = convertToString(row[k++]);
 
 				Encounter encounter = new Encounter(encounterId, encounterType, encounterDate, patientId, providerId, locationName, uuid); 
-				
-			} catch (ParseException ex) {
+				encounter.setPatientName(patientName);
+				encounter.setPatientContact(patientContact);
+				encounter.setLocationContact(locationContact);
+				encounter.setProviderContact(providerContact);
+				encounter.setDateCreated(dateCreated);
+				encounter.setUsername(user);
+				encounters.add(encounter);
+			} catch (Exception ex) {
 				log.severe(ex.getMessage());
 			}
 		}
-		return null;
+		return encounters;
 	}
 
+	public Map<String, Object> getEncounterObservations(Encounter encounter) {
+		Map<String, Object> observations;
+		StringBuilder query = new StringBuilder();
+		query.append("select q.name as obs, concat(ifnull(a.name, ''), ifnull(o.value_boolean, ''), ifnull(o.value_datetime, ''), ifnull(o.value_text, ''), ifnull(o.value_numeric, '')) as value from obs as o ");
+		query.append("left outer join concept_name as q on q.concept_id = o.concept_id and q.locale = 'en' and q.concept_name_type = 'SHORT' and q.voided = 0 ");
+		query.append("left outer join concept_name as a on a.concept_id = o.value_coded and a.locale = 'en' and a.locale_preferred = 1 and a.voided = 0 ");
+		query.append("where o.voided = 0 and o.encounter_id = " + encounter.getEncounterId());
+		Object[][] data = db.getTableData(query.toString());
+		observations = new HashMap<String, Object>();
+		for (Object[] row : data) {
+			int k = 0;
+			try {
+				String observation = convertToString(row[k++]);
+				String value = convertToString(row[k++]);
+				observations.put(observation, value);
+			} catch (Exception ex) {
+				log.severe(ex.getMessage());
+			}
+		}
+		return observations;
+	}
+	
 	/**
 	 * Fetch full name of a person by Id
 	 * 
@@ -123,4 +155,7 @@ public class OpenMrsUtil {
 		this.db = db;
 	}
 
+	public String convertToString(Object obj) {
+		return obj == null ? null : obj.toString();
+	}
 }

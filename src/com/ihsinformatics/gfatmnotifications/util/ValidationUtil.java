@@ -19,12 +19,6 @@ package com.ihsinformatics.gfatmnotifications.util;
 public class ValidationUtil {
 
 	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-	}
-
-	/**
 	 * Checks whether given contact number is legitimate or not. Illegitimate
 	 * numbers contain same digits or digits in increasing or decreasing order
 	 * 

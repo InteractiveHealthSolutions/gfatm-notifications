@@ -23,10 +23,14 @@ public final class Constants {
 	// API Key
 	public static final String SMS_API_KEY = "aWhzc21zOnVsNjJ6eDM=";
 	// Whether or not to use SSL encryption
-	public static final boolean SMS_USE_SSL = false;
+	public static final boolean SMS_USE_SSL = true;
 	// How often to check for new SMS notifications in DB
 	public static final int SMS_SCHEDULE_INTERVAL_IN_HOURS = 1;
 
 	// How often to check for new Call notifications in DB
 	public static final int CALL_SCHEDULE_INTERVAL_IN_HOURS = 24;
+
+	// How often to check for new Email notifications in DB
+	public static final int EMAIL_SCHEDULE_INTERVAL_IN_HOURS = 4;
+	
 }
