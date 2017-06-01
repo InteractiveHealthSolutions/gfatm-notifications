@@ -33,4 +33,6 @@ public final class Constants {
 	// How often to check for new Email notifications in DB
 	public static final int EMAIL_SCHEDULE_INTERVAL_IN_HOURS = 4;
 	
+	// Integer identifiers of FAST types
+	public static final int[] FAST_ENCOUNTER_TYPE_IDS = {17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 88, 89, 90};
 }

@@ -68,15 +68,23 @@ public class SmsNotificationsJob implements Job {
 		SmsNotificationsJob smsJob = (SmsNotificationsJob) dataMap
 				.get("smsJob");
 		initialize(smsJob);
+		// TODO: Remove the line below on production
 		dateFrom = dateFrom.withMonthOfYear(3);
 		executeFastSms(dateFrom, dateTo);
+		// TODO: executeChildhoodTBSms(dateFrom, dateTo);
+		// TODO: executePetSms(dateFrom, dateTo);
+		// TODO: executeComorbiditiesSms(dateFrom, dateTo);
+		// TODO: executePmdtSms(dateFrom, dateTo);
 	}
 
 	private void executeFastSms(DateTime dateFrom, DateTime dateTo) {
-		int type = 0;
-		// Get all encounter
-		List<Encounter> encounters = getOpenmrs().getEncounters(dateFrom,
-				dateTo, type);
+		List<Encounter> encounters = new ArrayList<Encounter>();
+		for (int type : Constants.FAST_ENCOUNTER_TYPE_IDS) {
+			List<Encounter> temp = getOpenmrs().getEncounters(dateFrom, dateTo,
+					type);
+			encounters.addAll(temp);
+		}
+		// Some encounters will be removed
 		List<Encounter> toDelete = new ArrayList<Encounter>();
 		for (Encounter encounter : encounters) {
 			// Remove encounters with missing or fake mobile numbers
@@ -208,23 +216,35 @@ public class SmsNotificationsJob implements Job {
 	}
 
 	private void sendReferralFormSms(Encounter encounter) {
-		// Map<String, Object> observations = encounter.getObservations();
+		Map<String, Object> observations = encounter.getObservations();
 		Calendar dueDate = Calendar.getInstance();
 		String sendTo = encounter.getPatientContact();
 		if (sendTo == null) {
 			return;
 		}
-		StringBuilder message = new StringBuilder();
-		message.append("Dear " + encounter.getPatientName() + ", ");
-		message.append("your test result is ready for collection at "
-				+ encounter.getLocation() + ". ");
-		message.append("Please collect at your earliest convenience.");
-		try {
-			smsController.createSms(sendTo, message.toString(),
-					dueDate.getTime(), "FAST", "");
-			log.info(message.toString());
-		} catch (Exception e) {
-			log.warning(e.getMessage());
+		Object referredOrTransferred = observations.get("referral_transfer");
+		if (referredOrTransferred.equals("PATIENT REFERRED")
+				|| referredOrTransferred.equals("PATIENT TRANSFERRED OUT")) {
+
+			String referralSite = observations.get("referral_site").toString();
+
+			StringBuilder query = new StringBuilder();
+			query.append("select pc.value as primary_contact from person_attribute as pc ");
+			query.append("where pc.person_attribute_type_id = 8 and pc.person_id = (select person_id from person_attribute where person_attribute_type_id = 7 and value = (select location_id from location where name = '"
+					+ referralSite + "'))");
+
+			StringBuilder message = new StringBuilder();
+			message.append("Dear " + encounter.getPatientName() + ", ");
+			message.append("your test result is ready for collection at "
+					+ encounter.getLocation() + ". ");
+			message.append("Please collect at your earliest convenience.");
+			try {
+				smsController.createSms(sendTo, message.toString(),
+						dueDate.getTime(), "FAST", "");
+				log.info(message.toString());
+			} catch (Exception e) {
+				log.warning(e.getMessage());
+			}
 		}
 	}
 
