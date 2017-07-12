@@ -365,7 +365,7 @@ public class SmsNotificationsJob implements Job {
 
 	public boolean sendTreatmentInitiationSms(Encounter encounter, OpenMrsUtil ope, SmsController smsController) {
 		
-	
+	 
 		Map<String, Object> observation = encounter.getObservations();	
 		String rtnVisitDate = observation.get("return_visit_date").toString()
 				.toUpperCase();
