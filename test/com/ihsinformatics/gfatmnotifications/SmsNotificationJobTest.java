@@ -64,7 +64,7 @@ public class SmsNotificationJobTest {
 	public void tearDown() throws Exception {
 	}
 	
-	@Test
+	//@Test
 	public void sendTreatmentInitiationSmsTest() {
 	
 		try{
@@ -86,8 +86,29 @@ public class SmsNotificationJobTest {
 		}
 
 	}
-	
 	@Test
+	public void sendReferralFormSmsTest() {
+		
+		try{
+				openMrs = new OpenMrsUtil(localDb);
+				Encounter enc =openMrs.getEncounter(1144, 28);
+				Map<String, Object> observations = openMrs.getEncounterObservations(enc);
+				enc.setObservations(observations);
+				//System.out.println(enc.getEncounterType());
+				SmsController smsController = new SmsController(
+						Constants.SMS_SERVER_ADDRESS, Constants.SMS_API_KEY,
+						Constants.SMS_USE_SSL);
+				boolean response =sms.sendReferralFormSms(enc,openMrs,smsController);
+				System.out.println(response);
+				Assert.assertTrue("Error ", response);		
+		}
+		catch (Exception e) {
+			
+			Assert.fail("Exception: " + e.getMessage());
+		}
+	}
+	
+	//@Test
 	public void sendTreatmentFollowupSmsTest() {
 		
 		try{

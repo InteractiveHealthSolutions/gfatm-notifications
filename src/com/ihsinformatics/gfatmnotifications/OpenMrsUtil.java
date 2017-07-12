@@ -166,10 +166,29 @@ public class OpenMrsUtil {
 		return encounters;
 	}
 
-	public void getSiteSupervisorContact(Encounter encounter, int conceptId){
+	public String getSiteSupervisorContact(String referralSite){
 		
+		StringBuilder query = new StringBuilder();
+		query.append("select pa.value from person_attribute pa ");
+		query.append("inner join users u on u.person_id = pa.person_id and person_attribute_type_id = '7' ");
+		query.append("inner join user_role ur on ur.user_id=u.user_id and ur.role = 'field supervisor' ");
+		query.append("inner join location l on l.location_id = pa.value and l.name = '"+referralSite+"'");
+		System.out.println(query);
+		Object[][] data =  db.getTableData(query.toString());
 	
-			StringBuilder query = new StringBuilder();
+		String contact="";
+		for (Object[] row : data) {
+			int k = 0;
+			try {
+				contact = convertToString(row[k++]);
+			} catch (Exception ex) {
+				log.severe(ex.getMessage());
+			}
+		}
+		System.out.println(contact);
+		return contact;
+		
+		/*	StringBuilder query = new StringBuilder();
 			query.append("select value_text from obs ");
 			query.append("where encounter_id ="+encounter.getEncounterId()+" and concept_id = " +conceptId);
 			Object[][] data =  db.getTableData(query.toString());
@@ -186,8 +205,11 @@ public class OpenMrsUtil {
 					log.severe(ex.getMessage());
 				}
 			}
+	*/
 		
-	}public void check(){
+	}
+	
+	public void check(){
 		System.out.println("helloWorld");
 	}
 
