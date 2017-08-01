@@ -64,12 +64,12 @@ public class SmsNotificationJobTest {
 	public void tearDown() throws Exception {
 	}
 	
-	//@Test
+//	@Test
 	public void sendTreatmentInitiationSmsTest() {
 	
 		try{
 			openMrs = new OpenMrsUtil(localDb);
-			Encounter enc =openMrs.getEncounter(1128, 29);
+			Encounter enc =openMrs.getEncounter(4823, 29);
 			Map<String, Object> observations = openMrs.getEncounterObservations(enc);
 			enc.setObservations(observations);
 			//System.out.println(enc.getEncounterType());
@@ -86,12 +86,12 @@ public class SmsNotificationJobTest {
 		}
 
 	}
-	@Test
+	//@Test
 	public void sendReferralFormSmsTest() {
 		
-		try{
+		try{//Fri Jul 21 09:32:07 PKT 2017
 				openMrs = new OpenMrsUtil(localDb);
-				Encounter enc =openMrs.getEncounter(1144, 28);
+				Encounter enc =openMrs.getEncounter(5094, 28);
 				Map<String, Object> observations = openMrs.getEncounterObservations(enc);
 				enc.setObservations(observations);
 				//System.out.println(enc.getEncounterType());
@@ -108,12 +108,13 @@ public class SmsNotificationJobTest {
 		}
 	}
 	
+	
 	//@Test
 	public void sendTreatmentFollowupSmsTest() {
 		
 		try{
 				openMrs = new OpenMrsUtil(localDb);
-				Encounter enc =openMrs.getEncounter(983, 29);
+				Encounter enc =openMrs.getEncounter(4987, 29);
 				Map<String, Object> observations = openMrs.getEncounterObservations(enc);
 				enc.setObservations(observations);
 				//System.out.println(enc.getEncounterType());
@@ -128,6 +129,98 @@ public class SmsNotificationJobTest {
 			
 			Assert.fail("Exception: " + e.getMessage());
 		}
+	}
+	
+	//@Test
+	public void isTransferOrReferel(){
+		
+		try{
+			openMrs = new OpenMrsUtil(localDb);
+			Encounter enc =openMrs.getEncounter(985, 32);
+			Map<String, Object> observations = openMrs.getEncounterObservations(enc);
+			enc.setObservations(observations);
+			System.out.println(observations);
+			
+			boolean response =openMrs.isTransferOrReferel(enc);
+			System.out.println(response);
+				Assert.assertTrue("Error ", response);		
+		}
+		catch (Exception e) {
+			
+			Assert.fail("Exception: " + e.getMessage());
+		}
+	}
+	
+	
+	//@Test
+	public void getSiteSupervisorContact() {
+		
+		try{
+				openMrs = new OpenMrsUtil(localDb);
+				String response = openMrs.getSiteSupervisorContact("3");			
+				System.out.println(response);
+				Assert.assertTrue("Error ", true);		
+		}
+		catch (Exception e) {
+			
+			Assert.fail("Exception: " + e.getMessage());
+		}
+	}
+	
+	//@Test
+	/*
+	public void patientIsDeadTest() {
+		
+		try{
+				openMrs = new OpenMrsUtil(localDb);
+				Encounter enc =openMrs.getEncounter(2395, 32);
+				Map<String, Object> observations = openMrs.getEncounterObservations(enc);
+				enc.setObservations(observations);
+				System.out.println(observations);
+				
+				boolean response =openMrs.isDead(enc);
+				System.out.println(response);
+				Assert.assertTrue("Error ", response);		
+		}
+		catch (Exception e) {
+			
+			Assert.fail("Exception: " + e.getMessage());
+		}
+	}
+	
+	*/
+	
+	
+	//@Test
+	public void checkReferelPresentTest() {
+		
+		try{
+				openMrs = new OpenMrsUtil(localDb);
+				Encounter enc =openMrs.getEncounter(4987, 29);
+				//Map<String, Object> observations = openMrs.getEncounterObservations(enc);
+				//enc.setObservations(observations);
+				System.out.println(enc.getEncounterType());
+				String id = openMrs.checkReferelPresent(enc);
+				
+				
+				System.out.println(id);
+				Assert.assertTrue("Error ", true);		
+		}
+		catch (Exception e) {
+			
+			Assert.fail("Exception: " + e.getMessage());
+		}
+	}
+	
+	
+	@Test
+	public void sumSmsTest() {
+	
+		
+			openMrs = new OpenMrsUtil(localDb);
+			boolean response = openMrs.sum2number(2, 0);
+			
+			Assert.assertTrue("Error ", response);	
 	}
 	
 	/**

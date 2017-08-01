@@ -52,8 +52,9 @@ public class SmsControllerTest {
 	@Test
 	public final void testCreateSms() {
 		String sendTo = "03222808980";
-		String message = "Testing the API";
-		Date sendOn = new Date(2017,07,05,12,01,00);
+		String message = "Bhatti bhatti bhatti";
+		Date sendOn = new Date();
+		System.out.println(sendOn);
 		String projectId = "TEST";
 		String additionalInfo = null;
 		smsController = new SmsController(SERVER_ADDRESS, API_KEY, false);

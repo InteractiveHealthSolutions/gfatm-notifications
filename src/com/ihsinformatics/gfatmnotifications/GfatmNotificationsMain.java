@@ -33,6 +33,8 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import com.ihsinformatics.util.DatabaseUtil;
 
+import UI.SwingControl;
+
 /**
  * @author owais.hussain@ihsinformatics.com
  *
@@ -57,6 +59,8 @@ public class GfatmNotificationsMain {
 	 */
 	public static void main(String[] args) {
 		GfatmNotificationsMain gfatm = new GfatmNotificationsMain();
+		 SwingControl  swingControlDemo = new SwingControl();      
+	     swingControlDemo.showLabelDemo();
 		try {
 			gfatm.createSmsJob();
 	//		gfatm.createCallJob();
@@ -69,6 +73,7 @@ public class GfatmNotificationsMain {
 	public GfatmNotificationsMain() {
 		System.out.println("*** Starting up " + title + " ***");
 		System.out.println("Reading properties...");
+		System.out.println(propFilePath);
 		readProperties(propFilePath);
 		String url = props.getProperty("local.connection.url");
 		String driverName = props.getProperty("local.connection.driver_class");
@@ -132,7 +137,7 @@ public class GfatmNotificationsMain {
 		smsJob.getJobDataMap().put("smsJob", smsJobObj);
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
 				.simpleSchedule().withIntervalInMinutes(
-						Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS);
+						Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS).repeatForever();
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("smsTrigger", "smsGroup")
 				.withSchedule(scheduleBuilder).build();
@@ -147,17 +152,20 @@ public class GfatmNotificationsMain {
 		callScheduler = StdSchedulerFactory.getDefaultScheduler();
 		JobDetail callJob = JobBuilder.newJob(CallNotificationsJob.class)
 				.withIdentity("callJob", "callGroup").build();
-		CallNotificationsJob callJobObj = new CallNotificationsJob();
+		/*CallNotificationsJob callJobObj = new CallNotificationsJob();
 		callJobObj.setLocalDb(localDb);
 		callJobObj.setDateFrom(from);
 		callJobObj.setDateTo(to);
-		callJob.getJobDataMap().put("callJob", callJobObj);
+		callJob.getJobDataMap().put("callJob", callJobObj);*/
+		
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
 				.simpleSchedule().withIntervalInHours(
 						Constants.CALL_SCHEDULE_INTERVAL_IN_HOURS);
+		
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("callTrigger", "notificationsGroup")
 				.withSchedule(scheduleBuilder).build();
+		
 		callScheduler.scheduleJob(callJob, trigger);
 		callScheduler.start();
 	}

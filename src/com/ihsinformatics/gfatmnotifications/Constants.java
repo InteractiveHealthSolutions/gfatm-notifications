@@ -25,7 +25,7 @@ public final class Constants {
 	// Whether or not to use SSL encryption
 	public static final boolean SMS_USE_SSL = false;
 	// How often to check for new SMS notifications in DB
-	public static final int SMS_SCHEDULE_INTERVAL_IN_HOURS = 1;
+	public static final int SMS_SCHEDULE_INTERVAL_IN_HOURS = 5;
 
 	// How often to check for new Call notifications in DB
 	public static final int CALL_SCHEDULE_INTERVAL_IN_HOURS = 24;
@@ -35,6 +35,7 @@ public final class Constants {
 	
 	// Integer identifiers of FAST types
 	public static final int[] FAST_ENCOUNTER_TYPE_IDS = {17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 88, 89, 90};
+	//public static final int[] FAST_ENCOUNTER_TYPE_IDS = {30};
 
 	public static final int[] CHILDHOOD_TB_ENCOUNTER_TYPE_IDS = {51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 81, 82, 83, 84 ,85, 86, 87};
 
