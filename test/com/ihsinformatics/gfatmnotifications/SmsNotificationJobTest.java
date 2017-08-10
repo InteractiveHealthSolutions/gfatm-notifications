@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
@@ -64,12 +65,12 @@ public class SmsNotificationJobTest {
 	public void tearDown() throws Exception {
 	}
 	
-//	@Test
+	@Test
 	public void sendTreatmentInitiationSmsTest() {
 	
 		try{
 			openMrs = new OpenMrsUtil(localDb);
-			Encounter enc =openMrs.getEncounter(4823, 29);
+			Encounter enc =openMrs.getEncounter(5183, 29);
 			Map<String, Object> observations = openMrs.getEncounterObservations(enc);
 			enc.setObservations(observations);
 			//System.out.println(enc.getEncounterType());
@@ -86,12 +87,12 @@ public class SmsNotificationJobTest {
 		}
 
 	}
-	//@Test
+//@Test
 	public void sendReferralFormSmsTest() {
 		
 		try{//Fri Jul 21 09:32:07 PKT 2017
 				openMrs = new OpenMrsUtil(localDb);
-				Encounter enc =openMrs.getEncounter(5094, 28);
+				Encounter enc =openMrs.getEncounter(5184, 28);
 				Map<String, Object> observations = openMrs.getEncounterObservations(enc);
 				enc.setObservations(observations);
 				//System.out.println(enc.getEncounterType());
@@ -114,7 +115,7 @@ public class SmsNotificationJobTest {
 		
 		try{
 				openMrs = new OpenMrsUtil(localDb);
-				Encounter enc =openMrs.getEncounter(4987, 29);
+				Encounter enc =openMrs.getEncounter(5184, 29);
 				Map<String, Object> observations = openMrs.getEncounterObservations(enc);
 				enc.setObservations(observations);
 				//System.out.println(enc.getEncounterType());
@@ -157,7 +158,8 @@ public class SmsNotificationJobTest {
 		
 		try{
 				openMrs = new OpenMrsUtil(localDb);
-				String response = openMrs.getSiteSupervisorContact("3");			
+				ArrayList<String> response = openMrs.getSiteSupervisorContact("4");			
+				System.out.println(response.size());
 				System.out.println(response);
 				Assert.assertTrue("Error ", true);		
 		}

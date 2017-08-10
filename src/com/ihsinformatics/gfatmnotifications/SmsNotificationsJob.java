@@ -296,51 +296,47 @@ public class SmsNotificationsJob implements Job {
 	public boolean sendReferralFormSms(Encounter encounter,OpenMrsUtil open, SmsController smsController) {
 		Map<String, Object> observations = encounter.getObservations();
 		DateTime dueDate =encounter.getEncounterDate();
-		System.out.println(dueDate);
+		
 		dueDate = dueDate.plusDays(1);
 	//	dueDate = DateTime.now();
 		String sendTo;
-		System.out.println(dueDate);
-		System.out.println(dueDate.toDate());
+	
 		Object referredOrTransferred = observations.get("referral_transfer");
-		
+		System.out.println(encounter.getLocation());
+		System.out.println(observations);
 		if (referredOrTransferred.equals("PATIENT REFERRED")
 				|| referredOrTransferred.equals("PATIENT TRANSFERRED OUT")) {
 			String referralSite = observations.get("referral_site").toString();
 		
-			String contact = open.getSiteSupervisorContact(referralSite);
+			ArrayList<String> contact = open.getSiteSupervisorContact(referralSite);
 			String locName = open.getLocationNameById(referralSite);
 			//System.out.println(referralSite);
 
 			if(!locName.equals(""))
 				referralSite = locName;
 		//	System.out.println(referralSite);
-			if (contact.equals("")) {
+		
+			if (contact.size() < 1) {
 				return false;
 			}
-			sendTo = contact;
-		//	sendTo = "03222808980";
-			//System.out.println(referralSite);
-			
-			/*StringBuilder query = new StringBuilder();
-			query.append("select pc.value as primary_contact from person_attribute as pc ");
-			query.append("select pc.value as primary_contact from person_attribute as pc and pc.person_id = (select person_id from person_attribute where person_attribute_type_id = 7 and value = (select location_id from location where name = '"
-					+ referralSite + "'))");
-*/
-			StringBuilder message = new StringBuilder();
-			message.append("Dear " + referralSite+" "+ encounter.getPatientName() + ", ");
-			message.append("has been transfered/referred to your hospital");
-		//	message.append("Please collect at your earliest convenience.");
-		System.out.println("----------------------");
-			try {
-				sendTo = sendTo.replace("-", "");
-				smsController.createSms(sendTo, message.toString(),
-						dueDate.toDate(), "FAST", "");
+			for(int i = 0 ; i < contact.size();i++){
+				sendTo = contact.get(i);
+		
+				StringBuilder message = new StringBuilder();
+				message.append("Dear Site Supervisor, patient "+ encounter.getPatientId() + ", ");
+				message.append("has been transfered/referred to  "+ referralSite);
+				System.out.println("----------------------");
+				try {
+					sendTo = sendTo.replace("-", "");
+					smsController.createSms(sendTo, message.toString(),
+							dueDate.toDate(), "FAST", "");
+					
+					log.info(message.toString());
+				} catch (Exception e) {
+					log.warning(e.getMessage());
+					return false;
+				}
 				
-				log.info(message.toString());
-			} catch (Exception e) {
-				log.warning(e.getMessage());
-				return false;
 			}
 			return true;
 		}
@@ -362,7 +358,11 @@ public class SmsNotificationsJob implements Job {
 		String id = open.checkReferelPresent(encounter);
 		if(!id.equals("")){
 			Encounter ency = open.getEncounter(Integer.parseInt(id), 28);
-			locName = open.getLocationNameById(ency.getLocation());
+			observations = open.getEncounterObservations(ency);
+			ency.setObservations(observations);
+		
+			String referralSite = observations.get("referral_site").toString();
+			locName = open.getLocationNameById(referralSite);
 		}
 		else{
 			locName = open.getLocationNameById(encounter.getLocation());
@@ -423,9 +423,35 @@ public class SmsNotificationsJob implements Job {
 			dueDate.setTime(returnVisitDate);
 			dueDate.set(Calendar.DATE, dueDate.get(Calendar.DATE) - 1);
 			System.out.println(encounter.getLocation());
-			String locName = ope.getLocationNameById(encounter.getLocation());
+			Map<String, Object> observations = encounter.getObservations();
+			System.out.println(observation);
+			String locName="";
+			String id = ope.checkReferelPresent(encounter);
+			if(!id.equals("")){
+				System.out.println("-================");
+				System.out.println(id);
+				Encounter ency = ope.getEncounter(Integer.parseInt(id), 28);
+				observations = ope.getEncounterObservations(ency);
+				ency.setObservations(observations);
+				System.out.println(observation);
+				System.out.println("-================");
+				String referralSite = observations.get("referral_site").toString();
+				locName = ope.getLocationNameById(referralSite);
+			}
+			else{
+				locName = ope.getLocationNameById(encounter.getLocation());
+
+			}
+			
+			
+		
 		
 			System.out.println(locName);
+			
+			
+			
+			
+			
 			if(!locName.equals(null)||!locName.equals(""))
 				encounter.setLocation(locName);
 			

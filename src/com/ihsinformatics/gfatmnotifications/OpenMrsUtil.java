@@ -179,7 +179,7 @@ System.out.println(locationName);
 		return encounters;
 	}
 
-	public String getSiteSupervisorContact(String referralSite){
+	public ArrayList<String> getSiteSupervisorContact(String referralSite){
 		
 		StringBuilder query = new StringBuilder();
 		/*query.append("select pa.value from person_attribute pa ");
@@ -198,16 +198,17 @@ System.out.println(locationName);
 		System.out.println(query);
 		Object[][] data =  db.getTableData(query.toString());
 	
-		String contact="";
+		ArrayList<String> contact=new ArrayList();
 		for (Object[] row : data) {
 			int k = 0;
 			try {
-				contact = convertToString(row[k++]);
+				contact.add(convertToString(row[k++]));
 			} catch (Exception ex) {
 				log.severe(ex.getMessage());
 			}
+			
 		}
-		System.out.println(contact);
+	
 		return contact;
 		
 		/*	StringBuilder query = new StringBuilder();
