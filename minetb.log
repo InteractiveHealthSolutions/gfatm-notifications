@@ -1,2 +1,0 @@
-ERROR main org.openmrs.util.OpenmrsUtil - Unable to find properties filejava.io.FileNotFoundException: C:\Application Data\OpenMRS\openmrs-runtime.properties (The system cannot find the path specified)
- 

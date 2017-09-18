@@ -31,9 +31,8 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.ihsinformatics.gfatmnotifications.ui.SwingControl;
 import com.ihsinformatics.util.DatabaseUtil;
-
-import UI.SwingControl;
 
 /**
  * @author owais.hussain@ihsinformatics.com

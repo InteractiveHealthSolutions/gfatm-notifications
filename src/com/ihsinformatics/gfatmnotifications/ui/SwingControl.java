@@ -1,4 +1,4 @@
-package UI;
+package com.ihsinformatics.gfatmnotifications.ui;
 
 import java.awt.*;
 import java.awt.event.*;
