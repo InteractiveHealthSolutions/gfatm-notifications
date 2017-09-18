@@ -1,0 +1,522 @@
+[
+	{
+		"encounter_type_id" : 61,
+		"name" : "Childhood TB-AFB Smear Test Order"
+	},
+	{
+		"encounter_type_id" : 82,
+		"name" : "Childhood TB-AFB Smear Test Result"
+	},
+	{
+		"encounter_type_id" : 70,
+		"name" : "Childhood TB-Antibiotic Trial Followup"
+	},
+	{
+		"encounter_type_id" : 55,
+		"name" : "Childhood TB-Contact Registry"
+	},
+	{
+		"encounter_type_id" : 64,
+		"name" : "Childhood TB-CT Scan Test Order"
+	},
+	{
+		"encounter_type_id" : 85,
+		"name" : "Childhood TB-CT Scan Test Result"
+	},
+	{
+		"encounter_type_id" : 60,
+		"name" : "Childhood TB-CXR Screening Test Order"
+	},
+	{
+		"encounter_type_id" : 81,
+		"name" : "Childhood TB-CXR Screening Test Result"
+	},
+	{
+		"encounter_type_id" : 71,
+		"name" : "Childhood TB-Drug Dispersal Form"
+	},
+	{
+		"encounter_type_id" : 62,
+		"name" : "Childhood TB-DST Culture Test Order"
+	},
+	{
+		"encounter_type_id" : 83,
+		"name" : "Childhood TB-DST Culture Test Result"
+	},
+	{
+		"encounter_type_id" : 74,
+		"name" : "Childhood TB-End of Followup"
+	},
+	{
+		"encounter_type_id" : 58,
+		"name" : "Childhood TB-GXP Specimen Collection"
+	},
+	{
+		"encounter_type_id" : 59,
+		"name" : "Childhood TB-GXP Test"
+	},
+	{
+		"encounter_type_id" : 66,
+		"name" : "Childhood TB-Histopathology Test Order"
+	},
+	{
+		"encounter_type_id" : 87,
+		"name" : "Childhood TB-Histopathology Test Result"
+	},
+	{
+		"encounter_type_id" : 69,
+		"name" : "Childhood TB-IPT Followup"
+	},
+	{
+		"encounter_type_id" : 65,
+		"name" : "Childhood TB-Mantoux Test Order"
+	},
+	{
+		"encounter_type_id" : 86,
+		"name" : "Childhood TB-Mantoux Test Result"
+	},
+	{
+		"encounter_type_id" : 73,
+		"name" : "Childhood TB-Missed Visit Followup"
+	},
+	{
+		"encounter_type_id" : 53,
+		"name" : "Childhood TB-Patient Registration"
+	},
+	{
+		"encounter_type_id" : 56,
+		"name" : "Childhood TB-PPA Score"
+	},
+	{
+		"encounter_type_id" : 54,
+		"name" : "Childhood TB-Presumptive Case Confirmation"
+	},
+	{
+		"encounter_type_id" : 72,
+		"name" : "Childhood TB-Referral"
+	},
+	{
+		"encounter_type_id" : 52,
+		"name" : "Childhood TB-Screening Location"
+	},
+	{
+		"encounter_type_id" : 68,
+		"name" : "Childhood TB-TB Treatment Followup"
+	},
+	{
+		"encounter_type_id" : 57,
+		"name" : "Childhood TB-Test Indication"
+	},
+	{
+		"encounter_type_id" : 67,
+		"name" : "Childhood TB-Treatment Initiation"
+	},
+	{
+		"encounter_type_id" : 63,
+		"name" : "Childhood TB-Ultrasound Test Order"
+	},
+	{
+		"encounter_type_id" : 84,
+		"name" : "Childhood TB-Ultrasound Test Result"
+	},
+	{
+		"encounter_type_id" : 51,
+		"name" : "Childhood TB-Verbal Screening"
+	},
+	{
+		"encounter_type_id" : 48,
+		"name" : "Comorbidities-Assessment Form Mental Health"
+	},
+	{
+		"encounter_type_id" : 36,
+		"name" : "Comorbidities-Blood Sugar Test Order"
+	},
+	{
+		"encounter_type_id" : 77,
+		"name" : "Comorbidities-Blood Sugar Test Result"
+	},
+	{
+		"encounter_type_id" : 40,
+		"name" : "Comorbidities-Creatinine Test Order"
+	},
+	{
+		"encounter_type_id" : 75,
+		"name" : "Comorbidities-Creatinine Test Result"
+	},
+	{
+		"encounter_type_id" : 44,
+		"name" : "Comorbidities-Diabetes Education"
+	},
+	{
+		"encounter_type_id" : 46,
+		"name" : "Comorbidities-Diabetes Eye Screening"
+	},
+	{
+		"encounter_type_id" : 45,
+		"name" : "Comorbidities-Diabetes Foot Screening"
+	},
+	{
+		"encounter_type_id" : 34,
+		"name" : "Comorbidities-Diabetes Mellitus Screening"
+	},
+	{
+		"encounter_type_id" : 43,
+		"name" : "Comorbidities-Diabetes Treatment Followup"
+	},
+	{
+		"encounter_type_id" : 38,
+		"name" : "Comorbidities-Diabetes Treatment Initiation"
+	},
+	{
+		"encounter_type_id" : 50,
+		"name" : "Comorbidities-Drug Disbursement"
+	},
+	{
+		"encounter_type_id" : 49,
+		"name" : "Comorbidities-End of Treatment Mental Health"
+	},
+	{
+		"encounter_type_id" : 35,
+		"name" : "Comorbidities-HbA1C Test Order"
+	},
+	{
+		"encounter_type_id" : 76,
+		"name" : "Comorbidities-HbA1C Test Result"
+	},
+	{
+		"encounter_type_id" : 41,
+		"name" : "Comorbidities-Lipid Test Order"
+	},
+	{
+		"encounter_type_id" : 79,
+		"name" : "Comorbidities-Lipid Test Result"
+	},
+	{
+		"encounter_type_id" : 16,
+		"name" : "Comorbidities-Mental Health Screening"
+	},
+	{
+		"encounter_type_id" : 33,
+		"name" : "Comorbidities-Patient Information"
+	},
+	{
+		"encounter_type_id" : 47,
+		"name" : "Comorbidities-Treatment Followup Mental Health"
+	},
+	{
+		"encounter_type_id" : 39,
+		"name" : "Comorbidities-Urine Detailed Report Order"
+	},
+	{
+		"encounter_type_id" : 78,
+		"name" : "Comorbidities-Urine Detailed Report Result"
+	},
+	{
+		"encounter_type_id" : 42,
+		"name" : "Comorbidities-Urine Microalbumin Test Order"
+	},
+	{
+		"encounter_type_id" : 80,
+		"name" : "Comorbidities-Urine Microalbumin Test Result"
+	},
+	{
+		"encounter_type_id" : 37,
+		"name" : "Comorbidities-Vitals"
+	},
+	{
+		"encounter_type_id" : 25,
+		"name" : "FAST-AFB Smear Test Order"
+	},
+	{
+		"encounter_type_id" : 88,
+		"name" : "FAST-AFB Smear Test Result"
+	},
+	{
+		"encounter_type_id" : 27,
+		"name" : "FAST-Contact Registry"
+	},
+	{
+		"encounter_type_id" : 26,
+		"name" : "FAST-DST Culture Test Order"
+	},
+	{
+		"encounter_type_id" : 90,
+		"name" : "FAST-DST Culture Test Result"
+	},
+	{
+		"encounter_type_id" : 32,
+		"name" : "FAST-End of Followup"
+	},
+	{
+		"encounter_type_id" : 22,
+		"name" : "FAST-GXP Specimen Collection"
+	},
+	{
+		"encounter_type_id" : 23,
+		"name" : "FAST-GXP Test"
+	},
+	{
+		"encounter_type_id" : 31,
+		"name" : "FAST-Missed Visit Followup"
+	},
+	{
+		"encounter_type_id" : 20,
+		"name" : "FAST-Patient Location"
+	},
+	{
+		"encounter_type_id" : 19,
+		"name" : "FAST-Presumptive"
+	},
+	{
+		"encounter_type_id" : 21,
+		"name" : "FAST-Presumptive Information"
+	},
+	{
+		"encounter_type_id" : 18,
+		"name" : "FAST-Prompt"
+	},
+	{
+		"encounter_type_id" : 28,
+		"name" : "FAST-Referral Form"
+	},
+	{
+		"encounter_type_id" : 17,
+		"name" : "FAST-Screening"
+	},
+	{
+		"encounter_type_id" : 24,
+		"name" : "FAST-Screening CXR Test Order"
+	},
+	{
+		"encounter_type_id" : 89,
+		"name" : "FAST-Screening CXR Test Result"
+	},
+	{
+		"encounter_type_id" : 30,
+		"name" : "FAST-Treatment Followup"
+	},
+	{
+		"encounter_type_id" : 29,
+		"name" : "FAST-Treatment Initiation"
+	},
+	{
+		"encounter_type_id" : 12,
+		"name" : "PET-Adverse Events"
+	},
+	{
+		"encounter_type_id" : 5,
+		"name" : "PET-Baseline Counselling"
+	},
+	{
+		"encounter_type_id" : 6,
+		"name" : "PET-Baseline Screening"
+	},
+	{
+		"encounter_type_id" : 8,
+		"name" : "PET-Clinician Contact Screening"
+	},
+	{
+		"encounter_type_id" : 10,
+		"name" : "PET-Clinician Follow-up"
+	},
+	{
+		"encounter_type_id" : 1,
+		"name" : "PET-Contact Registry"
+	},
+	{
+		"encounter_type_id" : 11,
+		"name" : "PET-Counselling Follow-up"
+	},
+	{
+		"encounter_type_id" : 14,
+		"name" : "PET-End of Follow-up"
+	},
+	{
+		"encounter_type_id" : 13,
+		"name" : "PET-Incentive Disbursement"
+	},
+	{
+		"encounter_type_id" : 4,
+		"name" : "PET-Index Patient Registration"
+	},
+	{
+		"encounter_type_id" : 3,
+		"name" : "PET-Infection Treatment Eligibility"
+	},
+	{
+		"encounter_type_id" : 9,
+		"name" : "PET-Monthly Home Follow-up"
+	},
+	{
+		"encounter_type_id" : 15,
+		"name" : "PET-Socioeconomic Data"
+	},
+	{
+		"encounter_type_id" : 2,
+		"name" : "PET-Treatment Adherence"
+	},
+	{
+		"encounter_type_id" : 7,
+		"name" : "PET-Treatment Initiation"
+	},
+	{
+		"encounter_type_id" : 118,
+		"name" : "PMDT-Additional Test Result"
+	},
+	{
+		"encounter_type_id" : 113,
+		"name" : "PMDT-Adverse Event"
+	},
+	{
+		"encounter_type_id" : 124,
+		"name" : "PMDT-AKUADS"
+	},
+	{
+		"encounter_type_id" : 120,
+		"name" : "PMDT-Audiometry Test Result"
+	},
+	{
+		"encounter_type_id" : 114,
+		"name" : "PMDT-Bacteriology Result"
+	},
+	{
+		"encounter_type_id" : 103,
+		"name" : "PMDT-Baseline Assessment"
+	},
+	{
+		"encounter_type_id" : 125,
+		"name" : "PMDT-Baseline Counselling"
+	},
+	{
+		"encounter_type_id" : 92,
+		"name" : "PMDT-Basic Management Unit Visit"
+	},
+	{
+		"encounter_type_id" : 116,
+		"name" : "PMDT-Biochemistry Result"
+	},
+	{
+		"encounter_type_id" : 127,
+		"name" : "PMDT-Clinician Contact Screening"
+	},
+	{
+		"encounter_type_id" : 101,
+		"name" : "PMDT-Contact Baseline Screening"
+	},
+	{
+		"encounter_type_id" : 100,
+		"name" : "PMDT-Contact Registry"
+	},
+	{
+		"encounter_type_id" : 128,
+		"name" : "PMDT-Contact Screening Result"
+	},
+	{
+		"encounter_type_id" : 97,
+		"name" : "PMDT-Conveyance Allowance"
+	},
+	{
+		"encounter_type_id" : 91,
+		"name" : "PMDT-Daily Treatment Monitoring"
+	},
+	{
+		"encounter_type_id" : 123,
+		"name" : "PMDT-Drug Dispersal"
+	},
+	{
+		"encounter_type_id" : 121,
+		"name" : "PMDT-ECG Result"
+	},
+	{
+		"encounter_type_id" : 109,
+		"name" : "PMDT-End of Treatment Outcome"
+	},
+	{
+		"encounter_type_id" : 108,
+		"name" : "PMDT-Follow-up Assessment"
+	},
+	{
+		"encounter_type_id" : 126,
+		"name" : "PMDT-Follow-up Counselling"
+	},
+	{
+		"encounter_type_id" : 115,
+		"name" : "PMDT-Hematology Result"
+	},
+	{
+		"encounter_type_id" : 111,
+		"name" : "PMDT-Hospital Admission Notification"
+	},
+	{
+		"encounter_type_id" : 112,
+		"name" : "PMDT-Hospital Discharge Summary"
+	},
+	{
+		"encounter_type_id" : 105,
+		"name" : "PMDT-Medical Review Decision"
+	},
+	{
+		"encounter_type_id" : 107,
+		"name" : "PMDT-Medication Log"
+	},
+	{
+		"encounter_type_id" : 102,
+		"name" : "PMDT-Monthly Treatment Completeness"
+	},
+	{
+		"encounter_type_id" : 98,
+		"name" : "PMDT-Nutritional Support"
+	},
+	{
+		"encounter_type_id" : 99,
+		"name" : "PMDT-Nutritional Support Receiving"
+	},
+	{
+		"encounter_type_id" : 93,
+		"name" : "PMDT-Patient Assignment"
+	},
+	{
+		"encounter_type_id" : 94,
+		"name" : "PMDT-Patient Disscociation"
+	},
+	{
+		"encounter_type_id" : 122,
+		"name" : "PMDT-Performance Status"
+	},
+	{
+		"encounter_type_id" : 110,
+		"name" : "PMDT-Post Treatment Outcome"
+	},
+	{
+		"encounter_type_id" : 119,
+		"name" : "PMDT-Radiology Test Result"
+	},
+	{
+		"encounter_type_id" : 129,
+		"name" : "PMDT-Referral"
+	},
+	{
+		"encounter_type_id" : 117,
+		"name" : "PMDT-Serology Result"
+	},
+	{
+		"encounter_type_id" : 96,
+		"name" : "PMDT-Social Support Food Basket"
+	},
+	{
+		"encounter_type_id" : 130,
+		"name" : "PMDT-Transfer-in Details"
+	},
+	{
+		"encounter_type_id" : 95,
+		"name" : "PMDT-Treatment Coordinator Monitoring"
+	},
+	{
+		"encounter_type_id" : 106,
+		"name" : "PMDT-Treatment Initiation"
+	},
+	{
+		"encounter_type_id" : 104,
+		"name" : "PMDT-Treatment Registration"
+	}
+]
