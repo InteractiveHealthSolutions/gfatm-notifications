@@ -21,7 +21,22 @@ import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
 
+import org.apache.http.Header;
+import org.apache.http.auth.AuthenticationException;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.DateTime;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.openmrs.Patient;
+import org.openmrs.module.ModuleMustStartException;
+import org.openmrs.util.DatabaseUpdateException;
+import org.openmrs.util.InputRequiredException;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -31,6 +46,8 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ihsinformatics.gfatmnotifications.ui.SwingControl;
 import com.ihsinformatics.util.DatabaseUtil;
 
@@ -38,9 +55,11 @@ import com.ihsinformatics.util.DatabaseUtil;
  * @author owais.hussain@ihsinformatics.com
  *
  */
+@SuppressWarnings("deprecation")
 public class GfatmNotificationsMain {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
+	private static final String BASE_URL = "http://124.29.207.74:9902/openmrs/ws/rest/v1";
 	private static final String userHome = System.getProperty("user.home")
 			+ System.getProperty("file.separator") + "gfatm";
 	private static String propFilePath = userHome
@@ -55,18 +74,73 @@ public class GfatmNotificationsMain {
 
 	/**
 	 * @param args
+	 * @throws InputRequiredException
+	 * @throws DatabaseUpdateException
+	 * @throws ModuleMustStartException
 	 */
 	public static void main(String[] args) {
+		String rest = "/patient/?q=Z2TS5-1&v=full";
+		try {
+			String result = get(rest, "username", "password");
+			JSONObject jsonObj = new JSONObject(result);
+			String object = jsonObj.get("results").toString();
+			JSONArray results = new JSONArray(object);
+			JSONObject jsonPatient = results.getJSONObject(0);
+			GsonBuilder builder = new GsonBuilder();
+			Gson gson = builder.create();
+			Patient patient = gson.fromJson(jsonPatient.toString(),
+					Patient.class);
+			System.out.println(patient.getUuid());
+			System.out.println(patient.getPerson().getGivenName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Notifications part
 		GfatmNotificationsMain gfatm = new GfatmNotificationsMain();
-		 SwingControl  swingControlDemo = new SwingControl();      
-	     swingControlDemo.showLabelDemo();
+		SwingControl swingControlDemo = new SwingControl();
+		swingControlDemo.showLabelDemo();
 		try {
 			gfatm.createSmsJob();
-	//		gfatm.createCallJob();
-		//	gfatm.createEmailJob();
+			// gfatm.createCallJob();
+			// gfatm.createEmailJob();
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
+
+	}
+
+	/**
+	 * Executes HTTP GET request and returns the response
+	 * 
+	 * @param restPart
+	 *            only the part after BASE_URL is required here, e.g.
+	 *            /rest/countries
+	 * @param echo
+	 * @return
+	 * @throws AuthenticationException
+	 * @throws ClientProtocolException
+	 */
+	public static String get(String query, String username, String password)
+			throws AuthenticationException, ClientProtocolException,
+			IOException {
+		String response = "";
+		DefaultHttpClient httpClient = new DefaultHttpClient();
+		try {
+			String URL = BASE_URL + query;
+			HttpGet httpGet = new HttpGet(URL);
+			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+					username, password);
+			BasicScheme scheme = new BasicScheme();
+			Header authorizationHeader = scheme.authenticate(credentials,
+					httpGet);
+			httpGet.setHeader(authorizationHeader);
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			response = httpClient.execute(httpGet, responseHandler);
+		} finally {
+			httpClient.getConnectionManager().shutdown();
+			httpClient.close();
+		}
+		return response;
 	}
 
 	public GfatmNotificationsMain() {
@@ -79,7 +153,8 @@ public class GfatmNotificationsMain {
 		String dbName = props.getProperty("local.connection.database");
 		String userName = props.getProperty("local.connection.username");
 		String password = props.getProperty("local.connection.password");
-		System.out.println(url+" "+dbName+" "+driverName+" "+userName+" "+password);
+		System.out.println(url + " " + dbName + " " + driverName + " "
+				+ userName + " " + password);
 		localDb = new DatabaseUtil(url, dbName, driverName, userName, password);
 		if (!localDb.tryConnection()) {
 			System.out
@@ -92,7 +167,7 @@ public class GfatmNotificationsMain {
 	 * Read properties from properties file
 	 */
 	public void readProperties(String propertiesFile) {
-		
+
 		InputStream propFile;
 		try {
 			if (!(new File(userHome).exists())) {
@@ -135,8 +210,9 @@ public class GfatmNotificationsMain {
 				Constants.SMS_USE_SSL));
 		smsJob.getJobDataMap().put("smsJob", smsJobObj);
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
-				.simpleSchedule().withIntervalInMinutes(
-						Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS).repeatForever();
+				.simpleSchedule()
+				.withIntervalInMinutes(Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS)
+				.repeatForever();
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("smsTrigger", "smsGroup")
 				.withSchedule(scheduleBuilder).build();
@@ -151,20 +227,21 @@ public class GfatmNotificationsMain {
 		callScheduler = StdSchedulerFactory.getDefaultScheduler();
 		JobDetail callJob = JobBuilder.newJob(CallNotificationsJob.class)
 				.withIdentity("callJob", "callGroup").build();
-		/*CallNotificationsJob callJobObj = new CallNotificationsJob();
-		callJobObj.setLocalDb(localDb);
-		callJobObj.setDateFrom(from);
-		callJobObj.setDateTo(to);
-		callJob.getJobDataMap().put("callJob", callJobObj);*/
-		
+		/*
+		 * CallNotificationsJob callJobObj = new CallNotificationsJob();
+		 * callJobObj.setLocalDb(localDb); callJobObj.setDateFrom(from);
+		 * callJobObj.setDateTo(to); callJob.getJobDataMap().put("callJob",
+		 * callJobObj);
+		 */
+
 		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder
 				.simpleSchedule().withIntervalInHours(
 						Constants.CALL_SCHEDULE_INTERVAL_IN_HOURS);
-		
+
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("callTrigger", "notificationsGroup")
 				.withSchedule(scheduleBuilder).build();
-		
+
 		callScheduler.scheduleJob(callJob, trigger);
 		callScheduler.start();
 	}
