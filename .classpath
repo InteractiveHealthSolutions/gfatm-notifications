@@ -117,6 +117,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/openmrs-api-1.11.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

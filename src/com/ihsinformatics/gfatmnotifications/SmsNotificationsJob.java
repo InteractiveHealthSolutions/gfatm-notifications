@@ -12,8 +12,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,15 +22,14 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.json.JSONObject;
-import org.junit.Assert;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.ihsinformatics.gfatmnotifications.model.Encounter;
+import com.ihsinformatics.gfatmnotifications.model.Location;
+import com.ihsinformatics.gfatmnotifications.model.Patient;
 import com.ihsinformatics.gfatmnotifications.util.ValidationUtil;
 import com.ihsinformatics.util.DatabaseUtil;
 import com.ihsinformatics.util.DateTimeUtil;
@@ -73,61 +70,62 @@ public class SmsNotificationsJob implements Job {
 		JobDataMap dataMap = context.getMergedJobDataMap();
 		SmsNotificationsJob smsJob = (SmsNotificationsJob) dataMap
 				.get("smsJob");
-		//dateFrom = new DateTime();
-		//dateTo = new DateTime();
-		//smsJob.setDateFrom(dateFrom);
-		//smsJob.setDateTo(dateTo);
+		// dateFrom = new DateTime();
+		// dateTo = new DateTime();
+		// smsJob.setDateFrom(dateFrom);
+		// smsJob.setDateTo(dateTo);
 		initialize(smsJob);
 		// TODO: Remove the line below on production
-		
 		dateFrom = dateFrom.withMonthOfYear(6);
-		System.out.println(dateFrom+" "+dateTo);
-		
+		System.out.println(dateFrom + " " + dateTo);
+
 		executeFastSms(dateFrom, dateTo);
-		
+
 		// TODO: executeChildhoodTBSms(dateFrom, dateTo);
 		// TODO: executePetSms(dateFrom, dateTo);
 		// TODO: executeComorbiditiesSms(dateFrom, dateTo);
 		// TODO: executePmdtSms(dateFrom, dateTo);
 	}
 
-	private void executeFastSms(DateTime dateFrom, DateTime dateTo)  {
+	private void executeFastSms(DateTime dateFrom, DateTime dateTo) {
 		List<Encounter> encounters = new ArrayList<Encounter>();
-		HashSet<Encounter>ecc = new HashSet();
+		HashSet<Encounter> ecc = new HashSet<Encounter>();
 		for (int type : Constants.FAST_ENCOUNTER_TYPE_IDS) {
 			List<Encounter> temp = getOpenmrs().getEncounters(dateFrom, dateTo,
 					type);
-			//ecc.addAll(temp);
+			// ecc.addAll(temp);
 			encounters.addAll(temp);
 		}
-		
-		
+
 		// Some encounters will be removed
 		List<Encounter> toDelete = new ArrayList<Encounter>();
 		for (Encounter encounter : encounters) {
 			// Remove encounters with missing or fake mobile numbers
-			
+
 			if (encounter.getPatientContact() == null) {
 				toDelete.add(encounter);
 			} else if (!ValidationUtil.isValidContactNumber(encounter
 					.getPatientContact())) {
 				toDelete.add(encounter);
 			}
-		
+
 		}
-	
+
 		encounters.removeAll(toDelete);
-		
 		// Get observations against each encounter fetched
 		for (Encounter encounter : encounters) {
-			/*Map<String, Object> observations = getOpenmrs()
-					.getEncounterObservations(encounter);
-			encounter.setObservations(observations);*/
-			//System.out.println(encounter.getEncounterId() +" "+ encounter.getEncounterType());
+			/*
+			 * Map<String, Object> observations = getOpenmrs()
+			 * .getEncounterObservations(encounter);
+			 * encounter.setObservations(observations);
+			 */
+			// System.out.println(encounter.getEncounterId() +" "+
+			// encounter.getEncounterType());
 
-			Map<String, Object> observations = getObservations(encounter);;
+			Map<String, Object> observations = getObservations(encounter);
+			;
 			encounter.setObservations(observations);
-		//	System.out.println(observations);
+			// System.out.println(observations);
 			switch (encounter.getEncounterType()) {
 			case "FAST-AFB Smear Test Order":
 				break;
@@ -144,7 +142,7 @@ public class SmsNotificationsJob implements Job {
 			case "FAST-GXP Specimen Collection":
 				break;
 			case "FAST-GXP Test":
-				//sendGeneXpertSms(encounter);
+				// sendGeneXpertSms(encounter);
 				break;
 			case "FAST-Missed Visit Followup":
 				break;
@@ -157,7 +155,7 @@ public class SmsNotificationsJob implements Job {
 			case "FAST-Prompt":
 				break;
 			case "FAST-Referral Form":
-				sendReferralFormSms(encounter,openmrs,smsController);
+				sendReferralFormSms(encounter, smsController);
 				break;
 			case "FAST-Screening":
 				break;
@@ -166,25 +164,24 @@ public class SmsNotificationsJob implements Job {
 			case "FAST-Screening CXR Test Result":
 				break;
 			case "FAST-Treatment Followup":
-				sendTreatmentFollowupSms(encounter,openmrs,smsController);
+				sendTreatmentFollowupSms(encounter, smsController);
 				break;
 			case "FAST-Treatment Initiation":
-				sendTreatmentInitiationSms(encounter,openmrs,smsController);
+				sendTreatmentInitiationSms(encounter, smsController);
 				break;
 			default:
 				// Do nothing
 			}
 		}
 	}
-	
-	public Map<String, Object> getObservations(Encounter encounter){
-		
-	
+
+	public Map<String, Object> getObservations(Encounter encounter) {
+
 		Map<String, Object> observations = getOpenmrs()
 				.getEncounterObservations(encounter);
 		return observations;
 	}
-	
+
 	private void executeChildhoodTBSms(DateTime dateFrom, DateTime dateTo) {
 		List<Encounter> encounters = new ArrayList<Encounter>();
 		for (int type : Constants.CHILDHOOD_TB_ENCOUNTER_TYPE_IDS) {
@@ -196,14 +193,14 @@ public class SmsNotificationsJob implements Job {
 		List<Encounter> toDelete = new ArrayList<Encounter>();
 		for (Encounter encounter : encounters) {
 			// Remove encounters with missing or fake mobile numbers
-			
+
 			if (encounter.getPatientContact() == null) {
 				toDelete.add(encounter);
 			} else if (!ValidationUtil.isValidContactNumber(encounter
 					.getPatientContact())) {
 				toDelete.add(encounter);
 			}
-		
+
 		}
 		encounters.removeAll(toDelete);
 		// Get observations against each encounter fetched
@@ -211,15 +208,15 @@ public class SmsNotificationsJob implements Job {
 			Map<String, Object> observations = getOpenmrs()
 					.getEncounterObservations(encounter);
 			encounter.setObservations(observations);
-		//	System.out.println(observations);
-			//System.out.println(encounter.getEncounterType());
+			// System.out.println(observations);
+			// System.out.println(encounter.getEncounterType());
 			switch (encounter.getEncounterType()) {
-		
+
 			case "FAST-Treatment Followup":
-				//sendTreatmentFollowupSms(encounter);
+				// sendTreatmentFollowupSms(encounter);
 				break;
 			case "Childhood TB-Treatment Initiation":
-			//	sendTreatmentInitiationSms(encounter);
+				// sendTreatmentInitiationSms(encounter);
 				break;
 			default:
 				// Do nothing
@@ -278,7 +275,7 @@ public class SmsNotificationsJob implements Job {
 		if (sendTo == null) {
 			return;
 		}
-		
+
 		StringBuilder message = new StringBuilder();
 		message.append("Dear " + encounter.getPatientName() + ", ");
 		message.append("your test result is ready for collection at "
@@ -293,84 +290,62 @@ public class SmsNotificationsJob implements Job {
 		}
 	}
 
-	public boolean sendReferralFormSms(Encounter encounter,OpenMrsUtil open, SmsController smsController) {
+	public boolean sendReferralFormSms(Encounter encounter, SmsController smsController) {
 		Map<String, Object> observations = encounter.getObservations();
-		DateTime dueDate =encounter.getEncounterDate();
-		
+		DateTime dueDate = encounter.getEncounterDate();
+
 		dueDate = dueDate.plusDays(1);
-	//	dueDate = DateTime.now();
+		// dueDate = DateTime.now();
 		String sendTo;
-	
+
 		Object referredOrTransferred = observations.get("referral_transfer");
-		System.out.println(encounter.getLocation());
-		System.out.println(observations);
 		if (referredOrTransferred.equals("PATIENT REFERRED")
 				|| referredOrTransferred.equals("PATIENT TRANSFERRED OUT")) {
 			String referralSite = observations.get("referral_site").toString();
-		
-			ArrayList<String> contact = open.getSiteSupervisorContact(referralSite);
-			String locName = open.getLocationNameById(referralSite);
-			//System.out.println(referralSite);
-
-			if(!locName.equals(""))
-				referralSite = locName;
-		//	System.out.println(referralSite);
-		
+			Location referralLocation = openmrs.getLocationByShortCode(referralSite);
+			ArrayList<String> contact = openmrs.getSiteSupervisorContact(referralSite);
 			if (contact.size() < 1) {
 				return false;
 			}
-			for(int i = 0 ; i < contact.size();i++){
+			for (int i = 0; i < contact.size(); i++) {
 				sendTo = contact.get(i);
-		
 				StringBuilder message = new StringBuilder();
-				message.append("Dear Site Supervisor, patient "+ encounter.getPatientId() + ", ");
-				message.append("has been transfered/referred to  "+ referralSite);
-				System.out.println("----------------------");
+				message.append("Dear Site Supervisor, patient "
+						+ encounter.getPatientId() + ", ");
+				message.append("has been transfered/referred to "
+						+ referralLocation.getName());
 				try {
 					sendTo = sendTo.replace("-", "");
 					smsController.createSms(sendTo, message.toString(),
 							dueDate.toDate(), "FAST", "");
-					
 					log.info(message.toString());
 				} catch (Exception e) {
 					log.warning(e.getMessage());
 					return false;
 				}
-				
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public boolean sendTreatmentFollowupSms(Encounter encounter, OpenMrsUtil open, SmsController smsController) {
+	public boolean sendTreatmentFollowupSms(Encounter encounter, SmsController smsController) {
 		Map<String, Object> observations = encounter.getObservations();
 		String returnVisitStr = observations.get("return_visit_date")
 				.toString().toUpperCase();
-		
-		System.out.println(encounter.getPatientId());
-		System.out.println(encounter.getEncounterId());
 		// || !open.getfilter(encounter,"FAST-End of Followup")
-		if(returnVisitStr.equals(null)  || open.isTransferOrReferel(encounter)){			
-			return false;	
+		if (returnVisitStr.equals(null) /*|| open.isTransferOrReferel(encounter)*/) {
+			return false;
 		}
-		String locName="";
-		String id = open.checkReferelPresent(encounter);
-		if(!id.equals("")){
-			Encounter ency = open.getEncounter(Integer.parseInt(id), 28);
-			observations = open.getEncounterObservations(ency);
+		String id = openmrs.checkReferelPresent(encounter);
+		Location referralLocation = null;
+		if (!id.equals("")) {
+			Encounter ency = openmrs.getEncounter(Integer.parseInt(id), 28);
+			observations = openmrs.getEncounterObservations(ency);
 			ency.setObservations(observations);
-		
 			String referralSite = observations.get("referral_site").toString();
-			locName = open.getLocationNameById(referralSite);
+			referralLocation = openmrs.getLocationByShortCode(referralSite);
 		}
-		else{
-			locName = open.getLocationNameById(encounter.getLocation());
-
-		}
-		
-		System.out.println(locName);
-	
 		Date returnVisitDate;
 		try {
 			returnVisitDate = DateTimeUtil.getDateFromString(returnVisitStr,
@@ -378,11 +353,7 @@ public class SmsNotificationsJob implements Job {
 			Calendar dueDate = Calendar.getInstance();
 			dueDate.setTime(returnVisitDate);
 			dueDate.set(Calendar.DATE, dueDate.get(Calendar.DATE) - 1);
-			
-			System.out.println(locName);
-			if(!locName.equals(null)||!locName.equals(""))
-				encounter.setLocation(locName);
-			
+			encounter.setLocation(referralLocation.getName());
 			String sendTo = encounter.getPatientContact();
 			sendTo = sendTo.replace("-", "");
 			StringBuilder message = new StringBuilder();
@@ -395,7 +366,6 @@ public class SmsNotificationsJob implements Job {
 			smsController.createSms(sendTo, message.toString(),
 					dueDate.getTime(), "FAST", "");
 			log.info(message.toString());
-	
 		} catch (Exception e) {
 			log.warning(e.getMessage());
 			return false;
@@ -403,82 +373,67 @@ public class SmsNotificationsJob implements Job {
 		return true;
 	}
 
-	public boolean sendTreatmentInitiationSms(Encounter encounter, OpenMrsUtil ope, SmsController smsController) {
-		
-	   
-		Map<String, Object> observation = encounter.getObservations();	
+	public boolean sendTreatmentInitiationSms(Encounter encounter, SmsController smsController) {
+
+		Map<String, Object> observation = encounter.getObservations();
 		String rtnVisitDate = observation.get("return_visit_date").toString()
 				.toUpperCase();
-		
-		if(rtnVisitDate.equals(null)  || !ope.getfilter(encounter,"FAST-Treatment Followup") || ope.isDead(encounter) ){
+		Patient patient = openmrs.getPatientByIdentifier(encounter.getPatientId());
+		if (rtnVisitDate.equals(null)
+				|| !openmrs.getfilter(encounter, "FAST-Treatment Followup")
+				|| patient.isDead()) {
 			return false;
 		}
 		Date returnVisitDate;
-		try{
+		try {
 			String sendTo = encounter.getPatientContact();
-			//System.out.println(sendTo);
+			// System.out.println(sendTo);
 			returnVisitDate = DateTimeUtil.getDateFromString(rtnVisitDate,
-			DateTimeUtil.SQL_DATETIME);
+					DateTimeUtil.SQL_DATETIME);
 			Calendar dueDate = Calendar.getInstance();
 			dueDate.setTime(returnVisitDate);
 			dueDate.set(Calendar.DATE, dueDate.get(Calendar.DATE) - 1);
 			System.out.println(encounter.getLocation());
 			Map<String, Object> observations = encounter.getObservations();
-			System.out.println(observation);
-			String locName="";
-			String id = ope.checkReferelPresent(encounter);
-			if(!id.equals("")){
-				System.out.println("-================");
-				System.out.println(id);
-				Encounter ency = ope.getEncounter(Integer.parseInt(id), 28);
-				observations = ope.getEncounterObservations(ency);
+			Location referralLocation = null;
+			String id = openmrs.checkReferelPresent(encounter);
+			if (!id.equals("")) {
+				Encounter ency = openmrs.getEncounter(Integer.parseInt(id), 28);
+				observations = openmrs.getEncounterObservations(ency);
 				ency.setObservations(observations);
-				System.out.println(observation);
-				System.out.println("-================");
-				String referralSite = observations.get("referral_site").toString();
-				locName = ope.getLocationNameById(referralSite);
+				String referralSite = observations.get("referral_site")
+						.toString();
+				referralLocation = openmrs.getLocationByShortCode(referralSite);
+			} else {
+				referralLocation = openmrs.getLocationByShortCode(encounter.getLocation());
 			}
-			else{
-				locName = ope.getLocationNameById(encounter.getLocation());
-
-			}
-			
-			
-		
-		
-			System.out.println(locName);
-			
-			
-			
-			
-			
-			if(!locName.equals(null)||!locName.equals(""))
-				encounter.setLocation(locName);
-			
+			encounter.setLocation(referralLocation.getName());
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy");
 			sdf.applyPattern("EEEE d MMM yyyy");
-			
-			/*String df=DateFormat.getDateInstance().format(dueDate.getTime());*/
-			StringBuilder message = new StringBuilder();
-			message.append("Dear " +encounter.getPatientName() + ", ");
-			message.append("please come to " + encounter.getLocation()+ " on "+sdf.format(dueDate.getTime()) + " "+" for a follow up visit and pick up your next supply of medicine.");
-		
-			
-		//sendTo = "03222808980";
-		System.out.println(dueDate.getTime());
-		sendTo = sendTo.replace("-", "");
 
-			String response = smsController.createSms(sendTo,
-			message.toString(), dueDate.getTime(), "FAST", rtnVisitDate);
+			/* String df=DateFormat.getDateInstance().format(dueDate.getTime()); */
+			StringBuilder message = new StringBuilder();
+			message.append("Dear " + encounter.getPatientName() + ", ");
+			message.append("please come to "
+					+ encounter.getLocation()
+					+ " on "
+					+ sdf.format(dueDate.getTime())
+					+ " "
+					+ " for a follow up visit and pick up your next supply of medicine.");
+
+			// sendTo = "03222808980";
+			System.out.println(dueDate.getTime());
+			sendTo = sendTo.replace("-", "");
+
+			String response = smsController
+					.createSms(sendTo, message.toString(), dueDate.getTime(),
+							"FAST", rtnVisitDate);
 			System.out.println(response);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.warning(e.getMessage());
 			return false;
 		}
 		return true;
 	}
-	
 
-	
 }

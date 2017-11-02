@@ -31,12 +31,6 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.DateTime;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.openmrs.Patient;
-import org.openmrs.module.ModuleMustStartException;
-import org.openmrs.util.DatabaseUpdateException;
-import org.openmrs.util.InputRequiredException;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -46,8 +40,6 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ihsinformatics.gfatmnotifications.ui.SwingControl;
 import com.ihsinformatics.util.DatabaseUtil;
 
@@ -79,30 +71,14 @@ public class GfatmNotificationsMain {
 	 * @throws ModuleMustStartException
 	 */
 	public static void main(String[] args) {
-		String rest = "/patient/?q=Z2TS5-1&v=full";
-		try {
-			String result = get(rest, "username", "password");
-			JSONObject jsonObj = new JSONObject(result);
-			String object = jsonObj.get("results").toString();
-			JSONArray results = new JSONArray(object);
-			JSONObject jsonPatient = results.getJSONObject(0);
-			GsonBuilder builder = new GsonBuilder();
-			Gson gson = builder.create();
-			Patient patient = gson.fromJson(jsonPatient.toString(),
-					Patient.class);
-			System.out.println(patient.getUuid());
-			System.out.println(patient.getPerson().getGivenName());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		// Notifications part
 		GfatmNotificationsMain gfatm = new GfatmNotificationsMain();
 		SwingControl swingControlDemo = new SwingControl();
 		swingControlDemo.showLabelDemo();
 		try {
 			gfatm.createSmsJob();
-			// gfatm.createCallJob();
-			// gfatm.createEmailJob();
+			gfatm.createCallJob();
+			gfatm.createEmailJob();
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
@@ -167,7 +143,6 @@ public class GfatmNotificationsMain {
 	 * Read properties from properties file
 	 */
 	public void readProperties(String propertiesFile) {
-
 		InputStream propFile;
 		try {
 			if (!(new File(userHome).exists())) {
