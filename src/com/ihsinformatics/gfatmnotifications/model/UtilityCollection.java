@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.ihsinformatics.gfatmnotifications.EmailController;
-import com.ihsinformatics.gfatmnotifications.OpenMrsUtil;
+import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
+import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
+import com.ihsinformatics.util.DatabaseUtil;
 
 public class UtilityCollection {
 	
@@ -22,11 +23,11 @@ public class UtilityCollection {
 	private static List<Email> emailList;
 	
 	//Email Jobs  Instance 
-	private OpenMrsUtil warehouseInstance;
-	private EmailController emailController;
-	private Properties props;
-	
-	
+	private static OpenMrsUtil warehouseInstance;
+	private static EmailController emailController;
+	private static Properties props;
+	private static DatabaseUtil warehouseDb;
+	private static  DatabaseUtil localDb;
 	
 	private UtilityCollection(){
 		
@@ -138,13 +139,10 @@ public class UtilityCollection {
 	}
 
 
-	
-	//Email job Intances 
-	
 	/**
 	 * @return the warehouseInstance
 	 */
-	public OpenMrsUtil getWarehouseInstance() {
+	public static OpenMrsUtil getWarehouseInstance() {
 		return warehouseInstance;
 	}
 
@@ -152,15 +150,15 @@ public class UtilityCollection {
 	/**
 	 * @param warehouseInstance the warehouseInstance to set
 	 */
-	public void setWarehouseInstance(OpenMrsUtil warehouseInstance) {
-		this.warehouseInstance = warehouseInstance;
+	public static void setWarehouseInstance(OpenMrsUtil warehouseInstance) {
+		UtilityCollection.warehouseInstance = warehouseInstance;
 	}
 
 
 	/**
 	 * @return the emailController
 	 */
-	public EmailController getEmailController() {
+	public static EmailController getEmailController() {
 		return emailController;
 	}
 
@@ -168,15 +166,15 @@ public class UtilityCollection {
 	/**
 	 * @param emailController the emailController to set
 	 */
-	public void setEmailController(EmailController emailController) {
-		this.emailController = emailController;
+	public static void setEmailController(EmailController emailController) {
+		UtilityCollection.emailController = emailController;
 	}
 
 
 	/**
 	 * @return the props
 	 */
-	public Properties getProps() {
+	public static Properties getProps() {
 		return props;
 	}
 
@@ -184,11 +182,44 @@ public class UtilityCollection {
 	/**
 	 * @param props the props to set
 	 */
-	public void setProps(Properties props) {
-		this.props = props;
+	public static void setProps(Properties props) {
+		UtilityCollection.props = props;
 	}
 
 
+	/**
+	 * @return the warehouseDb
+	 */
+	public static DatabaseUtil getWarehouseDb() {
+		return warehouseDb;
+	}
+
+
+	/**
+	 * @param warehouseDb the warehouseDb to set
+	 */
+	public static void setWarehouseDb(DatabaseUtil warehouseDb) {
+		UtilityCollection.warehouseDb = warehouseDb;
+	}
+
+
+	/**
+	 * @return the localDb
+	 */
+	public static DatabaseUtil getLocalDb() {
+		return localDb;
+	}
+
+
+	/**
+	 * @param localDb the localDb to set
+	 */
+	public static void setLocalDb(DatabaseUtil localDb) {
+		UtilityCollection.localDb = localDb;
+	}
+
+
+     
 	
 
 }

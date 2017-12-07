@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmnotifications;
+package com.ihsinformatics.gfatmnotifications.controllers;
 
 import java.util.logging.Logger;
 
@@ -33,7 +33,7 @@ public class EmailController {
 					subject, message, from);
 		} catch (MessagingException e) {
 			e.printStackTrace();
-			log.warning(""+e.getMessage());
+			log.warning("Email not send due to :- "+e.getMessage());
 			return false;
 		}
 		return isSent;

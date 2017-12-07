@@ -22,9 +22,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ihsinformatics.gfatmnotifications.controllers.SmsController;
+import com.ihsinformatics.gfatmnotifications.model.Constants;
 import com.ihsinformatics.gfatmnotifications.model.Encounter;
 import com.ihsinformatics.gfatmnotifications.model.Location;
 import com.ihsinformatics.gfatmnotifications.model.Patient;
+import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
 import com.ihsinformatics.util.DatabaseUtil;
 import com.ihsinformatics.util.DateTimeUtil;
 

@@ -10,7 +10,7 @@ You can also access the license on the internet at the address: http://www.gnu.o
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
  */
 
-package com.ihsinformatics.gfatmnotifications;
+package com.ihsinformatics.gfatmnotifications.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
@@ -568,7 +568,7 @@ public class OpenMrsUtil {
 		Type listType = new TypeToken<List<FactTable>>() {
 		}.getType();*/
 		
-		String jsonString = "[{\"locationId\":82,\"locationName\":\"SKARDU BALTISTAN\",\"locationDescription\":\"SKARDU Community\",\"dateTime\":\"2017-11-06\",\"totalScreeingForm\":196,\"totalChestXrays\":118,\"totalVerbalScreenPresumptives\":0,\"totalChestXrayPresumptives\":0,\"totalVerbalScreenAndChestXrayPresumptives\":0,\"SamplesCollectedVerbalScreenPresumptives\":2,\"SamplesCollectedCXRPresumptives\":0,\"AcceptedSamples\":0,\"InternalTests\":1,\"ExternalTests\":1,\"GXPTestsDone\":0,\"MTBpveInternal\":0,\"MTBpveRRpveInternal\":0,\"ErrorInternal\":0,\"NoresultInternal\":0,\"InvalidInternal\":0,\"PendingSamples\":322,\"ClinicallyDiagnosed\":0,\"InitiatedOnAntibiotic\":0,\"InitiatedOnTBTx\":0,\"emailAddress\":\"shujaat.ali@ihsinformatics.com\"},{\"locationId\":82,\"locationName\":\"COM-KHI\",\"locationDescription\":\"General Community\",\"dateTime\":\"2017-11-06\",\"totalScreeingForm\":196,\"totalChestXrays\":118,\"totalVerbalScreenPresumptives\":0,\"totalChestXrayPresumptives\":0,\"totalVerbalScreenAndChestXrayPresumptives\":0,\"SamplesCollectedVerbalScreenPresumptives\":2,\"SamplesCollectedCXRPresumptives\":0,\"AcceptedSamples\":0,\"InternalTests\":1,\"ExternalTests\":1,\"GXPTestsDone\":0,\"MTBpveInternal\":0,\"MTBpveRRpveInternal\":0,\"ErrorInternal\":0,\"NoresultInternal\":0,\"InvalidInternal\":0,\"PendingSamples\":322,\"ClinicallyDiagnosed\":0,\"InitiatedOnAntibiotic\":0,\"InitiatedOnTBTx\":0,\"emailAddress\":\"shujaaeali@gmail.com\"}]";
+		String jsonString = "[{\"locationId\":82,\"locationName\":\"SKARDU BALTISTAN\",\"locationDescription\":\"SKARDU Community\",\"dateTime\":\"2017-11-06\",\"totalScreeingForm\":196,\"totalChestXrays\":118,\"totalVerbalScreenPresumptives\":0,\"totalChestXrayPresumptives\":0,\"totalVerbalScreenAndChestXrayPresumptives\":0,\"SamplesCollectedVerbalScreenPresumptives\":2,\"SamplesCollectedCXRPresumptives\":0,\"AcceptedSamples\":0,\"InternalTests\":1,\"ExternalTests\":1,\"GXPTestsDone\":0,\"MTBpveInternal\":0,\"MTBpveRRpveInternal\":0,\"ErrorInternal\":0,\"NoresultInternal\":0,\"InvalidInternal\":0,\"PendingSamples\":322,\"ClinicallyDiagnosed\":0,\"InitiatedOnAntibiotic\":0,\"InitiatedOnTBTx\":0,\"emailAddress\":\"shujaat.ali@ihsinformatics.com\"},{\"locationId\":6,\"locationName\":\"COM-KHI\",\"locationDescription\":\"General Community\",\"dateTime\":\"2017-11-06\",\"totalScreeingForm\":196,\"totalChestXrays\":118,\"totalVerbalScreenPresumptives\":0,\"totalChestXrayPresumptives\":0,\"totalVerbalScreenAndChestXrayPresumptives\":0,\"SamplesCollectedVerbalScreenPresumptives\":2,\"SamplesCollectedCXRPresumptives\":0,\"AcceptedSamples\":0,\"InternalTests\":1,\"ExternalTests\":1,\"GXPTestsDone\":0,\"MTBpveInternal\":0,\"MTBpveRRpveInternal\":0,\"ErrorInternal\":0,\"NoresultInternal\":0,\"InvalidInternal\":0,\"PendingSamples\":322,\"ClinicallyDiagnosed\":0,\"InitiatedOnAntibiotic\":0,\"InitiatedOnTBTx\":0,\"emailAddress\":\"shujaaeali@gmail.com\"}]";
 		//String jsonString = queryToJson(query.toString());
 		Type listType = new TypeToken<List<FactTable>>() {}.getType();
 		Gson gson = new Gson();
@@ -585,17 +585,21 @@ public class OpenMrsUtil {
 	   
 	    	StringBuilder query = new StringBuilder();
 	    	
-	    	query.append("select pa.value as emailAdress, hc.value as locationId from person p ");
+	    	/*query.append("select pa.value as emailAdress, hc.value as locationId from person p ");
 	 		query.append(" inner join person_attribute pa ");
 	 		query.append(" on pa.person_id = p.person_id and pa.person_attribute_type_id = 29 and pa.voided =0 ");
 	 		query.append(" inner join person_attribute hc ");
 	 		query.append(" on hc.person_id = p.person_id and hc.person_attribute_type_id = 7 and hc.voided =0 ");
 	 		query.append(" inner join users u ");
 	 		query.append(" on u.person_id = p.person_id ");
-	 		query.append(" on u.person_id = p.person_id ");
 	 		query.append(" where u.system_id = (select la.value_reference from location l inner join location_attribute la ");
-	 		query.append(" on la.location_id = l.location_id where la.attribute_type_id = 16)");
-	 		String jsonString = queryToJson(query.toString());
+	 		query.append(" on la.location_id = l.location_id where la.attribute_type_id = 16)");*/
+	    	query.append(" select distinct pa.value as emailAdress,la.location_id as locationId from person p ");
+	    	query.append(" inner join person_attribute pa on pa.person_id = p.person_id and pa.person_attribute_type_id = 29 and pa.voided =0 ");
+	    	query.append(" inner join users u on u.person_id = p.person_id  ");
+	    	query.append(" inner join location_attribute la on la.value_reference = u.system_id and  la.attribute_type_id = 16 and la.voided = 0 ");
+	 		
+	    	String jsonString = queryToJson(query.toString());
 	 		Type listType = new TypeToken<List<Email>>() {}.getType();
 			Gson gson = new Gson();
 		    List<Email> emailList = gson.fromJson(jsonString, listType);
@@ -615,8 +619,7 @@ public class OpenMrsUtil {
 				return email;
 			}
 		}
-		return null;
-    	
-    	
+		return  null;
+
     }
 }

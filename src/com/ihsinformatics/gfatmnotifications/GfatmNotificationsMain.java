@@ -42,8 +42,12 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
+import com.ihsinformatics.gfatmnotifications.controllers.SmsController;
+import com.ihsinformatics.gfatmnotifications.model.Constants;
 import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
 import com.ihsinformatics.gfatmnotifications.ui.SwingControl;
+import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
 import com.ihsinformatics.util.DatabaseUtil;
 
 /**
@@ -180,6 +184,7 @@ public class GfatmNotificationsMain {
 		if (!whLocalDb.tryConnection()) {
 		    return false;
 		}
+	    UtilityCollection.setWarehouseDb(whLocalDb);
 		System.out.println("*** Starting Email Engine ***");
 		startEmailEngine();
 	    return true;
@@ -304,8 +309,8 @@ public class GfatmNotificationsMain {
 				.withIdentity("emailJob", "emailGroup").build();
 		
 		EmailNotificationsJob emailJobObj = new EmailNotificationsJob();
-		emailJobObj.setLocalDb(whLocalDb);
-		emailJobObj.setOpenmrsWarehouse(new OpenMrsUtil(whLocalDb));
+		emailJobObj.setLocalDb(localDb);
+		emailJobObj.setOpenmrsWarehouse(new OpenMrsUtil(localDb));
 		emailJobObj.setProps(prop);
 		emailJobObj.setEmailController(new EmailController());
 		emailJob.getJobDataMap().put("emailJob", emailJobObj);

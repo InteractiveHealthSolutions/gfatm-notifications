@@ -16,6 +16,7 @@ import org.junit.Test;
 import com.ihsinformatics.gfatmnotifications.model.Location;
 import com.ihsinformatics.gfatmnotifications.model.User;
 import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
+import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
 import com.ihsinformatics.util.DatabaseUtil;
 
 public class OpenMrsUtilTest {
