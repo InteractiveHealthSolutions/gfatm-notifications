@@ -63,6 +63,13 @@ public class EmailNotificationsJob implements Job {
 	}
 
 	private void initialize(EmailNotificationsJob emailJob) {
+		/*
+		 * This  code will be refactor..
+	    props = UtilityCollection.getProps();
+	    warehouseDb = UtilityCollection.getWarehouseDb();
+	    localDb =UtilityCollection.getLocalDb();
+	    */
+		
 		setLocalDb(emailJob.getLocalDb());
 		setOpenmrsWarehouse(emailJob.getOpenmrsWarehouse());
 		setProps(emailJob.getProps());
