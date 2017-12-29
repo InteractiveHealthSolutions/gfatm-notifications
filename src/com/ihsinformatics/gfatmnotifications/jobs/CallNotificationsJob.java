@@ -10,7 +10,7 @@ You can also access the license on the internet at the address: http://www.gnu.o
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
 */
 
-package com.ihsinformatics.gfatmnotifications;
+package com.ihsinformatics.gfatmnotifications.jobs;
 
 import org.joda.time.DateTime;
 import org.quartz.Job;

@@ -1,6 +1,6 @@
 package com.ihsinformatics.gfatmnotifications.controllers;
 
-import com.ihsinformatics.gfatmnotifications.model.FactTable;
+import com.ihsinformatics.gfatmnotifications.model.FastFact;
 
 
 public class DailyEmailNotification {
@@ -13,7 +13,7 @@ public class DailyEmailNotification {
 
 	}
 	
-  public void programSelector(String programName,FactTable factTable){
+  public void programSelector(String programName,FastFact factTable){
 	  
 	  switch (programName) {
 	case "FAST":
@@ -36,7 +36,7 @@ private void childhoodDailyReport() {
 	
 }
 
-private void fastDailyReport(FactTable factTable) {
+private void fastDailyReport(FastFact factTable) {
 	
 	//First we need to work
 	

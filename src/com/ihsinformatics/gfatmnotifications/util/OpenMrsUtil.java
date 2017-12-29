@@ -33,11 +33,12 @@ import org.omg.CORBA.ULongLongSeqHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.ihsinformatics.gfatmnotifications.model.ChilhoodFact;
 import com.ihsinformatics.gfatmnotifications.model.DateDeserializer;
 import com.ihsinformatics.gfatmnotifications.model.DateSerializer;
 import com.ihsinformatics.gfatmnotifications.model.Email;
 import com.ihsinformatics.gfatmnotifications.model.Encounter;
-import com.ihsinformatics.gfatmnotifications.model.FactTable;
+import com.ihsinformatics.gfatmnotifications.model.FastFact;
 import com.ihsinformatics.gfatmnotifications.model.Location;
 import com.ihsinformatics.gfatmnotifications.model.Obs;
 import com.ihsinformatics.gfatmnotifications.model.Patient;
@@ -545,59 +546,53 @@ public class OpenMrsUtil {
 		return false;
 	}
 
-	public ArrayList<FactTable> getFactFast(String dateFrom, String dateTo) {
+	public ArrayList<FastFact> getFactFast(String todayDate) {
       
-		 UtilityCollection.setFactFast(new ArrayList<FactTable>());
+		 UtilityCollection.setFactFast(new ArrayList<FastFact>());
 		
-		//StringBuilder query = new StringBuilder();
-		//query.append("select * from fact_fast");
-	/*	StringBuilder query = new StringBuilder();
+		StringBuilder query = new StringBuilder();
 		query.append(" select ff.location_id as locationId,l.name as locationName,l.description as locationDescription,dd.full_date as dateTime, ");
-		query.append(" ff.Total_Screening as totalScreeingForm,ff.chest_xrays as totalChestXrays,ff.Verbal_Screen_Presumptives as totalVerbalScreenPresumptives ,ff.Chest_XRay_Presumptives as totalChestXrayPresumptives, ");
-		query.append(" ff.VerbalScreen_and_ChestXRay_Presumptives as totalVerbalScreenAndChestXrayPresumptives,ff.Samples_Collected_Verbal_Screen_Presumptives as SamplesCollectedVerbalScreenPresumptives , ");
-		query.append(" ff.Samples_Collected_CXR_Presumptives as SamplesCollectedCXRPresumptives, ff.Accepted_Samples as AcceptedSamples, ff.Internal_Tests as InternalTests, ");
-		query.append(" ff.External_Tests as ExternalTests, ff.GXP_Tests_Done as GXPTestsDone, ff.MTBpve_Internal as MTBpveInternal , ff.MTBpve_RRpve_Internal as MTBpveRRpveInternal , ");
-		query.append(" ff.Error_Internal as ErrorInternal ,ff.No_result_Internal as NoresultInternal ,ff.Invalid_Internal as InvalidInternal, ff.Pending_Samples as PendingSamples, ");
-		query.append(" ff.Clinically_Diagnosed as ClinicallyDiagnosed,ff.Initiated_on_Antibiotic as InitiatedOnAntibiotic, ff.Initiated_on_TBTx as InitiatedOnTBTx ");
+		query.append(" ff.Total_Screening as totalScreeingForm, ff.chest_xrays as chestXrays,ff.Verbal_Screen_Presumptives as verbalScreenPresumptives, ");
+		query.append(" ff.Chest_XRay_Presumptives as chestXrayPresumptives,ff.Samples_Collected_Verbal_Screen_Presumptives as samplesCollectedVerbalScreenPresumptives , ");
+		query.append(" ff.Samples_Collected_CXR_Presumptives as samplesCollectedCXRPresumptives,ff.GXP_Tests_Done as gxpTestsDone, ");
+		query.append(" ff.Internal_Tests as internalTests, ff.External_Tests as externalTests,ff.MTBpve_Internal as mTBpveInternal ,ff.MTBpve_External as mTBpveExternal, ");
+		query.append(" ff.MTBpve_RRpve_Internal as mTBpveRRpveInternal,ff.MTBpve_RRpve_External as mTBpveRRpveExternal, ");
+		query.append(" ff.Error_ as allError ,ff.No_result as noResult , ff.Invalid as invalidAllTest ,ff.Pending_Samples as pendingSamples, ");
+		query.append(" ff.Clinically_Diagnosed as clinicallyDiagnosed,ff.Initiated_on_Antibiotic as initiatedOnAntibiotic, ff.Initiated_on_TBTx as initiatedOnTBTx  ");
 		query.append(" from fact_fast_dsss ff  ");
 		query.append(" Inner join dim_datetime dd  on dd.datetime_id = ff.datetime_id ");
 		query.append(" Inner join location l on l.location_id = ff.location_id ");
-		query.append("where dd.full_date between '"+dateFrom+"' and '"+dateTo+"';");
+		query.append("where dd.full_date='"+todayDate+"';");
+		//query.append("where dd.full_date='2017-12-11';");
 
 		String jsonString = queryToJson(query.toString());
-		Type listType = new TypeToken<List<FactTable>>() {
-		}.getType();*/
-		
-		String jsonString = "[{\"locationId\":82,\"locationName\":\"SKARDU BALTISTAN\",\"locationDescription\":\"SKARDU Community\",\"dateTime\":\"2017-11-06\",\"totalScreeingForm\":196,\"totalChestXrays\":118,\"totalVerbalScreenPresumptives\":0,\"totalChestXrayPresumptives\":0,\"totalVerbalScreenAndChestXrayPresumptives\":0,\"SamplesCollectedVerbalScreenPresumptives\":2,\"SamplesCollectedCXRPresumptives\":0,\"AcceptedSamples\":0,\"InternalTests\":1,\"ExternalTests\":1,\"GXPTestsDone\":0,\"MTBpveInternal\":0,\"MTBpveRRpveInternal\":0,\"ErrorInternal\":0,\"NoresultInternal\":0,\"InvalidInternal\":0,\"PendingSamples\":322,\"ClinicallyDiagnosed\":0,\"InitiatedOnAntibiotic\":0,\"InitiatedOnTBTx\":0,\"emailAddress\":\"shujaat.ali@ihsinformatics.com\"},{\"locationId\":6,\"locationName\":\"COM-KHI\",\"locationDescription\":\"General Community\",\"dateTime\":\"2017-11-06\",\"totalScreeingForm\":196,\"totalChestXrays\":118,\"totalVerbalScreenPresumptives\":0,\"totalChestXrayPresumptives\":0,\"totalVerbalScreenAndChestXrayPresumptives\":0,\"SamplesCollectedVerbalScreenPresumptives\":2,\"SamplesCollectedCXRPresumptives\":0,\"AcceptedSamples\":0,\"InternalTests\":1,\"ExternalTests\":1,\"GXPTestsDone\":0,\"MTBpveInternal\":0,\"MTBpveRRpveInternal\":0,\"ErrorInternal\":0,\"NoresultInternal\":0,\"InvalidInternal\":0,\"PendingSamples\":322,\"ClinicallyDiagnosed\":0,\"InitiatedOnAntibiotic\":0,\"InitiatedOnTBTx\":0,\"emailAddress\":\"shujaaeali@gmail.com\"}]";
-		//String jsonString = queryToJson(query.toString());
-		Type listType = new TypeToken<List<FactTable>>() {}.getType();
+		Type listType = new TypeToken<List<FastFact>>() {}.getType();
 		Gson gson = new Gson();
-		ArrayList<FactTable> factFast  = gson.fromJson(jsonString, listType);
+		ArrayList<FastFact> factFast  = gson.fromJson(jsonString, listType);
 		UtilityCollection.setFactFast(factFast);
     
 		return UtilityCollection.getFactFast();
 
 	}
 
+	public ArrayList<ChilhoodFact> getFactChildhood(String todayDate){
+		
+		ArrayList<ChilhoodFact> chilhoodFacts = new ArrayList<ChilhoodFact>();
+		
+		
+		
+		return chilhoodFacts;
+	}
+	
     public List<Email> LoadAllUsersEmail(){
 	    
     	  UtilityCollection.setEmailList(new ArrayList<Email>());
 	   
 	    	StringBuilder query = new StringBuilder();
 	    	
-	    	/*query.append("select pa.value as emailAdress, hc.value as locationId from person p ");
-	 		query.append(" inner join person_attribute pa ");
-	 		query.append(" on pa.person_id = p.person_id and pa.person_attribute_type_id = 29 and pa.voided =0 ");
-	 		query.append(" inner join person_attribute hc ");
-	 		query.append(" on hc.person_id = p.person_id and hc.person_attribute_type_id = 7 and hc.voided =0 ");
-	 		query.append(" inner join users u ");
-	 		query.append(" on u.person_id = p.person_id ");
-	 		query.append(" where u.system_id = (select la.value_reference from location l inner join location_attribute la ");
-	 		query.append(" on la.location_id = l.location_id where la.attribute_type_id = 16)");*/
-	    	query.append(" select distinct pa.value as emailAdress,la.location_id as locationId from person p ");
-	    	query.append(" inner join person_attribute pa on pa.person_id = p.person_id and pa.person_attribute_type_id = 29 and pa.voided =0 ");
-	    	query.append(" inner join users u on u.person_id = p.person_id  ");
-	    	query.append(" inner join location_attribute la on la.value_reference = u.system_id and  la.attribute_type_id = 16 and la.voided = 0 ");
+	    	query.append(" select distinct dl.location_id as locationId,pam.email_address as emailAdress,dl.primary_contact as primaryContact,dl.secondary_contact as secondaryContact from person_attribute_merged pam ");
+	    	query.append(" inner join users u on u.person_id = pam.person_id ");
+	    	query.append(" inner join dim_location dl on dl.Site_Supervisor_System_ID = u.system_id ");
 	 		
 	    	String jsonString = queryToJson(query.toString());
 	 		Type listType = new TypeToken<List<Email>>() {}.getType();
@@ -605,14 +600,13 @@ public class OpenMrsUtil {
 		    List<Email> emailList = gson.fromJson(jsonString, listType);
 	        UtilityCollection.setEmailList(emailList);
 	        
-	   return UtilityCollection.getEmailList();
-	   
+	   return UtilityCollection.getEmailList();  
    } 
-    
-    public Email getEmailByLocationName (int LocationId){
+
+    public Email getEmailByLocationId (int LocationId){
     	
     	if (UtilityCollection.getEmailList().isEmpty()) {
-			loadUsers();
+    		LoadAllUsersEmail();
 		}
 		for (Email email : UtilityCollection.getEmailList()) {
 			if (email.getLocationId() == LocationId) {

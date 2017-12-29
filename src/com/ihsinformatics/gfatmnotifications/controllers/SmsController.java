@@ -64,7 +64,6 @@ public class SmsController {
 						"UTF-8") + "&");
 		content.append("project_id=" + projectId + "&");
 		String response = null;
-	//	System.out.println(content);
 		if (useSsl) {
 			response = postSecure(serverAddress, content.toString());
 		} else {

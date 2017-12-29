@@ -17,7 +17,7 @@ public class UtilityCollection {
 	private static List<Location> locations;
 	private static List<Patient> patients;
 	private static List<String> userRoles;
-	private static ArrayList<FactTable> factFast;
+	private static ArrayList<FastFact> factFast;
 	/* private static List<Person> */
 	private static Map<Integer, String> encounterTypes;
 	private static List<Email> emailList;
@@ -28,6 +28,14 @@ public class UtilityCollection {
 	private static Properties props;
 	private static DatabaseUtil warehouseDb;
 	private static  DatabaseUtil localDb;
+	
+	public static String minutes;
+	public static String seconds;
+	public static String hours;
+	
+	//Codebook Names 
+	
+	public static String [] names ={"Verbal Screened","Chest X-Rays","","",""};
 	
 	private UtilityCollection(){
 		
@@ -127,14 +135,14 @@ public class UtilityCollection {
 	/**
 	 * @return the factFast
 	 */
-	public static ArrayList<FactTable> getFactFast() {
+	public static ArrayList<FastFact> getFactFast() {
 		return factFast;
 	}
 
 	/**
 	 * @param factFast the factFast to set
 	 */
-	public static void setFactFast(ArrayList<FactTable> factFast) {
+	public static void setFactFast(ArrayList<FastFact> factFast) {
 		UtilityCollection.factFast = factFast;
 	}
 

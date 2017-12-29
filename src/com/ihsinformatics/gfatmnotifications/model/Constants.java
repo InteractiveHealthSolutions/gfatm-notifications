@@ -53,7 +53,7 @@ public final class Constants {
 	
 	/***********************/
 	public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MMM-yyyy");
-	
+	public static final SimpleDateFormat DATE_FORMATWH = new SimpleDateFormat("yyyy-MM-dd");
 	/*******************Extra Variable ***********************/
 	
 	public static final int REFERREL_ENCOUNTER_TYPE =28;
@@ -67,6 +67,7 @@ public final class Constants {
 	
 	/*********************Email Properties ******************/
 	
+	//public static final String PROP_FILE_NAME = "/src/tbreach-api.properties";
 	public static final String PROP_FILE_NAME = "tbreach-api.properties";
 	
 	
