@@ -18,6 +18,24 @@ public class UtilityCollection {
 	private static List<Patient> patients;
 	private static List<String> userRoles;
 	private static ArrayList<FastFact> factFast;
+	private static ArrayList<ChilhoodFact> factChildhood;
+	private static ArrayList<PetFact> factPet;
+	/**
+	 * @return the factChildhood
+	 */
+	public static ArrayList<ChilhoodFact> getFactChildhood() {
+		return factChildhood;
+	}
+
+
+	/**
+	 * @param factChildhood the factChildhood to set
+	 */
+	public static void setFactChildhood(ArrayList<ChilhoodFact> factChildhood) {
+		UtilityCollection.factChildhood = factChildhood;
+	}
+
+
 	/* private static List<Person> */
 	private static Map<Integer, String> encounterTypes;
 	private static List<Email> emailList;
@@ -224,6 +242,22 @@ public class UtilityCollection {
 	 */
 	public static void setLocalDb(DatabaseUtil localDb) {
 		UtilityCollection.localDb = localDb;
+	}
+
+
+	/**
+	 * @return the factPet
+	 */
+	public static ArrayList<PetFact> getFactPet() {
+		return factPet;
+	}
+
+
+	/**
+	 * @param factPet the factPet to set
+	 */
+	public static void setFactPet(ArrayList<PetFact> factPet) {
+		UtilityCollection.factPet = factPet;
 	}
 
 

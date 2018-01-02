@@ -159,7 +159,7 @@ public class Connections {
 			InputStream inputStream = Thread.currentThread()
 					.getContextClassLoader()
 					.getResourceAsStream(Constants.PROP_FILE_NAME);
-			//InputStream inputStream = Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
+		///InputStream inputStream = Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
 			prop = new Properties();
 			prop.load(inputStream);
 		} catch (Exception e) {

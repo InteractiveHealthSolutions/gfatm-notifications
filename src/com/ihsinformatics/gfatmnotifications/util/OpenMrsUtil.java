@@ -42,6 +42,7 @@ import com.ihsinformatics.gfatmnotifications.model.FastFact;
 import com.ihsinformatics.gfatmnotifications.model.Location;
 import com.ihsinformatics.gfatmnotifications.model.Obs;
 import com.ihsinformatics.gfatmnotifications.model.Patient;
+import com.ihsinformatics.gfatmnotifications.model.PetFact;
 import com.ihsinformatics.gfatmnotifications.model.User;
 import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
 import com.ihsinformatics.util.DatabaseUtil;
@@ -576,13 +577,51 @@ public class OpenMrsUtil {
 	}
 
 	public ArrayList<ChilhoodFact> getFactChildhood(String todayDate){
+		UtilityCollection.setFactChildhood(new ArrayList<ChilhoodFact>());
+	
+		StringBuilder query = new StringBuilder();
+			query.append(" select dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription , dd.full_date as dateTime, fc.Screened_nurse as screenedByNurse, fc.Presumptive_nurse as presumptiveByNurse , fc.Screening_Location as screeningLocationForms, ");
+			query.append(" fc.Registration as registrationForms, fc.Presumptive_Case_Confirmed as presumptiveCaseConfirmedForms, fc.TB_Presumptive as tbPresumptiveConfirmed,fc.Test_indication as testIndication,fc.CBC_Indicated as cbcIndicated, fc.ESR_Indicated  as esrIndicated,fc.CXR_Indicated as cxrIndicated , ");
+			query.append(" fc.MT_Indicated as mtIndicated,fc.Ultrasound_Indicated as ultrasoundIndicated,fc.HistopathologyFNAC_Indicated  as histopathologyFNACIndicated ,fc.CT_scan_Indicated as ctScanIndicated,fc.GXP_Indicated as gxpIndicated , fc.TB_Treatment_intiated as tbTreatmentIntiated, ");
+			query.append(" fc.Antibiotic_trial_initiated as antibioticTrialInitiated,fc.IPT_treatment_initiated as iptTreatmentInitiated,fc.TB_Treatment_Follow_up as tbTreatmentFUP ,fc.Antibiotic_trial_Followup as antibioticTrialFUP,fc.IPT_follow_up as iptFUP from fact_childtb_dsss fc  ");
+			query.append(" inner join dim_location dl  on dl.location_id =fc.location_id ");
+			query.append(" inner join dim_datetime dd on dd.datetime_id = fc.datetime_id ");
+			//query.append("where dd.full_date='"+todayDate+"';");
+			query.append("where dd.full_date ='2017-12-11';");
 		
-		ArrayList<ChilhoodFact> chilhoodFacts = new ArrayList<ChilhoodFact>();
+		String jsonString = queryToJson(query.toString());
+		Type listType = new TypeToken<List<ChilhoodFact>>() {}.getType();
+		Gson gson = new Gson();
+		ArrayList<ChilhoodFact> chilhoodFacts = gson.fromJson(jsonString, listType);
+		UtilityCollection.setFactChildhood(chilhoodFacts);
 		
-		
-		
-		return chilhoodFacts;
+		return UtilityCollection.getFactChildhood();
 	}
+	
+	public ArrayList<PetFact> getPetFact(String todayDate){
+		
+		UtilityCollection.setFactPet(new ArrayList<PetFact>());
+		
+		StringBuilder query = new StringBuilder();
+			query.append(" SELECT dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription,dd.full_date as dateTime,fp.No_Of_Index_Patients_Registered as noOfIndexPatientRegistered ,fp.No_Of_DSTB_Patients as noOfDSTBPatients, ");
+			query.append(" fp.No_Of_DRTB_Patients as noOfDRTBPatients,fp.No_Of_Baseline_Screening as noOfBaselineScreening,fp.No_Of_Index_Patient_Agreed_For_Their_Contact_Screening as noOfIndexPatientsAgreed,fp.No_Of_Adult_Contacts as noOfAdultsContacts, ");
+			query.append(" fp.No_Of_Peads_Contacts as noOfPeadsContacts ,fp.No_Of_Index_Not_Eligible_For_Study as noOfIndexNotEligibleStudy,fp.No_Of_Contact_Screening_Counseling_Done as noOfContactScreeningCounselingDone, fp.No_Of_Baseline_Counceling_Done as noOfBaselineCounselingDone, ");
+			query.append(" fp.No_Of_Contacts_Investigated as noOfContactsInvestigated ,fp.No_Of_Contacts_Diagnosed_With_TB as noOfContactsDiagnosedTB,fp.No_Of_Contacts_Eligible_For_Pet as noOfContactsEligiblePET,fp.No_Of_Contacts_Agreed_For_Pet as noOfContactsAgreedPET , ");
+			query.append(" fp.No_Of_Contacts_Completed_Treatment as noOfContactsCompletedTreatment FROM fact_Pet_DS fp ");
+			query.append(" inner join dim_location dl on dl.location_id = fp.location_id ");
+			query.append(" inner join dim_datetime dd on dd.datetime_id = fp.datetime_id ");
+			//query.append("where dd.full_date='"+todayDate+"';");
+			query.append(" where dd.full_date ='2017-12-11'; ");
+		
+		String jsonString = queryToJson(query.toString());
+		Type listType = new TypeToken<List<PetFact>>() {}.getType();
+		Gson gson = new Gson();
+		ArrayList<PetFact> petFacts = gson.fromJson(jsonString, listType);
+		UtilityCollection.setFactPet(petFacts);
+			
+		return UtilityCollection.getFactPet();
+	
+	} 
 	
     public List<Email> LoadAllUsersEmail(){
 	    

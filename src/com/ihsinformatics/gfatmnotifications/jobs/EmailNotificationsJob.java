@@ -40,6 +40,7 @@ import com.ihsinformatics.gfatmnotifications.model.ChilhoodFact;
 import com.ihsinformatics.gfatmnotifications.model.Constants;
 import com.ihsinformatics.gfatmnotifications.model.Email;
 import com.ihsinformatics.gfatmnotifications.model.FastFact;
+import com.ihsinformatics.gfatmnotifications.model.PetFact;
 import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
 import com.ihsinformatics.gfatmnotifications.ui.SwingControl;
 import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
@@ -87,20 +88,18 @@ public class EmailNotificationsJob implements Job {
 			throws JobExecutionException {
 
 		 JobDataMap dataMap = context.getMergedJobDataMap();
-		 EmailNotificationsJob emailJob = (EmailNotificationsJob) dataMap
-				.get("emailJob");
+		 EmailNotificationsJob emailJob = (EmailNotificationsJob) dataMap.get("emailJob");
 		 initialize(emailJob);
 		 // load all the site supervisor email from ware database.
 		 warehouseOpenmrsInstance.LoadAllUsersEmail();
-		 //remove when it move to production .
-		 SwingControl swingControlDemo = new SwingControl();
-		 swingControlDemo.showLabelDemoAfter();
-		 //when we move to production level then we should take the datetime with .minusDays(1);
+		 
 		 dateFrom = new DateTime().minusDays(1);
-		 fastdailyEmailReportExecution(dateFrom);
+		// fastdailyEmailReportExecution(dateFrom);
+		// childhoodDailyReport(dateFrom);
+		petDailyReport(dateFrom);
 
 	}
-
+ 
 	public DatabaseUtil getLocalDb() {
 		return localDb;
 	}
@@ -200,11 +199,24 @@ public class EmailNotificationsJob implements Job {
 
 	/************************* Childhood Email Execution *******************/
 
-	public void childhoodDailyReport(){
-      
-		ArrayList<ChilhoodFact> ctbFact= new ArrayList<ChilhoodFact>();
-		
-		
+	public void childhoodDailyReport(DateTime dateFrom){
+	
+		String todayDate = Constants.DATE_FORMATWH.format(dateFrom.toDate());
+		ArrayList<ChilhoodFact> factChildhood = warehouseOpenmrsInstance.getFactChildhood(todayDate);
+		if (!factChildhood.isEmpty()) {
+			for (ChilhoodFact childhoodTable : factChildhood) {
+				Email emailVal = warehouseOpenmrsInstance.getEmailByLocationId(childhoodTable.getLocationId());
+					if (emailVal == null) {
+						log.warning("This Location:"+ childhoodTable.getLocationDescription()+ " have not linked with any site supervisor email ");
+					} else {
+						childhoodTable.setEmailAddress(emailVal.getEmailAdress());
+						childhoodSiteSpecificScreenEmail(childhoodTable);
+					} 
+			}
+	 	}
+		else{
+			log.warning("No updates are avaiable...");
+		}
 	}
 	
 	public boolean childhoodSiteSpecificScreenEmail(ChilhoodFact chilhoodFact){
@@ -238,6 +250,52 @@ public class EmailNotificationsJob implements Job {
 		return sendEmail(chilhoodFact.getEmailAddress(), message,props.getProperty("mail.childhood.subject.title"));
 	}
 	
+	/************************* PET Email Execution *******************/
+	
+	public void petDailyReport(DateTime dateFrom ){
+	
+		String todayDate = Constants.DATE_FORMATWH.format(dateFrom.toDate());
+		ArrayList<PetFact> factPet = warehouseOpenmrsInstance.getPetFact(todayDate);
+		if (!factPet.isEmpty()) {
+			for (PetFact petTable : factPet) {
+				Email emailVal = warehouseOpenmrsInstance.getEmailByLocationId(petTable.getLocationId());
+					if (emailVal == null) {
+						log.warning("This Location:"+ petTable.getLocationDescription()+ " have not linked with any site supervisor email ");
+					} else {
+						petTable.setEmailAddress(emailVal.getEmailAdress());
+						petSiteDailyReport(petTable);
+					} 
+			}
+	 	}
+		else{
+			log.warning("No updates are avaiable...");
+		}
+		
+	}
+	
+	public boolean petSiteDailyReport(PetFact factPet){
+		
+		String facilityName =factPet.getLocationDescription()+" ( "+factPet.getLocationName()+" )";
+		Map<String,Integer> mapping = new HashMap<String,Integer>();
+			mapping.put("No of Index Patient Registered",factPet.getNoOfIndexPatientRegistered());
+			mapping.put("No of DSTB patients ",factPet.getNoOfDSTBPatients());
+			mapping.put("No of DRTB patients ",factPet.getNoOfDRTBPatients());
+			mapping.put("No of Baseline Screening",factPet.getNoOfBaselineScreening());
+			mapping.put("No of Index Patients agreed for their contacts' screening",factPet.getNoOfIndexPatientsAgreed());
+			mapping.put("No of Adults Contacts",factPet.getNoOfAdultsContacts());
+			mapping.put("No of Peads Contacts",factPet.getNoOfPeadsContacts());
+			mapping.put("No of index not eligible for study",factPet.getNoOfIndexNotEligibleStudy());
+			mapping.put("No of Contact Screening Counseling Done",factPet.getNoOfContactScreeningCounselingDone());
+			mapping.put("No of Baseline Counseling Done",factPet.getNoOfBaselineCounselingDone());
+			mapping.put("No of Contacts Investigated",factPet.getNoOfContactsInvestigated());
+			mapping.put("No of Contacts diagnosed with TB",factPet.getNoOfContactsDiagnosedTB());
+			mapping.put("No of contacts eligible for PET",factPet.getNoOfContactsEligiblePET());
+			mapping.put("No of contacts agreed for PET",factPet.getNoOfContactsAgreedPET());
+			mapping.put("No of Contacts completed treatment",factPet.getNoOfContactsCompletedTreatment());
+		
+			String message =  tableFormate(mapping,facilityName);
+			return sendEmail(factPet.getEmailAddress(), message,props.getProperty("mail.pet.subject.title"));
+	}
 	
 	/******************* Common Methods ************************/
 	

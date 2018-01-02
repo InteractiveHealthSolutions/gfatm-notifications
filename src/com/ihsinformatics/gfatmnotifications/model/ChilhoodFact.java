@@ -1,6 +1,7 @@
 package com.ihsinformatics.gfatmnotifications.model;
 
 public class ChilhoodFact {
+	
 	private Integer locationId;
 	private String locationName;
 	private String locationDescription;

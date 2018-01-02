@@ -81,8 +81,8 @@ public class GfatmNotificationsMain {
 	
 		// Notifications part
 		GfatmNotificationsMain gfatm = new GfatmNotificationsMain();
-		 SwingControl swingControlDemo = new SwingControl();
-		 swingControlDemo.showLabelDemo();
+		 /*SwingControl swingControlDemo = new SwingControl();
+		 swingControlDemo.showLabelDemo();*/
 		try {
 			//gfatm.createSmsJob();
 			//gfatm.createCallJob();
@@ -208,6 +208,7 @@ public class GfatmNotificationsMain {
         System.out.println(""+UtilityCollection.hours +" "+ UtilityCollection.minutes);
 		Trigger trigger = TriggerBuilder.newTrigger()
 				.withIdentity("emailTrigger", "notificationsGroup")
+				.forJob(emailJob)
 				.withSchedule(CronScheduleBuilder.cronSchedule(""+UtilityCollection.seconds+" "+UtilityCollection.minutes+" "+UtilityCollection.hours+" * * ?")).build(); //trigger will fire daily at 15:46 pm:
 		emailScheduler.scheduleJob(emailJob, trigger);
 		emailScheduler.start();
