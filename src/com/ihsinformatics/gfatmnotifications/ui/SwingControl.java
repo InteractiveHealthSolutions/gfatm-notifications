@@ -7,7 +7,7 @@ import java.util.Stack;
 import javax.swing.*;
 
 import com.ihsinformatics.gfatmnotifications.model.Email;
-import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
+import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 
 public class SwingControl {
 

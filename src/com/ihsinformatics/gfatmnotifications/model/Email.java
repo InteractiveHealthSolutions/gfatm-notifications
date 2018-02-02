@@ -4,6 +4,7 @@ public class Email {
 
 	private String emailAdress;
 	private Integer locationId;
+	private String locationName;
 	private String primaryContact;
 	private String secondaryContact;
 
@@ -65,7 +66,19 @@ public class Email {
 		this.secondaryContact = secondaryContact;
 	}
 
-	
-	
+	/**
+	 * @return the locationName
+	 */
+	public String getLocationName() {
+		return locationName;
+	}
+
+	/**
+	 * @param locationName the locationName to set
+	 */
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+
 	
 }

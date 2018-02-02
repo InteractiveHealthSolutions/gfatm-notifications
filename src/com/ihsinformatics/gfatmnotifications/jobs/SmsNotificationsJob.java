@@ -96,11 +96,9 @@ public class SmsNotificationsJob implements Job {
 
 	private void executeFastSms(DateTime dateFrom, DateTime dateTo) {
 		List<Encounter> encounters = new ArrayList<Encounter>();
-		HashSet<Encounter> ecc = new HashSet<Encounter>();
 		for (int type : Constants.FAST_ENCOUNTER_TYPE_IDS) {
 			List<Encounter> temp = getOpenmrs().getEncounters(dateFrom, dateTo,
 					type);
-			// ecc.addAll(temp);
 			encounters.addAll(temp);
 		}
 
@@ -445,6 +443,7 @@ public class SmsNotificationsJob implements Job {
 	@SuppressWarnings("deprecation")
 	public boolean sendTreatmentInitiationSms(Encounter encounter,
 			SmsController smsController) {
+		
 		Date returnVisitDate = null;
 		Map<String, Object> observation = encounter.getObservations();
 		System.out.print(observation.toString());
@@ -470,7 +469,6 @@ public class SmsNotificationsJob implements Job {
 					DateTimeUtil.SQL_DATETIME);
 
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
@@ -501,7 +499,6 @@ public class SmsNotificationsJob implements Job {
 		try {
 			String sendTo = encounter.getPatientContact();
 			// System.out.println(sendTo);
-
 			Calendar dueDate = Calendar.getInstance();
 			dueDate.setTime(returnVisitDate);
 			dueDate.set(Calendar.DATE, dueDate.get(Calendar.DATE) - 1);

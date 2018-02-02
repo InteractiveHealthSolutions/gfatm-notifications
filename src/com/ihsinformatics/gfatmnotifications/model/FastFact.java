@@ -1,7 +1,5 @@
 package com.ihsinformatics.gfatmnotifications.model;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class FastFact {
 

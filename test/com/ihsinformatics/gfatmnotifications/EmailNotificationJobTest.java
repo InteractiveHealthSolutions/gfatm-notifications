@@ -18,8 +18,8 @@ import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
 import com.ihsinformatics.gfatmnotifications.databaseconnections.Connections;
 import com.ihsinformatics.gfatmnotifications.jobs.SmsNotificationsJob;
 import com.ihsinformatics.gfatmnotifications.model.Email;
-import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
 import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
+import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 import com.ihsinformatics.util.DatabaseUtil;
 
 public class EmailNotificationJobTest {

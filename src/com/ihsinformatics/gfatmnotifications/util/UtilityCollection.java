@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmnotifications.model;
+package com.ihsinformatics.gfatmnotifications.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,14 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
-import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
+import com.ihsinformatics.gfatmnotifications.model.ChilhoodFact;
+import com.ihsinformatics.gfatmnotifications.model.Email;
+import com.ihsinformatics.gfatmnotifications.model.FastFact;
+import com.ihsinformatics.gfatmnotifications.model.Location;
+import com.ihsinformatics.gfatmnotifications.model.Patient;
+import com.ihsinformatics.gfatmnotifications.model.PatientScheduled;
+import com.ihsinformatics.gfatmnotifications.model.PetFact;
+import com.ihsinformatics.gfatmnotifications.model.User;
 import com.ihsinformatics.util.DatabaseUtil;
 
 public class UtilityCollection {
@@ -20,22 +27,8 @@ public class UtilityCollection {
 	private static ArrayList<FastFact> factFast;
 	private static ArrayList<ChilhoodFact> factChildhood;
 	private static ArrayList<PetFact> factPet;
-	/**
-	 * @return the factChildhood
-	 */
-	public static ArrayList<ChilhoodFact> getFactChildhood() {
-		return factChildhood;
-	}
-
-
-	/**
-	 * @param factChildhood the factChildhood to set
-	 */
-	public static void setFactChildhood(ArrayList<ChilhoodFact> factChildhood) {
-		UtilityCollection.factChildhood = factChildhood;
-	}
-
-
+	private  ArrayList<PatientScheduled> patientScheduledsList;
+	
 	/* private static List<Person> */
 	private static Map<Integer, String> encounterTypes;
 	private static List<Email> emailList;
@@ -258,6 +251,37 @@ public class UtilityCollection {
 	 */
 	public static void setFactPet(ArrayList<PetFact> factPet) {
 		UtilityCollection.factPet = factPet;
+	}
+
+	/**
+	 * @return the factChildhood
+	 */
+	public static ArrayList<ChilhoodFact> getFactChildhood() {
+		return factChildhood;
+	}
+
+
+	/**
+	 * @param factChildhood the factChildhood to set
+	 */
+	public static void setFactChildhood(ArrayList<ChilhoodFact> factChildhood) {
+		UtilityCollection.factChildhood = factChildhood;
+	}
+
+
+	/**
+	 * @return the patientScheduledsList
+	 */
+	public ArrayList<PatientScheduled> getPatientScheduledsList() {
+		return patientScheduledsList;
+	}
+
+
+	/**
+	 * @param patientScheduledsList the patientScheduledsList to set
+	 */
+	public void setPatientScheduledsList(ArrayList<PatientScheduled> patientScheduledsList) {
+		this.patientScheduledsList = patientScheduledsList;
 	}
 
 

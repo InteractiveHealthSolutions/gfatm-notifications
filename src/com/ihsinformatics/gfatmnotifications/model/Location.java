@@ -13,7 +13,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package com.ihsinformatics.gfatmnotifications.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -378,4 +377,20 @@ public class Location implements Serializable {
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
+
+	/**
+	 * @return the country
+	 */
+	public String getCountry() {
+		return country;
+	}
+
+	/**
+	 * @param country the country to set
+	 */
+	public void setCountry(String country) {
+		this.country = country;
+	}
+	
+	
 }

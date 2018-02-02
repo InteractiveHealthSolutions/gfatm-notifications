@@ -29,8 +29,7 @@ public class EmailController {
 		String[] recipient = {recipientList};
 	
 		try {
-			isSent = EmailEngine.getInstance().postHtmlMail(recipient,
-					subject, message, from);
+			isSent = EmailEngine.getInstance().postHtmlMail(recipient,subject, message, from);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 			log.warning("Email not send due to :- "+e.getMessage());

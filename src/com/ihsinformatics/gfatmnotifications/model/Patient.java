@@ -12,7 +12,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications.model;
 
-import java.util.Date;
 
 /**
  * @author owais.hussain@ihsinformatics.com

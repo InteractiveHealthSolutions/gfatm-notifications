@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -13,13 +12,9 @@ import javax.swing.JOptionPane;
 
 import org.ihs.emailer.EmailEngine;
 import org.ihs.emailer.EmailException;
-import org.joda.time.DateTime;
-import org.quartz.Scheduler;
 
-import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
 import com.ihsinformatics.gfatmnotifications.model.Constants;
-import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
-import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
+import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 import com.ihsinformatics.util.DatabaseUtil;
 
 public class Connections {
@@ -43,11 +38,11 @@ public class Connections {
 	public static String guestPassword = "";
 
 	public Connections() {
-
+		readProperties(propFilePath);
 	}
 
 	public void createConnection() {
-		boolean isConnectionBuild = false;
+		
 		if (!openmrsDbConnection()) {
 			System.out
 					.println("Failed to connect with local database. Exiting");
@@ -65,13 +60,13 @@ public class Connections {
 	 * @return
 	 */
 	public boolean openmrsDbConnection() {
+		
 		if (localDb != null) {
 		    return false;	
 		}
 		System.out.println("*** Starting up " + title + " ***");
 		System.out.println("Reading properties...");
 		System.out.println(propFilePath);
-		readProperties(propFilePath);
 		String url = props.getProperty("local.connection.url");
 		String driverName = props.getProperty("local.connection.driver_class");
 		String dbName = props.getProperty("local.connection.database");
@@ -115,8 +110,7 @@ public class Connections {
 		}
 		UtilityCollection.setWarehouseDb(whLocalDb);
 		//System.out.println("*** Starting Email Engine ***");
-		startEmailEngine();
-		return true;
+		return startEmailEngine();
 
 	}
 
@@ -153,17 +147,19 @@ public class Connections {
 	/**
 	 * Start Email Engine instance
 	 */
-	public void startEmailEngine() {
-
+	public boolean startEmailEngine() {
+       boolean isEnginStart = true;
 		try {
 			InputStream inputStream = Thread.currentThread()
 					.getContextClassLoader()
 					.getResourceAsStream(Constants.PROP_FILE_NAME);
-		///InputStream inputStream = Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
+		   //  InputStream inputStream = Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
 			prop = new Properties();
 			prop.load(inputStream);
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.warning("InpuStream In Email Engine method : "+e.getMessage());
+			isEnginStart = false;
 		}
 		guestUsername = prop.getProperty("mail.user.username");
 		guestPassword = prop.getProperty("mail.user.password");
@@ -174,12 +170,17 @@ public class Connections {
 		try {
 			System.out.println("*** Values **" + prop.isEmpty());
 			System.out.println("*** Starting Email Engine ***");
-			  EmailEngine.instantiateEmailEngine(prop);
+			EmailEngine.instantiateEmailEngine(prop);
+			isEnginStart =true;
 			
 		} catch (EmailException e) {
 			e.printStackTrace();
+			log.warning("Email Engine Exception : "+e.getMessage());
+			isEnginStart =false;
 		}
-
+		
+  return isEnginStart;
+	
 	}
 
 }

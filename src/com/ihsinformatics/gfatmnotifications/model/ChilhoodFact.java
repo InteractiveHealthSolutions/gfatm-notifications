@@ -28,6 +28,7 @@ public class ChilhoodFact {
 	private Integer antibioticTrialFUP;
 	private Integer iptFUP;
 	private String emailAddress;
+	private Integer endOfFUP;
 	
 	
 	
@@ -357,7 +358,7 @@ public class ChilhoodFact {
 	public void setEndOfFUP(Integer endOfFUP) {
 		this.endOfFUP = endOfFUP;
 	}
-	private Integer endOfFUP;
+	
 	
 	
 	

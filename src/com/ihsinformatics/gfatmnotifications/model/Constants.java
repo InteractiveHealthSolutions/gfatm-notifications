@@ -67,8 +67,8 @@ public final class Constants {
 	
 	/*********************Email Properties ******************/
 	
-	//public static final String PROP_FILE_NAME = "/src/tbreach-api.properties";
-	 public static final String PROP_FILE_NAME = "tbreach-api.properties";
+       //public static final String PROP_FILE_NAME = "/src/tbreach-api.properties";
+	  public static final String PROP_FILE_NAME = "tbreach-api.properties";
 	
 	
 	

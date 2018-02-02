@@ -11,19 +11,8 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
  */
 package com.ihsinformatics.gfatmnotifications;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.logging.Logger;
-
-import javax.swing.JOptionPane;
+import java.util.Calendar;
 
 import org.apache.http.Header;
 import org.apache.http.auth.AuthenticationException;
@@ -35,7 +24,6 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.joda.time.DateTime;
-import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -45,32 +33,27 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
-import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
 import com.ihsinformatics.gfatmnotifications.controllers.SmsController;
 import com.ihsinformatics.gfatmnotifications.databaseconnections.Connections;
 import com.ihsinformatics.gfatmnotifications.jobs.CallNotificationsJob;
-import com.ihsinformatics.gfatmnotifications.jobs.EmailNotificationsJob;
+import com.ihsinformatics.gfatmnotifications.jobs.PatientScheduledEmailNotificationJob;
 import com.ihsinformatics.gfatmnotifications.jobs.SmsNotificationsJob;
 import com.ihsinformatics.gfatmnotifications.model.Constants;
-import com.ihsinformatics.gfatmnotifications.model.FastFact;
-import com.ihsinformatics.gfatmnotifications.model.UtilityCollection;
-import com.ihsinformatics.gfatmnotifications.ui.SwingControl;
 import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
-import com.ihsinformatics.util.DatabaseUtil;
-import com.mysql.jdbc.Connection;
+import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 
 /**
- * @author owais.hussain@ihsinformatics.com
+ * @author owais.hussain@ihsinformatics.com 
  *
  */
 @SuppressWarnings("deprecation")
 public class GfatmNotificationsMain {
 
-	private static final Logger log = Logger.getLogger(Class.class.getName());
 	private static final String BASE_URL = "http://124.29.207.74:9902/openmrs/ws/rest/v1";
 	private Scheduler smsScheduler;
 	private Scheduler callScheduler;
-	private Scheduler emailScheduler;
+	private PatientScheduledEmailNotificationJob emaiJob;
+	private Calendar calendar = Calendar.getInstance();
 	/**
 	 * @param args
 	 * @throws InputRequiredException
@@ -84,13 +67,15 @@ public class GfatmNotificationsMain {
 		 /*SwingControl swingControlDemo = new SwingControl();
 		 swingControlDemo.showLabelDemo();*/
 		try {
-			//gfatm.createSmsJob();
+			// gfatm.createSmsJob();
 			//gfatm.createCallJob();
 			  gfatm.createEmailJob();
-		} catch (SchedulerException e) {
+			  System.gc();
+			  System.exit(0);
+		} catch (Exception e) {
 			e.printStackTrace();
+			System.exit(-1);
 		}
-
 	}
 
 	/**
@@ -129,11 +114,12 @@ public class GfatmNotificationsMain {
 	public GfatmNotificationsMain() {
 		
 		Connections connection = new Connections();
-		if (!connection.openmrsDbConnection()) {
-			System.out.println("Failed to connect with local database. Exiting");
-		}
+		/*if (!connection.openmrsDbConnection()) {
+			System.out.println("Failed to connect with local database. Exiting");	
+		}*/
 		if (!connection.wareHouseConnection()) {
 			System.out.println("Failed to connect with warehouse local database. Exiting");
+			 System.exit(-1);
 		}
 		
 	}
@@ -170,7 +156,6 @@ public class GfatmNotificationsMain {
 	public void createCallJob() throws SchedulerException {
 		DateTime from = new DateTime();
 		from.minusHours(Constants.CALL_SCHEDULE_INTERVAL_IN_HOURS);
-		DateTime to = new DateTime();
 		callScheduler = StdSchedulerFactory.getDefaultScheduler();
 		JobDetail callJob = JobBuilder.newJob(CallNotificationsJob.class)
 				.withIdentity("callJob", "callGroup").build();
@@ -193,24 +178,27 @@ public class GfatmNotificationsMain {
 		callScheduler.start();
 	}
 
-	public void createEmailJob() throws SchedulerException {
-		
-		emailScheduler = StdSchedulerFactory.getDefaultScheduler();
-		JobDetail emailJob = JobBuilder.newJob(EmailNotificationsJob.class)
-				.withIdentity("emailJob", "emailGroup").build();
-		
-		EmailNotificationsJob emailJobObj = new EmailNotificationsJob();
-		emailJobObj.setLocalDb(UtilityCollection.getWarehouseDb());
-		emailJobObj.setOpenmrsWarehouse(new OpenMrsUtil(UtilityCollection.getWarehouseDb()));
-		emailJobObj.setProps(Connections.prop);
-		emailJobObj.setEmailController(new EmailController());
-		emailJob.getJobDataMap().put("emailJob", emailJobObj);
-        System.out.println(""+UtilityCollection.hours +" "+ UtilityCollection.minutes);
-		Trigger trigger = TriggerBuilder.newTrigger()
-				.withIdentity("emailTrigger", "notificationsGroup")
-				.forJob(emailJob)
-				.withSchedule(CronScheduleBuilder.cronSchedule(""+UtilityCollection.seconds+" "+UtilityCollection.minutes+" "+UtilityCollection.hours+" * * ?")).build(); //trigger will fire daily at 15:46 pm:
-		emailScheduler.scheduleJob(emailJob, trigger);
-		emailScheduler.start();
+	public void createEmailJob() {
+				
+		/*
+		EmailNotificationsJob emailNotificationsJob = new EmailNotificationsJob();
+		emailNotificationsJob.execute();
+		*/
+
+		int day = calendar.get(Calendar.DAY_OF_WEEK); 
+		switch (day) {
+		    case Calendar.MONDAY:
+		    	emaiJob = new PatientScheduledEmailNotificationJob();
+				emaiJob.execute();
+				break;
+		    case Calendar.THURSDAY:
+		    	 emaiJob = new PatientScheduledEmailNotificationJob();
+				 emaiJob.execute();
+				break;
+		    case Calendar.FRIDAY:
+		    	 emaiJob = new PatientScheduledEmailNotificationJob();
+				 emaiJob.execute();
+				break;	
+		}
 	}
 }
