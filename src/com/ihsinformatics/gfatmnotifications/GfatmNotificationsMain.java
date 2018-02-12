@@ -33,12 +33,18 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
+import com.ihsinformatics.gfatmnotifications.Implementer.EmailManager;
+import com.ihsinformatics.gfatmnotifications.Interface.IConsumer;
+import com.ihsinformatics.gfatmnotifications.Interface.Iemail;
 import com.ihsinformatics.gfatmnotifications.controllers.SmsController;
 import com.ihsinformatics.gfatmnotifications.databaseconnections.Connections;
 import com.ihsinformatics.gfatmnotifications.jobs.CallNotificationsJob;
+import com.ihsinformatics.gfatmnotifications.jobs.EmailNotificationsJob;
 import com.ihsinformatics.gfatmnotifications.jobs.PatientScheduledEmailNotificationJob;
 import com.ihsinformatics.gfatmnotifications.jobs.SmsNotificationsJob;
 import com.ihsinformatics.gfatmnotifications.model.Constants;
+import com.ihsinformatics.gfatmnotifications.service.EmailServiceInjector;
+import com.ihsinformatics.gfatmnotifications.service.NotificationInjector;
 import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
 import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 
@@ -49,11 +55,8 @@ import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 @SuppressWarnings("deprecation")
 public class GfatmNotificationsMain {
 
-	private static final String BASE_URL = "http://124.29.207.74:9902/openmrs/ws/rest/v1";
 	private Scheduler smsScheduler;
 	private Scheduler callScheduler;
-	private PatientScheduledEmailNotificationJob emaiJob;
-	private Calendar calendar = Calendar.getInstance();
 	/**
 	 * @param args
 	 * @throws InputRequiredException
@@ -67,48 +70,21 @@ public class GfatmNotificationsMain {
 		 /*SwingControl swingControlDemo = new SwingControl();
 		 swingControlDemo.showLabelDemo();*/
 		try {
-			// gfatm.createSmsJob();
-			//gfatm.createCallJob();
-			  gfatm.createEmailJob();
-			  System.gc();
-			  System.exit(0);
+			
+		/*	//Send email
+			NotificationInjector injector = new EmailServiceInjector();
+			IConsumer consumer = injector.getConsumer();
+			consumer.getConnection(Constants.WAREHOUSE_CONNECTION);//Here we can pass string or required database connection e.g warehosue and  openmrs database connecion etc .
+			consumer.process();*/
+			
+			 // gfatm.createSmsJob();
+			 //gfatm.createCallJob();
+			   gfatm.createEmailJob();
+			   System.exit(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-	}
-
-	/**
-	 * Executes HTTP GET request and returns the response
-
-	 * @param restPart
-	 * @param echo
-	 * @return this method is design for openmrs restful api... current not in use 
-	 * may be  in future we have to move on restful api 
-	 * @throws AuthenticationException
-	 * @throws ClientProtocolException
-	 */
-	public static String get(String query, String username, String password)
-			throws AuthenticationException, ClientProtocolException,
-			IOException {
-		String response = "";
-		DefaultHttpClient httpClient = new DefaultHttpClient();
-		try {
-			String URL = BASE_URL + query;
-			HttpGet httpGet = new HttpGet(URL);
-			UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-					username, password);
-			BasicScheme scheme = new BasicScheme();
-			Header authorizationHeader = scheme.authenticate(credentials,
-					httpGet);
-			httpGet.setHeader(authorizationHeader);
-			ResponseHandler<String> responseHandler = new BasicResponseHandler();
-			response = httpClient.execute(httpGet, responseHandler);
-		} finally {
-			httpClient.getConnectionManager().shutdown();
-			httpClient.close();
-		}
-		return response;
 	}
 
 	public GfatmNotificationsMain() {
@@ -179,26 +155,8 @@ public class GfatmNotificationsMain {
 	}
 
 	public void createEmailJob() {
-				
-		/*
-		EmailNotificationsJob emailNotificationsJob = new EmailNotificationsJob();
-		emailNotificationsJob.execute();
-		*/
-
-		int day = calendar.get(Calendar.DAY_OF_WEEK); 
-		switch (day) {
-		    case Calendar.MONDAY:
-		    	emaiJob = new PatientScheduledEmailNotificationJob();
-				emaiJob.execute();
-				break;
-		    case Calendar.THURSDAY:
-		    	 emaiJob = new PatientScheduledEmailNotificationJob();
-				 emaiJob.execute();
-				break;
-		    case Calendar.FRIDAY:
-		    	 emaiJob = new PatientScheduledEmailNotificationJob();
-				 emaiJob.execute();
-				break;	
-		}
+		
+		Iemail emailInterface = new EmailManager();
+		emailInterface.execute();
 	}
 }

@@ -150,10 +150,10 @@ public class Connections {
 	public boolean startEmailEngine() {
        boolean isEnginStart = true;
 		try {
-			InputStream inputStream = Thread.currentThread()
+			/*InputStream inputStream = Thread.currentThread()
 					.getContextClassLoader()
-					.getResourceAsStream(Constants.PROP_FILE_NAME);
-		   //  InputStream inputStream = Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
+					.getResourceAsStream(Constants.PROP_FILE_NAME);*/
+		    InputStream inputStream = Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
 			prop = new Properties();
 			prop.load(inputStream);
 		} catch (Exception e) {

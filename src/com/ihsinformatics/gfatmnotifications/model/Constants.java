@@ -63,12 +63,13 @@ public final class Constants {
 	/*******************Program Names ***********************/
 	public static final String FAST_PROGRAM ="FAST";
 	public static final String CHILDHOOD_PROGRAM ="CHILDHOOD";
-	
-	
+	/*******************Connection Name ***********************/
+	public static final String WAREHOUSE_CONNECTION ="FAST";
+	public static final String OPENMRS_CONNECTION ="FAST";
 	/*********************Email Properties ******************/
 	
-       //public static final String PROP_FILE_NAME = "/src/tbreach-api.properties";
-	  public static final String PROP_FILE_NAME = "tbreach-api.properties";
+       public static final String PROP_FILE_NAME = "/src/tbreach-api.properties";
+	   /// public static final String PROP_FILE_NAME = "tbreach-api.properties";
 	
 	
 	

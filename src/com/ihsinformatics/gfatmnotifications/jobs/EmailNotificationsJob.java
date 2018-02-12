@@ -101,7 +101,7 @@ public class EmailNotificationsJob  {
 				}
 			 }
 		} else {
-			 sendEmail(props.getProperty("emailer.admin-email"),HtmlUtile.getInstance().messageFormate(),props.getProperty("mail.subject.title"));
+			 sendEmail(props.getProperty("emailer.admin-email"),HtmlUtile.getInstance().getMessageFormate(),props.getProperty("mail.subject.title"));
 			 log.warning("No updates are avaiable...");
 		}
 	}
@@ -129,17 +129,14 @@ public class EmailNotificationsJob  {
 	        mapping.put("MTB+ [External]", factTable.getmTBpveExternal());
 	        mapping.put("MTB+/RR+ [Internal]", factTable.getmTBpveRRpveInternal());
 	        mapping.put("MTB+/RR+ [External]",factTable.getmTBpveRRpveExternal());
-	        mapping.put("Error [all tests]", factTable.getAllError());
-	        mapping.put("No result [all tests]",factTable.getNoResult());
-	        mapping.put("Invalid [all tests]", factTable.getInvalidAllTest());
-	        mapping.put("Pending Samples", factTable.getPendingSamples());
+	        mapping.put("Error/Invalid/No Result", factTable.getErrorNoResultInvalid());
 	        mapping.put("Clinically Diagnosed", factTable.getClinicallyDiagnosed());
 	        mapping.put("Initiated on Antibiotic",factTable.getInitiatedOnAntibiotic());
 	        mapping.put("Initiated on TB Tx", factTable.getInitiatedOnTBTx());
          
 		String message =  HtmlUtile.getInstance().getHtmltableFormate(mapping,facilityName);
-		sendEmail("shujaat.ali@ihsinformatics.com", message, props.getProperty("mail.subject.title"));
-		return sendEmail(factTable.getEmailAddress(), message, props.getProperty("mail.subject.title"));
+		 sendEmail("shujaat.ali@ihsinformatics.com", message, props.getProperty("mail.subject.title"));
+	   return sendEmail(factTable.getEmailAddress(), message, props.getProperty("mail.subject.title"));
 	}
 
 	/************************* Childhood Email Execution *******************/
@@ -160,7 +157,7 @@ public class EmailNotificationsJob  {
 			}
 	 	}
 		else{
-			 sendEmail(props.getProperty("emailer.admin-email"),HtmlUtile.getInstance().messageFormate(),props.getProperty("mail.childhood.subject.title"));
+			 sendEmail(props.getProperty("emailer.admin-email"),HtmlUtile.getInstance().getMessageFormate(),props.getProperty("mail.childhood.subject.title"));
 			log.warning("No updates are avaiable...");
 		}
 	}
@@ -194,8 +191,8 @@ public class EmailNotificationsJob  {
 			mapping.put("End of follow up forms",chilhoodFact.getEndOfFUP());
 		
 		String message =   HtmlUtile.getInstance().getHtmltableFormate(mapping,facilityName);
-		 sendEmail("shujaat.ali@ihsinformatics.com", message, props.getProperty("mail.childhood.subject.title"));
-		return sendEmail(chilhoodFact.getEmailAddress(), message,props.getProperty("mail.childhood.subject.title"));
+	    sendEmail("shujaat.ali@ihsinformatics.com", message, props.getProperty("mail.childhood.subject.title"));
+	    return sendEmail(chilhoodFact.getEmailAddress(), message,props.getProperty("mail.childhood.subject.title"));
 	}
 	
 	/************************* PET Email Execution *******************/
@@ -216,7 +213,7 @@ public class EmailNotificationsJob  {
 			}
 	 	}
 		else{
-			sendEmail(props.getProperty("emailer.admin-email"),HtmlUtile.getInstance().messageFormate(),props.getProperty("mail.pet.subject.title"));
+			sendEmail(props.getProperty("emailer.admin-email"),HtmlUtile.getInstance().getMessageFormate(),props.getProperty("mail.pet.subject.title"));
 			log.warning("No updates are avaiable...");
 		}
 		

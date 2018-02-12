@@ -15,7 +15,12 @@ public class PatientScheduled {
 	private String  testType;
 	private String  raFacilityScheduled;
 	private String  raFacilityVisitDate;
-	
+	private String  facilityScheduled;
+	private String  facilityVisitDate;
+	private String  cReturnVisitDate;
+	private String  fReturnVisitDate;
+	private String  pReturnVisitDate;
+	private String  facilityName;
 	
 	/**
 	 * @return the patientId
@@ -112,6 +117,78 @@ public class PatientScheduled {
 	 */
 	public void setRaFacilityVisitDate(String raFacilityVisitDate) {
 		this.raFacilityVisitDate = raFacilityVisitDate;
+	}
+	/**
+	 * @return the facilityScheduled
+	 */
+	public String getFacilityScheduled() {
+		return facilityScheduled;
+	}
+	/**
+	 * @param facilityScheduled the facilityScheduled to set
+	 */
+	public void setFacilityScheduled(String facilityScheduled) {
+		this.facilityScheduled = facilityScheduled;
+	}
+	/**
+	 * @return the facilityVisitDate
+	 */
+	public String getFacilityVisitDate() {
+		return facilityVisitDate;
+	}
+	/**
+	 * @param facilityVisitDate the facilityVisitDate to set
+	 */
+	public void setFacilityVisitDate(String facilityVisitDate) {
+		this.facilityVisitDate = facilityVisitDate;
+	}
+	/**
+	 * @return the cReturnVisitDate
+	 */
+	public String getcReturnVisitDate() {
+		return cReturnVisitDate;
+	}
+	/**
+	 * @param cReturnVisitDate the cReturnVisitDate to set
+	 */
+	public void setcReturnVisitDate(String cReturnVisitDate) {
+		this.cReturnVisitDate = cReturnVisitDate;
+	}
+	/**
+	 * @return the fReturnVisitDate
+	 */
+	public String getfReturnVisitDate() {
+		return fReturnVisitDate;
+	}
+	/**
+	 * @param fReturnVisitDate the fReturnVisitDate to set
+	 */
+	public void setfReturnVisitDate(String fReturnVisitDate) {
+		this.fReturnVisitDate = fReturnVisitDate;
+	}
+	/**
+	 * @return the pReturnVisitDate
+	 */
+	public String getpReturnVisitDate() {
+		return pReturnVisitDate;
+	}
+	/**
+	 * @param pReturnVisitDate the pReturnVisitDate to set
+	 */
+	public void setpReturnVisitDate(String pReturnVisitDate) {
+		this.pReturnVisitDate = pReturnVisitDate;
+	}
+	/**
+	 * @return the facilityName
+	 */
+	public String getFacilityName() {
+		return facilityName;
+	}
+	/**
+	 * @param facilityName the facilityName to set
+	 */
+	public void setFacilityName(String facilityName) {
+		this.facilityName = facilityName;
 	}
 
 	

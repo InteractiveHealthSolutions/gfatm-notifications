@@ -34,7 +34,7 @@ public class PatientScheduledEmailNotificationJob {
   private Properties props;
   private String subject,subjectNotFound,watcherEmail,from;
   private Set<String> locationsSet;
-  
+  private String noUpdateAvailableSubject;
   
   public PatientScheduledEmailNotificationJob() {
       emailController = new EmailController();
@@ -46,7 +46,8 @@ public class PatientScheduledEmailNotificationJob {
 	  props= Connections.prop;
 	  watcherEmail =props.getProperty("emailer.watcher.email.address");
 	  subject= props.getProperty("mail.patient.schedule.subject");
-	  subjectNotFound =props.getProperty("mail.location.subject");
+	  subjectNotFound = props.getProperty("mail.location.subject");
+	  noUpdateAvailableSubject = props.getProperty("mail.update.available");
 	  from = props.getProperty("mail.user.username");
   } 
 
@@ -54,7 +55,6 @@ public class PatientScheduledEmailNotificationJob {
 	
 	   String startVisitDateStr = Constants.DATE_FORMATWH.format(startVisitDate.toDate());
 	   String endVisitDateStr = Constants.DATE_FORMATWH.format(endVisitDate.toDate());
-	  
 	   //load emails.
 	   openMrsUtil.LoadAllUsersEmail();
 	   //load the three day scheduled patients....
@@ -64,44 +64,53 @@ public class PatientScheduledEmailNotificationJob {
        System.exit(0);
   }
 
-  private void scheduledPatient() {
+  protected void scheduledPatient() {
 	  Email supervisorEmail;
 	  String htmlConvertStr;
+	  
 	  //First Step1 
 	  scheduledPatientList = UtilityCollection.getInstance().getPatientScheduledsList();
 	  if (!scheduledPatientList.isEmpty()) {
 			  Iterator<PatientScheduled> iterator = scheduledPatientList.iterator();
-			  while (iterator.hasNext()) {
+			  while (iterator.hasNext()) { //
 				  PatientScheduled patientScheduled = iterator.next(); 
-				  if (StringUtils.isBlank( patientScheduled.getRaFacilityScheduled()))
-					    supervisorEmail  = openMrsUtil.getEmailByLocationName(patientScheduled.getFupFacilityScheduled());
-				  else 
-					    supervisorEmail =openMrsUtil.getEmailByLocationName(patientScheduled.getRaFacilityScheduled());
+				   ///First we need to check 
+				   if(StringUtils.isBlank(HtmlUtile.getInstance().missedFupConditions(patientScheduled)))
+				        supervisorEmail  = openMrsUtil.getEmailByLocationName(patientScheduled.getFacilityScheduled());
+				   else 
+					   supervisorEmail = openMrsUtil.getEmailByLocationName(patientScheduled.getFacilityName());
+				   
 				  if (supervisorEmail == null) {
-					    locationsSet.add(patientScheduled.getFupFacilityScheduled());
-				   }
+					    locationsSet.add(patientScheduled.getFacilityScheduled()); 
+					    ArrayList<PatientScheduled> removeLocation =  openMrsUtil.getPatientByScheduledFacilityName(patientScheduled.getFacilityScheduled());
+					    scheduledPatientList.removeAll(removeLocation);//remove list of same location.
+					    iterator = scheduledPatientList.iterator();//reassign the new list.
+				  }
 				  else{
-					    ArrayList<PatientScheduled> patientScheduledResult =  openMrsUtil.getPatientByScheduledFacilityName(patientScheduled.getFupFacilityScheduled());
+					    ArrayList<PatientScheduled> patientScheduledResult =  openMrsUtil.getPatientByScheduledFacilityName(patientScheduled.getFacilityScheduled());
 					    scheduledPatientList.removeAll(patientScheduledResult);
 					    iterator = scheduledPatientList.iterator();//new Iterator.
 					    htmlConvertStr = HtmlUtile.getInstance().getHtmlTableWithMultipleCol(patientScheduledResult);
-					    sendEmail("shujaat.ali@ihsinformatics.com", htmlConvertStr, subject);
+					    sendEmail(watcherEmail, htmlConvertStr, subject);
+					    //sendEmail(supervisorEmail.getEmailAdress(), htmlConvertStr, subject);
 					  }     
 			  }
-		  sendEmail(watcherEmail,HtmlUtile.getInstance().getHtmlTableWithSet(locationsSet),subjectNotFound);
+        if (!locationsSet.isEmpty())//send thos location which are not linked with sit supervisor email.
+		   sendEmail(watcherEmail,HtmlUtile.getInstance().getHtmlTableWithSet(locationsSet),subjectNotFound);
 	  }
 	  else {
-		  sendEmail(watcherEmail,HtmlUtile.getInstance().getHtmlTableWithSet(locationsSet),subjectNotFound);
+		   sendEmail(watcherEmail,HtmlUtile.getInstance().getMessageFormate(),noUpdateAvailableSubject); 
 		}
   }
   
-  public boolean sendEmail(String email ,String message,String subject){
+  protected boolean sendEmail(String email ,String message,String subject){
 		
 		boolean isSent = emailController.sendEmailWithHtml(email,
 				subject, message,
 				from);
 		return isSent;	
 	}
-
+  
+  
 
 }

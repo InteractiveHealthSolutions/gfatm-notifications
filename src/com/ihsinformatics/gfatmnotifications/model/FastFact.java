@@ -24,6 +24,7 @@ public class FastFact {
 	private Integer noResult;
 	private Integer invalidAllTest;
 	private Integer pendingSamples;
+	private Integer errorNoResultInvalid;
 	private Integer clinicallyDiagnosed;
 	private Integer initiatedOnAntibiotic;
 	private Integer initiatedOnTBTx;
@@ -440,6 +441,20 @@ public class FastFact {
 	 */
 	public void setSecondaryContct(String secondaryContct) {
 		this.secondaryContct = secondaryContct;
+	}
+
+	/**
+	 * @return the errorNoResultInvalid
+	 */
+	public Integer getErrorNoResultInvalid() {
+		return errorNoResultInvalid;
+	}
+
+	/**
+	 * @param errorNoResultInvalid the errorNoResultInvalid to set
+	 */
+	public void setErrorNoResultInvalid(Integer errorNoResultInvalid) {
+		this.errorNoResultInvalid = errorNoResultInvalid;
 	}
 
 	

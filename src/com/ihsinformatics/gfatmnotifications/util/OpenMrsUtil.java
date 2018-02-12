@@ -313,7 +313,9 @@ public class OpenMrsUtil {
 		if (from == null || to == null) {
 			return null;
 		}
+		@SuppressWarnings("deprecation")
 		String sqlFrom = DateTimeUtil.getSqlDateTime(from.toDate());
+		@SuppressWarnings("deprecation")
 		String sqlTo = DateTimeUtil.getSqlDateTime(to.toDate());
 		StringBuilder filter = new StringBuilder();
 		filter.append("where e.voided = 0 and e.date_created between ");
@@ -556,8 +558,7 @@ public class OpenMrsUtil {
 		query.append(" ff.Samples_Collected_CXR_Presumptives as samplesCollectedCXRPresumptives,ff.GXP_Tests_Done as gxpTestsDone, ");
 		query.append(" ff.Internal_Tests as internalTests, ff.External_Tests as externalTests,ff.MTBpve_Internal as mTBpveInternal ,ff.MTBpve_External as mTBpveExternal, ");
 		query.append(" ff.MTBpve_RRpve_Internal as mTBpveRRpveInternal,ff.MTBpve_RRpve_External as mTBpveRRpveExternal, ");
-		query.append(" ff.Error_ as allError ,ff.No_result as noResult , ff.Invalid as invalidAllTest ,ff.Pending_Samples as pendingSamples, ");
-		query.append(" ff.Clinically_Diagnosed as clinicallyDiagnosed,ff.Initiated_on_Antibiotic as initiatedOnAntibiotic, ff.Initiated_on_TBTx as initiatedOnTBTx  ");
+		query.append(" ff.Error_No_result_Invalid as errorNoResultInvalid,ff.Clinically_Diagnosed as clinicallyDiagnosed,ff.Initiated_on_Antibiotic as initiatedOnAntibiotic, ff.Initiated_on_TBTx as initiatedOnTBTx ");
 		query.append(" from fact_fast_dsss ff  ");
 		query.append(" Inner join dim_datetime dd  on dd.datetime_id = ff.datetime_id ");
 		query.append(" Inner join location l on l.location_id = ff.location_id ");
@@ -672,14 +673,36 @@ public class OpenMrsUtil {
 	   UtilityCollection.getInstance().setPatientScheduledsList(new ArrayList<PatientScheduled>());
 	   
 	   StringBuilder query = new StringBuilder();
-	   	query.append(" select distinct dp.patient_identifier as patientIdentifier,dp.patient_id as patientId,ccTbFup.reason_for_call as reasonForCall, ccTbFup.facility_scheduled as fupFacilityScheduled,date(ccTbFup.facility_visit_date) as fupFacilityVisitDate ");
-	   	query.append(" ,ccDtra.test_type as testType, ccDtra.facility_scheduled as raFacilityScheduled,date(ccDtra.facility_visit_date) as raFacilityVisitDate from gfatm_dw.enc_cc___tb_investigation_fup ccTbFup ");
-	   	query.append(" left join gfatm_dw.dim_patient dp on dp.patient_id = ccTbFup.patient_id  inner join gfatm_dw.dim_location dl on dl.location_name = ccTbFup.facility_scheduled  ");
-		query.append(" left join gfatm_dw.dim_user duFup on duFup.identifier= ccTbFup.provider left join gfatm_dw.enc_cc___diagnostic_test_result_available ccDtra on ccDtra.patient_id = ccTbFup.patient_id and ccDtra.facility_visit_date is not null ");
-		query.append(" left join gfatm_dw.dim_user duTra on duTra.identifier = ccDtra.provider where ccTbFup.facility_visit_date is not null  ");
-		query.append(" and date(ccTbFup.facility_visit_date) between '"+startDate+"' and '"+endDate+"'; ");
-		//query.append(" and date(ccTbFup.facility_visit_date) between '2018-01-01' and '2018-01-03'; ");
-			
+		   query.append(" SELECT distinct dp.patient_id as patientId ,dp.patient_identifier as patientIdentifier, basTable.facility_scheduled as facilityScheduled , ccifup.reason_for_call as reasonForCall,ccifup.facility_scheduled as fupFacilityScheduled ,date(ccifup.facility_visit_date) as fupFacilityVisitDate, ");
+		   query.append(" ccdtra.test_type as testType,ccdtra.facility_scheduled as raFacilityScheduled , date(ccdtra.facility_visit_date) as raFacilityVisitDate, ");
+		   query.append(" if(dp.health_center is not null,hdl.location_name,dl.location_name) as facilityName, date(cccmvf.return_visit_date)as cReturnVisitDate, date(ccpmvf.return_visit_date)as pReturnVisitDate,date(ccfmvf.return_visit_date)as fReturnVisitDate  ");
+		   query.append(" FROM (  ");
+		   query.append(" select ifup.patient_id ,ifup.facility_visit_date,ifup.facility_scheduled ,null as return_visit_date from  enc_cc___tb_investigation_fup  ifup ");
+		   query.append(" union ");
+		   query.append(" select dtra.patient_id,dtra.facility_visit_date,dtra.facility_scheduled ,null as return_visit_date from enc_cc___diagnostic_test_result_available dtra ");
+		   query.append(" union ");
+		   query.append(" select cmvf.patient_id,null,null,cmvf.return_visit_date from enc_childhood_tb_missed_visit_followup cmvf ");
+		   query.append(" union ");
+		   query.append(" select pmvf.patient_id,null,null,pmvf.return_visit_date from enc_pet_missed_visit_followup pmvf "); 
+		   query.append(" union ");
+		   query.append(" select fmvf.patient_id,null,null,fmvf.return_visit_date from enc_fast_missed_visit_followup fmvf ");
+		   query.append(" ) basTable ");
+		   query.append(" inner join gfatm_dw.dim_patient dp on dp.patient_id = basTable.patient_id   ");
+		   query.append(" inner join gfatm_dw.patient_identifier di on di.patient_id = basTable.patient_id ");
+		   query.append(" inner join gfatm_dw.dim_location dl on dl.location_id = di.location_id ");
+		   query.append(" left join gfatm_dw.dim_location hdl on hdl.location_id =dp.health_center   "); 
+		   query.append(" left join gfatm_dw.enc_cc___tb_investigation_fup ccifup on ccifup.patient_id = basTable.patient_id and ccifup.facility_visit_date is not null and  date(ccifup.date_entered) = (select max(date_entered) from enc_cc___tb_investigation_fup where patient_id =ccifup.patient_id)  ");
+		   query.append(" left join gfatm_dw.dim_user duFup on duFup.identifier= ccifup.provider  ");
+		   query.append(" left join gfatm_dw.enc_cc___diagnostic_test_result_available ccdtra on ccdtra.patient_id=basTable.patient_id and ccdtra.facility_visit_date is not null and date(ccdtra.date_entered) = (select max(date_entered) from enc_cc___diagnostic_test_result_available where patient_id =ccdtra.patient_id) "); 
+		   query.append(" left join gfatm_dw.dim_user dudtra on dudtra.identifier= ccdtra.provider ");
+		   query.append(" left join gfatm_dw.enc_fast_missed_visit_followup ccfmvf on ccfmvf.patient_id=basTable.patient_id and ccfmvf.location_name='IBEX-KHI' and ccfmvf.return_visit_date is not null  and date(ccfmvf.date_entered) = (select max(date_entered) from enc_fast_missed_visit_followup where patient_id =ccfmvf.patient_id)  ");
+		   query.append(" left join gfatm_dw.dim_user dufmvf on dufmvf.identifier= ccfmvf.provider ");
+		   query.append(" left join gfatm_dw.enc_childhood_tb_missed_visit_followup cccmvf on cccmvf.patient_id=basTable.patient_id and cccmvf.location_name='IBEX-KHI' and cccmvf.return_visit_date is not null and date(cccmvf.date_entered) = (select max(date_entered) from enc_childhood_tb_missed_visit_followup where patient_id =cccmvf.patient_id) "); 
+		   query.append(" left join gfatm_dw.dim_user ducmvf on ducmvf.identifier= cccmvf.provider ");
+		   query.append(" left join gfatm_dw.enc_pet_missed_visit_followup ccpmvf on ccpmvf.patient_id=basTable.patient_id and ccpmvf.location_name='IBEX-KHI' and ccpmvf.return_visit_date is not null  and date(ccpmvf.date_entered) = (select max(date_entered) from enc_pet_missed_visit_followup where patient_id =ccpmvf.patient_id)  ");
+		   query.append(" left join gfatm_dw.dim_user dupmvf on dupmvf.identifier= ccpmvf.provider ");
+		   query.append(" where ( date(basTable.facility_visit_date) between '"+startDate+"' and '"+endDate+"' ||  date (basTable.return_visit_date) between '"+startDate+"' and '"+endDate+"' ) ; ");
+
    	    String jsonString = queryToJson(query.toString());
 	   	Type listType = new TypeToken<List<PatientScheduled>>() {}.getType();
 		Gson gson = new Gson();
@@ -696,12 +719,14 @@ public class OpenMrsUtil {
    		   return null;
 		}
 	   else{
-		   System.out.println("Befor : "+UtilityCollection.getInstance().getPatientScheduledsList().size());
-		    for (PatientScheduled patientScheduled : UtilityCollection.getInstance().getPatientScheduledsList()) {
-			    if (patientScheduled.getFupFacilityScheduled().equals(facilityName)){
-			    	 filterList.add(patientScheduled);
-			       }
-			}
+		   try{		   
+			    for (PatientScheduled patientScheduled : UtilityCollection.getInstance().getPatientScheduledsList()) {
+			    	if (patientScheduled.getFacilityScheduled().equals(facilityName))
+						    filterList.add(patientScheduled);
+			      }
+		   }catch(Exception e){
+			   log.warning(e.getMessage());
+		   }
 		   }
 	    return  filterList;
    }

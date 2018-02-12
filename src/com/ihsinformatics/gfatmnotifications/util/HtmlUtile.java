@@ -26,8 +26,8 @@ import com.ihsinformatics.gfatmnotifications.model.PatientScheduled;
 	 return instance;	
   }
   //this method used for the static email content ... 
-  public String  messageFormate(){
-  	
+  public String  getMessageFormate(){
+  
   	StringBuilder buf = new StringBuilder();
 		buf.append("<html><body style='font-family: Arial, Helvetica, Monospace;'>");
 			buf.append("<p>");
@@ -79,20 +79,23 @@ import com.ihsinformatics.gfatmnotifications.model.PatientScheduled;
 		           "<body>" +
 		           "<table style='font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif; border-spacing: 0px;  border-style:none; width: 100%;'>" +
 		           "<caption style='padding: 8px; padding-top: 12px; padding-bottom: 12px;font-size: 150%;'><code>");
-		 buf.append(mapping.get(0).getFupFacilityScheduled());
+		 buf.append(StringUtils.isBlank(missedFupConditions(mapping.get(0)))?mapping.get(0).getFacilityScheduled():mapping.get(0).getFacilityName());
 		 buf.append("</code></caption>"+
 		           "<tr>" +
-		           "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Patient Id</th>" +
+		           "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Internal Patient ID</th>" +
+		           "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>PID</th>" +
 		           "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Reason For Visit</th>" +
 		           "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Facility Visit Date</th>" +  
 				 "</tr>");
 		 for (PatientScheduled patientScheduled : mapping) {
 			 buf.append("<tr><td style = 'border: 1px solid #ddd;padding: 8px;'>")
+		        .append(patientScheduled.getPatientId())
+		        .append("</td><td style = 'border: 1px solid #ddd;padding: 8px;'>")
 		        .append(patientScheduled.getPatientIdentifier())
 		        .append("</td><td style = 'border: 1px solid #ddd;padding: 8px;'>")
-		        .append(StringUtils.isBlank(patientScheduled.getTestType())? patientScheduled.getReasonForCall():patientScheduled.getTestType())
+		        .append(StringUtils.isBlank(missedFupConditions(patientScheduled))?(StringUtils.isBlank(patientScheduled.getTestType())? patientScheduled.getReasonForCall():patientScheduled.getTestType()):missedFupConditions(patientScheduled))
 		        .append("</td><td style = 'border: 1px solid #ddd;padding: 8px;'>")
-		        .append(StringUtils.isBlank(patientScheduled.getRaFacilityVisitDate())? patientScheduled.getFupFacilityVisitDate() : patientScheduled.getRaFacilityVisitDate())
+		        .append(StringUtils.isBlank(missedFupConditions(patientScheduled))?(StringUtils.isBlank(patientScheduled.getRaFacilityVisitDate())? patientScheduled.getFupFacilityVisitDate() : patientScheduled.getRaFacilityVisitDate()):getMisedFupReturnVisitDate(patientScheduled))
 		        .append("</td></tr>");	
 		  }		 
 		buf.append("</table>" +
@@ -137,4 +140,27 @@ import com.ihsinformatics.gfatmnotifications.model.PatientScheduled;
 		return html;
 
   }
+  
+  public String missedFupConditions(PatientScheduled patientRecords){
+	  
+	  if(patientRecords.getcReturnVisitDate() != null)
+	        return "Childhood TB-Missed Visit Followup";
+	   else if(patientRecords.getpReturnVisitDate() !=null )
+           return "PET-Missed Visit Followup";
+      else if(patientRecords.getfReturnVisitDate() !=null)			
+	         return "FAST-Missed Visit Followup";
+		else
+           return null;		
+	 } 
+ public String getMisedFupReturnVisitDate(PatientScheduled patientRecords){
+	  
+	  if(patientRecords.getcReturnVisitDate() != null)
+	        return patientRecords.getcReturnVisitDate();
+	   else if(patientRecords.getpReturnVisitDate() !=null )
+           return patientRecords.getpReturnVisitDate();
+      else if(patientRecords.getfReturnVisitDate() !=null)			
+	         return  patientRecords.getfReturnVisitDate();
+		else
+           return null;		
+	 } 
 }
