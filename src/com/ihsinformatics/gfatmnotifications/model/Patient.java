@@ -12,52 +12,51 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications.model;
 
-
 /**
  * @author owais.hussain@ihsinformatics.com
  *
  */
 public class Patient {
 
-	private Integer personId;
-	private String givenName;
-	private String lastName;
-	private String gender;
-	private String birthdate;
-	private String estimated;
-	private String birthplace;
-	private String maritalStatus;
-	private String healthCenter;
-	private String healthDistrict;
-	private String motherName;
-	private String primaryContact;
-	private String primaryContactOwner;
-	private String secondaryContact;
-	private String secondaryContactOwner;
-	private String ethnicity;
-	private String educationLevel;
-	private String employmentStatus;
-	private String occupation;
-	private String motherTongue;
-	private String incomeClass;
-	private String nationalID;
-	private String nationalIDOwner;
-	private String guardianName;
-	private String treatmentSupporter;
-	private String otherIdentificationNumber;
-	private String transgender;
-	private String patientType;
-	private Boolean dead;
-	private String creator;
-	private long dateCreated;
-	private String address1;
-	private String address2;
-	private String district;
-	private String cityVillage;
-	private String country;
-	private String landmark;
-	private String patientIdentifier;
-	private String uuid;
+	private Integer	personId;
+	private String	givenName;
+	private String	lastName;
+	private String	gender;
+	private String	birthdate;
+	private String	estimated;
+	private String	birthplace;
+	private String	maritalStatus;
+	private String	healthCenter;
+	private String	healthDistrict;
+	private String	motherName;
+	private String	primaryContact;
+	private String	primaryContactOwner;
+	private String	secondaryContact;
+	private String	secondaryContactOwner;
+	private String	ethnicity;
+	private String	educationLevel;
+	private String	employmentStatus;
+	private String	occupation;
+	private String	motherTongue;
+	private String	incomeClass;
+	private String	nationalID;
+	private String	nationalIDOwner;
+	private String	guardianName;
+	private String	treatmentSupporter;
+	private String	otherIdentificationNumber;
+	private String	transgender;
+	private String	patientType;
+	private Boolean	dead;
+	private String	creator;
+	private long	dateCreated;
+	private String	address1;
+	private String	address2;
+	private String	district;
+	private String	cityVillage;
+	private String	country;
+	private String	landmark;
+	private String	patientIdentifier;
+	private String	uuid;
 
 	public Patient() {
 	}
@@ -631,7 +630,6 @@ public class Patient {
 	public void setPatientIdentifier(String patientIdentifier) {
 		this.patientIdentifier = patientIdentifier;
 	}
-
 
 	/**
 	 * @return the uuid

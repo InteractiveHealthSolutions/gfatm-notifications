@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -34,19 +33,22 @@ import com.ihsinformatics.util.DateTimeUtil;
 
 public class SmsNotificationJobTest {
 
-	private DateTime dateFrom;
-	private DateTime dateTo;
-	SmsNotificationsJob sms;
-	OpenMrsUtil openMrs;
-	private static final Logger log = Logger.getLogger(Class.class.getName());
-	private static final String userHome = System.getProperty("user.home")
-			+ System.getProperty("file.separator") + "gfatm";
-	private static String propFilePath = userHome
-			+ System.getProperty("file.separator")
-			+ "gfatm-notifications.properties";
-	private static Properties props;
-	private static String title = "GFATM Notifications ";
-	private static DatabaseUtil localDb;
+	private DateTime			dateFrom;
+	@SuppressWarnings("unused")
+	private DateTime			dateTo;
+	SmsNotificationsJob			sms;
+	OpenMrsUtil					openMrs;
+	private static final Logger	log				= Logger.getLogger(Class.class
+														.getName());
+	private static final String	userHome		= System.getProperty("user.home")
+														+ System.getProperty("file.separator")
+														+ "gfatm";
+	private static String		propFilePath	= userHome
+														+ System.getProperty("file.separator")
+														+ "gfatm-notifications.properties";
+	private static Properties	props;
+	private static String		title			= "GFATM Notifications ";
+	private static DatabaseUtil	localDb;
 
 	@Before
 	public void setUp() throws Exception {
@@ -64,7 +66,7 @@ public class SmsNotificationJobTest {
 		localDb = new DatabaseUtil(url, dbName, driverName, userName, password);
 		if (!localDb.tryConnection()) {
 			System.out
-					.println("Failed to connect with local database. Exiting");
+			.println("Failed to connect with local database. Exiting");
 			System.exit(-1);
 		}
 		dateFrom = new DateTime();
@@ -92,7 +94,7 @@ public class SmsNotificationJobTest {
 	 * encounter which doesn't have tb_patient than it fail our assertion
 	 * testing. tb_patient is must according to codebook. Some cases depends
 	 * upon the execution time.
-	 * 
+	 *
 	 */
 
 	public void sendTreatmentInitiationSmsTest() {
@@ -192,13 +194,14 @@ public class SmsNotificationJobTest {
 	}
 
 	/**
-	 * I copy this methods from the SmsNotificationJob  for testing purpose.
-	 * 
+	 * I copy this methods from the SmsNotificationJob for testing purpose.
+	 *
 	 * @param encounter
 	 * @param smsController
 	 * @param openmrsTestInstant
 	 * @return
 	 */
+	@SuppressWarnings({ "unused", "deprecation" })
 	public boolean sendTreatmentInitiationTestSms(Encounter encounter,
 			SmsController smsController, OpenMrsUtil openmrsTestInstant) {
 		Date returnVisitDate = null;
@@ -220,7 +223,7 @@ public class SmsNotificationJobTest {
 		 * endFupEncounter : encounterEndFup) { if
 		 * (endFupEncounter.getIdentifier().equals( encounter.getIdentifier()))
 		 * {
-		 * 
+		 *
 		 * Map<String, Object> observations = getObservations(endFupEncounter);
 		 * endFupEncounter.setObservations(observations);
 		 * EndOfFollowUpObservation = endFupEncounter.getObservations(); } }
@@ -342,9 +345,9 @@ public class SmsNotificationJobTest {
 
 			dueDate = dueDate.plusDays(1);
 			Date parsDate = new SimpleDateFormat("dd-MMM-yyyy")
-					.parse(Constants.DATE_FORMAT.format(dueDate.toDate()));
+			.parse(Constants.DATE_FORMAT.format(dueDate.toDate()));
 			Date currentDate = new SimpleDateFormat("dd-MMM-yyyy")
-					.parse(Constants.DATE_FORMAT.format(new Date()));
+			.parse(Constants.DATE_FORMAT.format(new Date()));
 			if (parsDate.before(currentDate)) {
 				return false;
 			}
@@ -416,11 +419,12 @@ public class SmsNotificationJobTest {
 			return false;
 		}
 		try {
-            //Past date is not allowed so, we ignore or skip the past date notifications
+			// Past date is not allowed so, we ignore or skip the past date
+			// notifications
 			returnVisitDate = DateTimeUtil.getDateFromString(returnVisitStr,
 					DateTimeUtil.SQL_DATETIME);
 			Date currentDate = new SimpleDateFormat("dd-MMM-yyyy")
-					.parse(Constants.DATE_FORMAT.format(new Date()));
+			.parse(Constants.DATE_FORMAT.format(new Date()));
 
 			if (returnVisitDate.before(currentDate)) {
 				return false;
@@ -491,10 +495,10 @@ public class SmsNotificationJobTest {
 				boolean checkDir = new File(userHome).mkdir();
 				if (!checkDir) {
 					JOptionPane
-							.showMessageDialog(
-									null,
-									"Could not create properties file. Please check the permissions of your home folder.",
-									"Error!", JOptionPane.ERROR_MESSAGE);
+					.showMessageDialog(
+							null,
+							"Could not create properties file. Please check the permissions of your home folder.",
+							"Error!", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			propFile = new FileInputStream(propertiesFile);

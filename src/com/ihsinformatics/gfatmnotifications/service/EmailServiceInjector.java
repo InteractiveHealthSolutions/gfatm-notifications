@@ -4,7 +4,6 @@ import com.ihsinformatics.gfatmnotifications.Implementer.EmailServiceImpl;
 import com.ihsinformatics.gfatmnotifications.Interface.IConsumer;
 import com.ihsinformatics.gfatmnotifications.controllers.NotificationController;
 
-
 public class EmailServiceInjector implements NotificationInjector {
 
 	@Override
@@ -13,7 +12,5 @@ public class EmailServiceInjector implements NotificationInjector {
 		app.setService(new EmailServiceImpl());
 		return app;
 	}
-
-	
 
 }

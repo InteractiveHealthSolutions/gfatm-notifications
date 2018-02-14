@@ -8,7 +8,7 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
-*/
+ */
 
 package com.ihsinformatics.gfatmnotifications.jobs;
 
@@ -25,18 +25,21 @@ import com.ihsinformatics.util.DatabaseUtil;
  */
 public class CallNotificationsJob implements Job {
 
-	private DatabaseUtil localDb;
+	private DatabaseUtil	localDb;
 
-	private boolean filterDate = true;
-	private DateTime dateFrom;
-	private DateTime dateTo;
+	private boolean			filterDate	= true;
+	private DateTime		dateFrom;
+	private DateTime		dateTo;
 
 	public CallNotificationsJob() {
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
+	@Override
 	public void execute(JobExecutionContext context)
 			throws JobExecutionException {
 		// TODO Auto-generated method stub

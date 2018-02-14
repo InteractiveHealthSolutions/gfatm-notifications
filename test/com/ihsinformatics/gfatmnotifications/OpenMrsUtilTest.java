@@ -21,14 +21,15 @@ import com.ihsinformatics.util.DatabaseUtil;
 
 public class OpenMrsUtilTest {
 
-	private static final String userHome = System.getProperty("user.home")
-			+ System.getProperty("file.separator") + "gfatm";
-	private static String propFilePath = userHome
-			+ System.getProperty("file.separator")
-			+ "gfatm-notifications.properties";
-	private static Properties props;
-	private static DatabaseUtil localDb;
-	private static OpenMrsUtil util;
+	private static final String	userHome		= System.getProperty("user.home")
+														+ System.getProperty("file.separator")
+														+ "gfatm";
+	private static String		propFilePath	= userHome
+														+ System.getProperty("file.separator")
+														+ "gfatm-notifications.properties";
+	private static Properties	props;
+	private static DatabaseUtil	localDb;
+	private static OpenMrsUtil	util;
 
 	@BeforeClass
 	public static void setUp() throws IOException {
@@ -51,7 +52,7 @@ public class OpenMrsUtilTest {
 		localDb = new DatabaseUtil(url, dbName, driverName, userName, password);
 		if (!localDb.tryConnection()) {
 			System.out
-					.println("Failed to connect with local database. Exiting");
+			.println("Failed to connect with local database. Exiting");
 			System.exit(-1);
 		}
 		util = new OpenMrsUtil(localDb);

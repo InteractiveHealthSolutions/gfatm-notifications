@@ -21,32 +21,32 @@ import java.io.Serializable;
 public class Location implements Serializable {
 
 	/**
-	 * 
+	 *
 	 */
-	private static final long serialVersionUID = -4675815525012531145L;
-	private Integer location_id;
-	private String name;
-	private Integer parentId;
-	private String uuid;
-	private Boolean fast;
-	private Boolean pet;
-	private Boolean childhoodTb;
-	private Boolean comorbidities;
-	private Boolean pmdt;
-	private String primaryContact;
-	private String primaryContactName;
-	private String secondaryContact;
-	private String secondaryContactName;
-	private String locationType;
-	private String address1;
-	private String address2;
-	private String address3;
-	private String city_village;
-	private String state_province;
-	private String description;
-	private String country;
-	private long date_created;
-	private Boolean status;
+	private static final long	serialVersionUID	= -4675815525012531145L;
+	private Integer				location_id;
+	private String				name;
+	private Integer				parentId;
+	private String				uuid;
+	private Boolean				fast;
+	private Boolean				pet;
+	private Boolean				childhoodTb;
+	private Boolean				comorbidities;
+	private Boolean				pmdt;
+	private String				primaryContact;
+	private String				primaryContactName;
+	private String				secondaryContact;
+	private String				secondaryContactName;
+	private String				locationType;
+	private String				address1;
+	private String				address2;
+	private String				address3;
+	private String				city_village;
+	private String				state_province;
+	private String				description;
+	private String				country;
+	private long				date_created;
+	private Boolean				status;
 
 	/**
 	 * @return the locationId
@@ -60,7 +60,7 @@ public class Location implements Serializable {
 	 *            the locationId to set
 	 */
 	public void setLocationId(Integer locationId) {
-		this.location_id = locationId;
+		location_id = locationId;
 	}
 
 	/**
@@ -315,7 +315,7 @@ public class Location implements Serializable {
 	 *            the cityVillage to set
 	 */
 	public void setCityVillage(String cityVillage) {
-		this.city_village = cityVillage;
+		city_village = cityVillage;
 	}
 
 	/**
@@ -330,7 +330,7 @@ public class Location implements Serializable {
 	 *            the stateProvince to set
 	 */
 	public void setStateProvince(String stateProvince) {
-		this.state_province = stateProvince;
+		state_province = stateProvince;
 	}
 
 	/**
@@ -360,7 +360,7 @@ public class Location implements Serializable {
 	 *            the dateCreated to set
 	 */
 	public void setDateCreated(long dateCreated) {
-		this.date_created = dateCreated;
+		date_created = dateCreated;
 	}
 
 	/**
@@ -386,11 +386,11 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param country the country to set
+	 * @param country
+	 *            the country to set
 	 */
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	
-	
+
 }

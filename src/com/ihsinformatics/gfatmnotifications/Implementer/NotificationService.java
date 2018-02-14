@@ -1,7 +1,9 @@
 package com.ihsinformatics.gfatmnotifications.Implementer;
 
 public interface NotificationService {
-    
-	void run();
+
+	public void run();
+
+	public void loader();
 
 }

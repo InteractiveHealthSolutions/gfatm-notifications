@@ -2,11 +2,11 @@ package com.ihsinformatics.gfatmnotifications.model;
 
 public class Email {
 
-	private String emailAdress;
-	private Integer locationId;
-	private String locationName;
-	private String primaryContact;
-	private String secondaryContact;
+	private String	emailAdress;
+	private Integer	locationId;
+	private String	locationName;
+	private String	primaryContact;
+	private String	secondaryContact;
 
 	/**
 	 * @return the emailAdress
@@ -46,7 +46,8 @@ public class Email {
 	}
 
 	/**
-	 * @param primaryContact the primaryContact to set
+	 * @param primaryContact
+	 *            the primaryContact to set
 	 */
 	public void setPrimaryContact(String primaryContact) {
 		this.primaryContact = primaryContact;
@@ -60,7 +61,8 @@ public class Email {
 	}
 
 	/**
-	 * @param secondaryContact the secondaryContact to set
+	 * @param secondaryContact
+	 *            the secondaryContact to set
 	 */
 	public void setSecondaryContact(String secondaryContact) {
 		this.secondaryContact = secondaryContact;
@@ -74,11 +76,11 @@ public class Email {
 	}
 
 	/**
-	 * @param locationName the locationName to set
+	 * @param locationName
+	 *            the locationName to set
 	 */
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
 	}
 
-	
 }

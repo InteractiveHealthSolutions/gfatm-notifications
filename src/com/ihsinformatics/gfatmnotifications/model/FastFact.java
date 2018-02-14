@@ -1,36 +1,35 @@
 package com.ihsinformatics.gfatmnotifications.model;
 
-
 public class FastFact {
 
-	private Integer locationId;
-	private String locationName;
-	private String locationDescription;
-	private String dateTime;
-	private Integer totalScreeingForm;
-	private Integer chestXrays;
-	private Integer verbalScreenPresumptives;
-	private Integer chestXrayPresumptives;
-	private Integer samplesCollectedVerbalScreenPresumptives;
-	private Integer samplesCollectedCXRPresumptives;
-	private Integer gxpTestsDone;
-	private Integer internalTests;
-	private Integer externalTests;
-	private Integer mTBpveInternal;
-	private Integer mTBpveExternal;
-	private Integer mTBpveRRpveInternal;
-	private Integer mTBpveRRpveExternal;
-	private Integer allError;
-	private Integer noResult;
-	private Integer invalidAllTest;
-	private Integer pendingSamples;
-	private Integer errorNoResultInvalid;
-	private Integer clinicallyDiagnosed;
-	private Integer initiatedOnAntibiotic;
-	private Integer initiatedOnTBTx;
-	private String emailAddress;
-	private String primaryContact;
-	private String secondaryContct;
+	private Integer	locationId;
+	private String	locationName;
+	private String	locationDescription;
+	private String	dateTime;
+	private Integer	totalScreeingForm;
+	private Integer	chestXrays;
+	private Integer	verbalScreenPresumptives;
+	private Integer	chestXrayPresumptives;
+	private Integer	samplesCollectedVerbalScreenPresumptives;
+	private Integer	samplesCollectedCXRPresumptives;
+	private Integer	gxpTestsDone;
+	private Integer	internalTests;
+	private Integer	externalTests;
+	private Integer	mTBpveInternal;
+	private Integer	mTBpveExternal;
+	private Integer	mTBpveRRpveInternal;
+	private Integer	mTBpveRRpveExternal;
+	private Integer	allError;
+	private Integer	noResult;
+	private Integer	invalidAllTest;
+	private Integer	pendingSamples;
+	private Integer	errorNoResultInvalid;
+	private Integer	clinicallyDiagnosed;
+	private Integer	initiatedOnAntibiotic;
+	private Integer	initiatedOnTBTx;
+	private String	emailAddress;
+	private String	primaryContact;
+	private String	secondaryContct;
 
 	// public static Map<String, String>
 
@@ -423,7 +422,8 @@ public class FastFact {
 	}
 
 	/**
-	 * @param primaryContact the primaryContact to set
+	 * @param primaryContact
+	 *            the primaryContact to set
 	 */
 	public void setPrimaryContact(String primaryContact) {
 		this.primaryContact = primaryContact;
@@ -437,7 +437,8 @@ public class FastFact {
 	}
 
 	/**
-	 * @param secondaryContct the secondaryContct to set
+	 * @param secondaryContct
+	 *            the secondaryContct to set
 	 */
 	public void setSecondaryContct(String secondaryContct) {
 		this.secondaryContct = secondaryContct;
@@ -451,13 +452,11 @@ public class FastFact {
 	}
 
 	/**
-	 * @param errorNoResultInvalid the errorNoResultInvalid to set
+	 * @param errorNoResultInvalid
+	 *            the errorNoResultInvalid to set
 	 */
 	public void setErrorNoResultInvalid(Integer errorNoResultInvalid) {
 		this.errorNoResultInvalid = errorNoResultInvalid;
 	}
-
-	
-	
 
 }

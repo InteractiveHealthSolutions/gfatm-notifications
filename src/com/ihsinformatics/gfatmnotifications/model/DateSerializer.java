@@ -25,6 +25,7 @@ import com.google.gson.JsonParseException;
  *
  */
 public class DateSerializer implements JsonDeserializer<Date> {
+	@Override
 	public Date deserialize(JsonElement json, Type typeOfT,
 			JsonDeserializationContext context) throws JsonParseException {
 		return json == null ? null : new Date(json.getAsLong());

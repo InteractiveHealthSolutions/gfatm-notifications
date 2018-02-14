@@ -12,7 +12,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications.model;
 
-import java.security.Timestamp;
 import java.util.Map;
 
 import org.joda.time.DateTime;
@@ -23,22 +22,21 @@ import org.joda.time.DateTime;
  */
 public class Encounter {
 
-	Integer encounter_id;
-	String encounter_type;
-	long encounter_datetime;
-	String patientId;
-	String identifier;
-	String patient_name;
-	String patient_contact;
-	String encounter_location;
-	String location_contact;
-	String provider;
-	String provider_contact;
-	String username;
-	long date_created;
-	String uuid;
-	Map<String, Object> observations;
-	
+	Integer				encounter_id;
+	String				encounter_type;
+	long				encounter_datetime;
+	String				patientId;
+	String				identifier;
+	String				patient_name;
+	String				patient_contact;
+	String				encounter_location;
+	String				location_contact;
+	String				provider;
+	String				provider_contact;
+	String				username;
+	long				date_created;
+	String				uuid;
+	Map<String, Object>	observations;
 
 	public Encounter() {
 	}
@@ -47,12 +45,12 @@ public class Encounter {
 			DateTime encounterDate, String patientId, String provider,
 			String location, String uuid) {
 		super();
-		this.encounter_id = encounterId;
-		this.encounter_type = encounterType;
-		//this.encounterdatetime = encounterDate;
+		encounter_id = encounterId;
+		encounter_type = encounterType;
+		// this.encounterdatetime = encounterDate;
 		this.patientId = patientId;
 		this.provider = provider;
-		this.encounter_location = location;
+		encounter_location = location;
 		this.uuid = uuid;
 	}
 
@@ -61,7 +59,7 @@ public class Encounter {
 	}
 
 	public void setEncounterId(Integer encounterId) {
-		this.encounter_id = encounterId;
+		encounter_id = encounterId;
 	}
 
 	public String getEncounterType() {
@@ -69,7 +67,7 @@ public class Encounter {
 	}
 
 	public void setEncounterType(String encounterType) {
-		this.encounter_type = encounterType;
+		encounter_type = encounterType;
 	}
 
 	public long getEncounterDate() {
@@ -77,7 +75,7 @@ public class Encounter {
 	}
 
 	public void setEncounterDate(long encounterDate) {
-		this.encounter_datetime = encounterDate;
+		encounter_datetime = encounterDate;
 	}
 
 	public String getPatientId() {
@@ -93,7 +91,7 @@ public class Encounter {
 	}
 
 	public void setPatientName(String patientName) {
-		this.patient_name = patientName;
+		patient_name = patientName;
 	}
 
 	public String getPatientContact() {
@@ -101,7 +99,7 @@ public class Encounter {
 	}
 
 	public void setPatientContact(String patientContact) {
-		this.patient_contact = patientContact;
+		patient_contact = patientContact;
 	}
 
 	public String getLocation() {
@@ -109,7 +107,7 @@ public class Encounter {
 	}
 
 	public void setLocation(String location) {
-		this.encounter_location = location;
+		encounter_location = location;
 	}
 
 	public String getLocationContact() {
@@ -117,7 +115,7 @@ public class Encounter {
 	}
 
 	public void setLocationContact(String locationContact) {
-		this.location_contact = locationContact;
+		location_contact = locationContact;
 	}
 
 	public String getProvider() {
@@ -133,7 +131,7 @@ public class Encounter {
 	}
 
 	public void setProviderContact(String providerContact) {
-		this.provider_contact = providerContact;
+		provider_contact = providerContact;
 	}
 
 	public String getUsername() {
@@ -149,7 +147,7 @@ public class Encounter {
 	}
 
 	public void setDateCreated(long dateCreated) {
-		this.date_created = dateCreated;
+		date_created = dateCreated;
 	}
 
 	public String getUuid() {

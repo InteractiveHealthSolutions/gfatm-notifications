@@ -19,32 +19,32 @@ import java.util.Date;
  *
  */
 public class User {
-	private Integer userId;
-	private Integer personId;
-	private String systemId;
-	private String username;
-	private String givenName;
-	private String lastName;
-	private String gender;
-	private String healthCenter;
-	private String healthDistrict;
-	private String primaryContact;
-	private String secondaryContact;
-	private String educationLevel;
-	private String employmentStatus;
-	private String occupation;
-	private String motherTongue;
-	private String nationalID;
-	private String address1;
-	private String address2;
-	private String district;
-	private String cityVillage;
-	private String country;
-	private String landmark;
-	private String intervention;
-	private Date dateCreated;
-	private String uuid;
-	private String userRole;
+	private Integer	userId;
+	private Integer	personId;
+	private String	systemId;
+	private String	username;
+	private String	givenName;
+	private String	lastName;
+	private String	gender;
+	private String	healthCenter;
+	private String	healthDistrict;
+	private String	primaryContact;
+	private String	secondaryContact;
+	private String	educationLevel;
+	private String	employmentStatus;
+	private String	occupation;
+	private String	motherTongue;
+	private String	nationalID;
+	private String	address1;
+	private String	address2;
+	private String	district;
+	private String	cityVillage;
+	private String	country;
+	private String	landmark;
+	private String	intervention;
+	private Date	dateCreated;
+	private String	uuid;
+	private String	userRole;
 
 	/**
 	 * @return the userId
@@ -428,6 +428,5 @@ public class User {
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
 	}
-	
-	
+
 }

@@ -35,11 +35,12 @@ import com.ihsinformatics.util.DateTimeUtil;
  */
 public class SmsController {
 
-	private String serverAddress;
-	private String apiKey;
-	private boolean useSsl;
+	private String	serverAddress;
+	private String	apiKey;
+	private boolean	useSsl;
 
-	public SmsController(final String serverAddress, final String apiKey, boolean useSsl) {
+	public SmsController(final String serverAddress, final String apiKey,
+			boolean useSsl) {
 		this.serverAddress = serverAddress;
 		this.apiKey = apiKey;
 		this.useSsl = useSsl;
@@ -52,10 +53,10 @@ public class SmsController {
 		HttpsURLConnection.setDefaultHostnameVerifier(hostNameVerifier);
 	}
 
+	@SuppressWarnings("deprecation")
 	public String createSms(String sendTo, String message, Date sendOn,
-			String projectId, String additionalInfo)
-			throws Exception {
-		
+			String projectId, String additionalInfo) throws Exception {
+
 		StringBuffer content = new StringBuffer();
 		content.append("send_to=" + sendTo + "&");
 		content.append("message=" + URLEncoder.encode(message, "UTF-8") + "&");
@@ -128,7 +129,7 @@ public class SmsController {
 					System.out.println("Response Code : "
 							+ con.getResponseCode());
 					System.out
-							.println("Cipher Suite : " + con.getCipherSuite());
+					.println("Cipher Suite : " + con.getCipherSuite());
 					System.out.println("\n");
 					Certificate[] certs = con.getServerCertificates();
 					for (Certificate cert : certs) {

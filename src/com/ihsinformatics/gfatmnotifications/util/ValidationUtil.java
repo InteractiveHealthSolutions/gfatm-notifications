@@ -21,7 +21,7 @@ public class ValidationUtil {
 	/**
 	 * Checks whether given contact number is legitimate or not. Illegitimate
 	 * numbers contain same digits or digits in increasing or decreasing order
-	 * 
+	 *
 	 * @param number
 	 * @return
 	 */
@@ -56,5 +56,5 @@ public class ValidationUtil {
 		}
 		return valid;
 	}
-    
+
 }

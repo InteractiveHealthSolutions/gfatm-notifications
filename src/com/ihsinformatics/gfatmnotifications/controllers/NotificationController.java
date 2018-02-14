@@ -7,40 +7,45 @@ import com.ihsinformatics.gfatmnotifications.model.Constants;
 
 public class NotificationController implements IConsumer {
 
-	NotificationService service;
+	private NotificationService	service;
+
 	public void setService(NotificationService service) {
 		this.service = service;
 	}
-	
+
 	@Override
 	public void process() {
-		//do some notification validation, manipulation logic etc
-		this.service.run();
+		// do some common validatin notification validation, manipulation logic
+		// etc
+		service.loader();
+		service.run();
 	}
 
 	@Override
 	public boolean getConnection(String requiredConnection) {
-		
+
 		Connections connection = new Connections();
-		
+
 		if (requiredConnection.equals(Constants.WAREHOUSE_CONNECTION)) {
-			
+
 			if (!connection.wareHouseConnection()) {
-				System.out.println("Failed to connect with warehouse local database. Exiting");
-				 System.exit(-1);
+				System.out
+						.println("Failed to connect with warehouse local database. Exiting");
+				System.exit(-1);
 			}
-			
+
 			return true;
 		}
 		if (requiredConnection.equals(Constants.OPENMRS_CONNECTION)) {
 			if (!connection.openmrsDbConnection()) {
-				System.out.println("Failed to connect with local database. Exiting");	
+				System.out
+						.println("Failed to connect with local database. Exiting");
 				System.exit(-1);
 			}
 			return true;
-		}
-		else{
-			System.out.println("Connection Requested String is not match...Exiting");	
+		} else {
+			System.out
+					.println("Connection Requested String is not match...Exiting");
 			System.exit(-1);
 			return false;
 		}

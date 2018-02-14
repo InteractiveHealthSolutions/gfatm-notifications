@@ -53,12 +53,13 @@ import com.ihsinformatics.util.DateTimeUtil;
  */
 public class OpenMrsUtil {
 
-	private static final Logger log = Logger.getLogger(Class.class.getName());
-	private static Map<Integer, String> encounterTypes;
-	private DatabaseUtil db;
+	private static final Logger			log	= Logger.getLogger(Class.class
+													.getName());
+	private static Map<Integer, String>	encounterTypes;
+	private DatabaseUtil				db;
 
 	public OpenMrsUtil(DatabaseUtil db) {
-		this.setDb(db);
+		setDb(db);
 	}
 
 	public DatabaseUtil getDb() {
@@ -71,7 +72,7 @@ public class OpenMrsUtil {
 
 	/**
 	 * Execultes query and converts result set into JSON string
-	 * 
+	 *
 	 * @param query
 	 * @return
 	 * @throws InstantiationException
@@ -126,9 +127,9 @@ public class OpenMrsUtil {
 		if (data == null) {
 			return;
 		}
-		for (int i = 0; i < data.length; i++) {
-			getEncounterTypes().put(Integer.parseInt(data[i][0].toString()),
-					data[i][1].toString());
+		for (Object[] element : data) {
+			getEncounterTypes().put(Integer.parseInt(element[0].toString()),
+					element[1].toString());
 		}
 	}
 
@@ -137,7 +138,7 @@ public class OpenMrsUtil {
 	 */
 	public void loadLocations() {
 		UtilityCollection.setLocations(new ArrayList<Location>());
-		List<Location>locations= new ArrayList<Location>();
+		List<Location> locations = new ArrayList<Location>();
 		StringBuilder query = new StringBuilder();
 		query.append("select l.location_id as locationId, l.name, l.parent_location as parentId, l.uuid, (case ifnull(ltfast.location_id, 0) when 0 then 0 else 1 end) as fast, (case ifnull(ltpet.location_id, 0) when 0 then 0 else 1 end) as pet, (case ifnull(ltpmdt.location_id, 0) when 0 then 0 else 1 end) as pmdt, (case ifnull(ltctb.location_id, 0) when 0 then 0 else 1 end) as childhood_tb, (case ifnull(ltcomorb.location_id, 0) when 0 then 0 else 1 end) as comorbidities, ");
 		query.append("pcontact.value_reference as primaryContact, pcontact_nm.value_reference as primaryContactName, scontact.value_reference as secondaryContact, scontact_nm.value_reference as secondaryContactName, ");
@@ -180,7 +181,7 @@ public class OpenMrsUtil {
 	 */
 	public void loadUsers() {
 		UtilityCollection.setUsers(new ArrayList<User>());
-		List<User> users= new ArrayList<User>();
+		List<User> users = new ArrayList<User>();
 		StringBuilder query = new StringBuilder();
 		query.append("select u.user_id as userId, u.person_id as personId, u.system_id as systemId, u.username, pn.given_name as givenName, pn.family_name as lastName, p.gender, pcontact.value as primaryContact, scontact.value as secondaryContact, hd.value as healthDistrict, hc.value as healthCenter, ");
 		query.append("edu.value as educationLevel, emp.value as employmentStatus, occu.value as occupation, lang.value as motherTongue, nic.value as nationalId, pa.address1, pa.address2, pa.county_district as district, pa.city_village as cityVillage, pa.country, pa.address3 as landmark, inter.value_reference as intervention, u.date_created as dateCreated, u.uuid,ur.role from users as u ");
@@ -218,7 +219,7 @@ public class OpenMrsUtil {
 			}
 			users.add(user);
 		}
-	UtilityCollection.setUsers(users);	
+		UtilityCollection.setUsers(users);
 	}
 
 	public void loadPatients() {
@@ -266,7 +267,7 @@ public class OpenMrsUtil {
 
 	/**
 	 * Fetch Encounter object by encounter ID This method may be recycle ////
-	 * 
+	 *
 	 * @param encounterId
 	 * @param encounterTypeId
 	 * @return
@@ -302,7 +303,7 @@ public class OpenMrsUtil {
 
 	/**
 	 * Fetch encounters by date range and type (optional)
-	 * 
+	 *
 	 * @param from
 	 * @param to
 	 * @param type
@@ -426,7 +427,7 @@ public class OpenMrsUtil {
 			loadLocations();
 		}
 		for (Location location : UtilityCollection.getLocations()) {
-		
+
 			if (location.getName().equals(code)) {
 				return location;
 			}
@@ -464,7 +465,7 @@ public class OpenMrsUtil {
 	}
 
 	public Patient getPatientByIdentifier(String patientIdentifier) {
-      
+
 		if (UtilityCollection.getPatients() == null) {
 			loadPatients();
 		}
@@ -483,7 +484,7 @@ public class OpenMrsUtil {
 
 	/**
 	 * not in use...
-	 * 
+	 *
 	 * @param enc
 	 * @return
 	 */
@@ -498,7 +499,7 @@ public class OpenMrsUtil {
 		System.out.println(query);
 		Object[][] data = db.getTableData(query.toString());
 		String encID = "";
-		if (data.length > 0)
+		if (data.length > 0) {
 			for (Object[] row : data) {
 				int k = 0;
 				try {
@@ -508,6 +509,7 @@ public class OpenMrsUtil {
 					log.severe(ex.getMessage());
 				}
 			}
+		}
 
 		return encID;
 	}
@@ -517,7 +519,7 @@ public class OpenMrsUtil {
 	 * specific patient. this method returns true value when End of follow up
 	 * form is not filed against the patient of this patient referral or
 	 * transfer out from any location.
-	 * 
+	 *
 	 * @param encounter
 	 * @return
 	 */
@@ -548,9 +550,9 @@ public class OpenMrsUtil {
 	}
 
 	public ArrayList<FastFact> getFactFast(String todayDate) {
-      
-		 UtilityCollection.setFactFast(new ArrayList<FastFact>());
-		
+
+		UtilityCollection.setFactFast(new ArrayList<FastFact>());
+
 		StringBuilder query = new StringBuilder();
 		query.append(" select ff.location_id as locationId,l.name as locationName,l.description as locationDescription,dd.full_date as dateTime, ");
 		query.append(" ff.Total_Screening as totalScreeingForm, ff.chest_xrays as chestXrays,ff.Verbal_Screen_Presumptives as verbalScreenPresumptives, ");
@@ -562,173 +564,189 @@ public class OpenMrsUtil {
 		query.append(" from fact_fast_dsss ff  ");
 		query.append(" Inner join dim_datetime dd  on dd.datetime_id = ff.datetime_id ");
 		query.append(" Inner join location l on l.location_id = ff.location_id ");
-		query.append("where dd.full_date='"+todayDate+"';");
-		//query.append("where dd.full_date='2017-12-11';");
+		query.append("where dd.full_date='" + todayDate + "';");
+		// query.append("where dd.full_date='2017-12-11';");
 
 		String jsonString = queryToJson(query.toString());
-		Type listType = new TypeToken<List<FastFact>>() {}.getType();
+		Type listType = new TypeToken<List<FastFact>>() {
+		}.getType();
 		Gson gson = new Gson();
-		ArrayList<FastFact> factFast  = gson.fromJson(jsonString, listType);
+		ArrayList<FastFact> factFast = gson.fromJson(jsonString, listType);
 		UtilityCollection.setFactFast(factFast);
-    
+
 		return UtilityCollection.getFactFast();
 
 	}
 
-	public ArrayList<ChilhoodFact> getFactChildhood(String todayDate){
+	public ArrayList<ChilhoodFact> getFactChildhood(String todayDate) {
 		UtilityCollection.setFactChildhood(new ArrayList<ChilhoodFact>());
-	
+
 		StringBuilder query = new StringBuilder();
-			query.append(" select dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription , dd.full_date as dateTime, fc.Screened_nurse as screenedByNurse, fc.Presumptive_nurse as presumptiveByNurse , fc.Screening_Location as screeningLocationForms, ");
-			query.append(" fc.Registration as registrationForms, fc.Presumptive_Case_Confirmed as presumptiveCaseConfirmedForms, fc.TB_Presumptive as tbPresumptiveConfirmed,fc.Test_indication as testIndication,fc.CBC_Indicated as cbcIndicated, fc.ESR_Indicated  as esrIndicated,fc.CXR_Indicated as cxrIndicated , ");
-			query.append(" fc.MT_Indicated as mtIndicated,fc.Ultrasound_Indicated as ultrasoundIndicated,fc.HistopathologyFNAC_Indicated  as histopathologyFNACIndicated ,fc.CT_scan_Indicated as ctScanIndicated,fc.GXP_Indicated as gxpIndicated , fc.TB_Treatment_intiated as tbTreatmentIntiated, ");
-			query.append(" fc.Antibiotic_trial_initiated as antibioticTrialInitiated,fc.IPT_treatment_initiated as iptTreatmentInitiated,fc.TB_Treatment_Follow_up as tbTreatmentFUP ,fc.Antibiotic_trial_Followup as antibioticTrialFUP,fc.IPT_follow_up as iptFUP,fc.End_of_followup as endOfFUP from fact_childtb_dsss fc  ");
-			query.append(" inner join dim_location dl  on dl.location_id =fc.location_id ");
-			query.append(" inner join dim_datetime dd on dd.datetime_id = fc.datetime_id ");
-			query.append("where dd.full_date='"+todayDate+"';");
-			//query.append("where dd.full_date ='2018-01-13';");
-		
+		query.append(" select dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription , dd.full_date as dateTime, fc.Screened_nurse as screenedByNurse, fc.Presumptive_nurse as presumptiveByNurse , fc.Screening_Location as screeningLocationForms, ");
+		query.append(" fc.Registration as registrationForms, fc.Presumptive_Case_Confirmed as presumptiveCaseConfirmedForms, fc.TB_Presumptive as tbPresumptiveConfirmed,fc.Test_indication as testIndication,fc.CBC_Indicated as cbcIndicated, fc.ESR_Indicated  as esrIndicated,fc.CXR_Indicated as cxrIndicated , ");
+		query.append(" fc.MT_Indicated as mtIndicated,fc.Ultrasound_Indicated as ultrasoundIndicated,fc.HistopathologyFNAC_Indicated  as histopathologyFNACIndicated ,fc.CT_scan_Indicated as ctScanIndicated,fc.GXP_Indicated as gxpIndicated , fc.TB_Treatment_intiated as tbTreatmentIntiated, ");
+		query.append(" fc.Antibiotic_trial_initiated as antibioticTrialInitiated,fc.IPT_treatment_initiated as iptTreatmentInitiated,fc.TB_Treatment_Follow_up as tbTreatmentFUP ,fc.Antibiotic_trial_Followup as antibioticTrialFUP,fc.IPT_follow_up as iptFUP,fc.End_of_followup as endOfFUP from fact_childtb_dsss fc  ");
+		query.append(" inner join dim_location dl  on dl.location_id =fc.location_id ");
+		query.append(" inner join dim_datetime dd on dd.datetime_id = fc.datetime_id ");
+		query.append("where dd.full_date='" + todayDate + "';");
+		// query.append("where dd.full_date ='2018-01-13';");
+
 		String jsonString = queryToJson(query.toString());
-		Type listType = new TypeToken<List<ChilhoodFact>>() {}.getType();
+		Type listType = new TypeToken<List<ChilhoodFact>>() {
+		}.getType();
 		Gson gson = new Gson();
-		ArrayList<ChilhoodFact> chilhoodFacts = gson.fromJson(jsonString, listType);
+		ArrayList<ChilhoodFact> chilhoodFacts = gson.fromJson(jsonString,
+				listType);
 		UtilityCollection.setFactChildhood(chilhoodFacts);
-		
+
 		return UtilityCollection.getFactChildhood();
 	}
-	
-	public ArrayList<PetFact> getPetFact(String todayDate){
-		
+
+	public ArrayList<PetFact> getPetFact(String todayDate) {
+
 		UtilityCollection.setFactPet(new ArrayList<PetFact>());
-		
+
 		StringBuilder query = new StringBuilder();
-			query.append(" SELECT dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription,dd.full_date as dateTime,fp.No_Of_Index_Patients_Registered as noOfIndexPatientRegistered ,fp.No_Of_DSTB_Patients as noOfDSTBPatients, ");
-			query.append(" fp.No_Of_DRTB_Patients as noOfDRTBPatients,fp.No_Of_Baseline_Screening as noOfBaselineScreening,fp.No_Of_Index_Patient_Agreed_For_Their_Contact_Screening as noOfIndexPatientsAgreed,fp.No_Of_Adult_Contacts as noOfAdultsContacts, ");
-			query.append(" fp.No_Of_Peads_Contacts as noOfPeadsContacts ,fp.No_Of_Index_Not_Eligible_For_Study as noOfIndexNotEligibleStudy,fp.No_Of_Contact_Screening_Counseling_Done as noOfContactScreeningCounselingDone, fp.No_Of_Baseline_Counceling_Done as noOfBaselineCounselingDone, ");
-			query.append(" fp.No_Of_Contacts_Investigated as noOfContactsInvestigated ,fp.No_Of_Contacts_Diagnosed_With_TB as noOfContactsDiagnosedTB,fp.No_Of_Contacts_Eligible_For_Pet as noOfContactsEligiblePET,fp.No_Of_Contacts_Agreed_For_Pet as noOfContactsAgreedPET , ");
-			query.append(" fp.No_Of_Contacts_Completed_Treatment as noOfContactsCompletedTreatment FROM fact_Pet_DS fp ");
-			query.append(" inner join dim_location dl on dl.location_id = fp.location_id ");
-			query.append(" inner join dim_datetime dd on dd.datetime_id = fp.datetime_id ");
-			query.append("where dd.full_date='"+todayDate+"';");
-			//query.append(" where dd.full_date ='2018-01-13'; ");
-		
+		query.append(" SELECT dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription,dd.full_date as dateTime,fp.No_Of_Index_Patients_Registered as noOfIndexPatientRegistered ,fp.No_Of_DSTB_Patients as noOfDSTBPatients, ");
+		query.append(" fp.No_Of_DRTB_Patients as noOfDRTBPatients,fp.No_Of_Baseline_Screening as noOfBaselineScreening,fp.No_Of_Index_Patient_Agreed_For_Their_Contact_Screening as noOfIndexPatientsAgreed,fp.No_Of_Adult_Contacts as noOfAdultsContacts, ");
+		query.append(" fp.No_Of_Peads_Contacts as noOfPeadsContacts ,fp.No_Of_Index_Not_Eligible_For_Study as noOfIndexNotEligibleStudy,fp.No_Of_Contact_Screening_Counseling_Done as noOfContactScreeningCounselingDone, fp.No_Of_Baseline_Counceling_Done as noOfBaselineCounselingDone, ");
+		query.append(" fp.No_Of_Contacts_Investigated as noOfContactsInvestigated ,fp.No_Of_Contacts_Diagnosed_With_TB as noOfContactsDiagnosedTB,fp.No_Of_Contacts_Eligible_For_Pet as noOfContactsEligiblePET,fp.No_Of_Contacts_Agreed_For_Pet as noOfContactsAgreedPET , ");
+		query.append(" fp.No_Of_Contacts_Completed_Treatment as noOfContactsCompletedTreatment FROM fact_Pet_DS fp ");
+		query.append(" inner join dim_location dl on dl.location_id = fp.location_id ");
+		query.append(" inner join dim_datetime dd on dd.datetime_id = fp.datetime_id ");
+		query.append("where dd.full_date='" + todayDate + "';");
+		// query.append(" where dd.full_date ='2018-01-13'; ");
+
 		String jsonString = queryToJson(query.toString());
-		Type listType = new TypeToken<List<PetFact>>() {}.getType();
+		Type listType = new TypeToken<List<PetFact>>() {
+		}.getType();
 		Gson gson = new Gson();
 		ArrayList<PetFact> petFacts = gson.fromJson(jsonString, listType);
 		UtilityCollection.setFactPet(petFacts);
-			
-		return UtilityCollection.getFactPet();
-	
-	} 
-	
-    public List<Email> LoadAllUsersEmail(){
-	    
-    	  UtilityCollection.setEmailList(new ArrayList<Email>());
-	   
-	    	StringBuilder query = new StringBuilder();
-	    	
-	    	query.append(" select distinct dl.location_id as locationId,dl.location_name as locationName ,pam.email_address as emailAdress,dl.primary_contact as primaryContact,dl.secondary_contact as secondaryContact from person_attribute_merged pam ");
-	    	query.append(" inner join users u on u.person_id = pam.person_id ");
-	    	query.append(" inner join dim_location dl on dl.Site_Supervisor_System_ID = u.system_id ");
-	 		
-	    	String jsonString = queryToJson(query.toString());
-	 		Type listType = new TypeToken<List<Email>>() {}.getType();
-			Gson gson = new Gson();
-		    List<Email> emailList = gson.fromJson(jsonString, listType);
-	        UtilityCollection.setEmailList(emailList);
-	        
-	   return UtilityCollection.getEmailList();  
-   } 
 
-    public Email getEmailByLocationId (int locationId){
-    	
-    	if (UtilityCollection.getEmailList().isEmpty()) {
-    		LoadAllUsersEmail();
+		return UtilityCollection.getFactPet();
+
+	}
+
+	public List<Email> LoadAllUsersEmail() {
+
+		UtilityCollection.setEmailList(new ArrayList<Email>());
+
+		StringBuilder query = new StringBuilder();
+
+		query.append(" select distinct dl.location_id as locationId,dl.location_name as locationName ,pam.email_address as emailAdress,dl.primary_contact as primaryContact,dl.secondary_contact as secondaryContact from person_attribute_merged pam ");
+		query.append(" inner join users u on u.person_id = pam.person_id ");
+		query.append(" inner join dim_location dl on dl.Site_Supervisor_System_ID = u.system_id ");
+
+		String jsonString = queryToJson(query.toString());
+		Type listType = new TypeToken<List<Email>>() {
+		}.getType();
+		Gson gson = new Gson();
+		List<Email> emailList = gson.fromJson(jsonString, listType);
+		UtilityCollection.setEmailList(emailList);
+
+		return UtilityCollection.getEmailList();
+	}
+
+	public Email getEmailByLocationId(int locationId) {
+
+		if (UtilityCollection.getEmailList().isEmpty()) {
+			LoadAllUsersEmail();
 		}
 		for (Email email : UtilityCollection.getEmailList()) {
 			if (email.getLocationId() == locationId) {
 				return email;
 			}
 		}
-		return  null;
+		return null;
 
-    }
-    
-   public Email getEmailByLocationName (String locationName){
-    	
-    	if (UtilityCollection.getEmailList().isEmpty()) {
-    		 LoadAllUsersEmail();
+	}
+
+	public Email getEmailByLocationName(String locationName) {
+
+		if (UtilityCollection.getEmailList().isEmpty()) {
+			LoadAllUsersEmail();
 		}
 		for (Email email : UtilityCollection.getEmailList()) {
 			if (email.getLocationName().equals(locationName)) {
 				return email;
 			}
 		}
-		return  null;
-    }
+		return null;
+	}
 
-   public  ArrayList<PatientScheduled> getPatientScheduledForVisit(String startDate,String endDate){
+	public ArrayList<PatientScheduled> getPatientScheduledForVisit(
+			String startDate, String endDate) {
 
-	   UtilityCollection.getInstance().setPatientScheduledsList(new ArrayList<PatientScheduled>());
-	   
-	   StringBuilder query = new StringBuilder();
-		   query.append(" SELECT distinct dp.patient_id as patientId ,dp.patient_identifier as patientIdentifier, basTable.facility_scheduled as facilityScheduled , ccifup.reason_for_call as reasonForCall,ccifup.facility_scheduled as fupFacilityScheduled ,date(ccifup.facility_visit_date) as fupFacilityVisitDate, ");
-		   query.append(" ccdtra.test_type as testType,ccdtra.facility_scheduled as raFacilityScheduled , date(ccdtra.facility_visit_date) as raFacilityVisitDate, ");
-		   query.append(" if(dp.health_center is not null,hdl.location_name,dl.location_name) as facilityName, date(cccmvf.return_visit_date)as cReturnVisitDate, date(ccpmvf.return_visit_date)as pReturnVisitDate,date(ccfmvf.return_visit_date)as fReturnVisitDate  ");
-		   query.append(" FROM (  ");
-		   query.append(" select ifup.patient_id ,ifup.facility_visit_date,ifup.facility_scheduled ,null as return_visit_date from  enc_cc___tb_investigation_fup  ifup ");
-		   query.append(" union ");
-		   query.append(" select dtra.patient_id,dtra.facility_visit_date,dtra.facility_scheduled ,null as return_visit_date from enc_cc___diagnostic_test_result_available dtra ");
-		   query.append(" union ");
-		   query.append(" select cmvf.patient_id,null,null,cmvf.return_visit_date from enc_childhood_tb_missed_visit_followup cmvf ");
-		   query.append(" union ");
-		   query.append(" select pmvf.patient_id,null,null,pmvf.return_visit_date from enc_pet_missed_visit_followup pmvf "); 
-		   query.append(" union ");
-		   query.append(" select fmvf.patient_id,null,null,fmvf.return_visit_date from enc_fast_missed_visit_followup fmvf ");
-		   query.append(" ) basTable ");
-		   query.append(" inner join gfatm_dw.dim_patient dp on dp.patient_id = basTable.patient_id   ");
-		   query.append(" inner join gfatm_dw.patient_identifier di on di.patient_id = basTable.patient_id ");
-		   query.append(" inner join gfatm_dw.dim_location dl on dl.location_id = di.location_id ");
-		   query.append(" left join gfatm_dw.dim_location hdl on hdl.location_id =dp.health_center   "); 
-		   query.append(" left join gfatm_dw.enc_cc___tb_investigation_fup ccifup on ccifup.patient_id = basTable.patient_id and ccifup.facility_visit_date is not null and  date(ccifup.date_entered) = (select max(date_entered) from enc_cc___tb_investigation_fup where patient_id =ccifup.patient_id)  ");
-		   query.append(" left join gfatm_dw.dim_user duFup on duFup.identifier= ccifup.provider  ");
-		   query.append(" left join gfatm_dw.enc_cc___diagnostic_test_result_available ccdtra on ccdtra.patient_id=basTable.patient_id and ccdtra.facility_visit_date is not null and date(ccdtra.date_entered) = (select max(date_entered) from enc_cc___diagnostic_test_result_available where patient_id =ccdtra.patient_id) "); 
-		   query.append(" left join gfatm_dw.dim_user dudtra on dudtra.identifier= ccdtra.provider ");
-		   query.append(" left join gfatm_dw.enc_fast_missed_visit_followup ccfmvf on ccfmvf.patient_id=basTable.patient_id and ccfmvf.location_name='IBEX-KHI' and ccfmvf.return_visit_date is not null  and date(ccfmvf.date_entered) = (select max(date_entered) from enc_fast_missed_visit_followup where patient_id =ccfmvf.patient_id)  ");
-		   query.append(" left join gfatm_dw.dim_user dufmvf on dufmvf.identifier= ccfmvf.provider ");
-		   query.append(" left join gfatm_dw.enc_childhood_tb_missed_visit_followup cccmvf on cccmvf.patient_id=basTable.patient_id and cccmvf.location_name='IBEX-KHI' and cccmvf.return_visit_date is not null and date(cccmvf.date_entered) = (select max(date_entered) from enc_childhood_tb_missed_visit_followup where patient_id =cccmvf.patient_id) "); 
-		   query.append(" left join gfatm_dw.dim_user ducmvf on ducmvf.identifier= cccmvf.provider ");
-		   query.append(" left join gfatm_dw.enc_pet_missed_visit_followup ccpmvf on ccpmvf.patient_id=basTable.patient_id and ccpmvf.location_name='IBEX-KHI' and ccpmvf.return_visit_date is not null  and date(ccpmvf.date_entered) = (select max(date_entered) from enc_pet_missed_visit_followup where patient_id =ccpmvf.patient_id)  ");
-		   query.append(" left join gfatm_dw.dim_user dupmvf on dupmvf.identifier= ccpmvf.provider ");
-		   query.append(" where ( date(basTable.facility_visit_date) between '"+startDate+"' and '"+endDate+"' ||  date (basTable.return_visit_date) between '"+startDate+"' and '"+endDate+"' ) ; ");
+		UtilityCollection.getInstance().setPatientScheduledsList(
+				new ArrayList<PatientScheduled>());
 
-   	    String jsonString = queryToJson(query.toString());
-	   	Type listType = new TypeToken<List<PatientScheduled>>() {}.getType();
+		StringBuilder query = new StringBuilder();
+		query.append(" SELECT distinct dp.patient_id as patientId ,dp.patient_identifier as patientIdentifier, basTable.facility_scheduled as facilityScheduled , ccifup.reason_for_call as reasonForCall,ccifup.facility_scheduled as fupFacilityScheduled ,date(ccifup.facility_visit_date) as fupFacilityVisitDate, ");
+		query.append(" ccdtra.test_type as testType,ccdtra.facility_scheduled as raFacilityScheduled , date(ccdtra.facility_visit_date) as raFacilityVisitDate, ");
+		query.append(" if(dp.health_center is not null,hdl.location_name,dl.location_name) as facilityName, date(cccmvf.return_visit_date)as cReturnVisitDate, date(ccpmvf.return_visit_date)as pReturnVisitDate,date(ccfmvf.return_visit_date)as fReturnVisitDate  ");
+		query.append(" FROM (  ");
+		query.append(" select ifup.patient_id ,ifup.facility_visit_date,ifup.facility_scheduled ,null as return_visit_date from  enc_cc___tb_investigation_fup  ifup ");
+		query.append(" union ");
+		query.append(" select dtra.patient_id,dtra.facility_visit_date,dtra.facility_scheduled ,null as return_visit_date from enc_cc___diagnostic_test_result_available dtra ");
+		query.append(" union ");
+		query.append(" select cmvf.patient_id,null,null,cmvf.return_visit_date from enc_childhood_tb_missed_visit_followup cmvf ");
+		query.append(" union ");
+		query.append(" select pmvf.patient_id,null,null,pmvf.return_visit_date from enc_pet_missed_visit_followup pmvf ");
+		query.append(" union ");
+		query.append(" select fmvf.patient_id,null,null,fmvf.return_visit_date from enc_fast_missed_visit_followup fmvf ");
+		query.append(" ) basTable ");
+		query.append(" inner join gfatm_dw.dim_patient dp on dp.patient_id = basTable.patient_id   ");
+		query.append(" inner join gfatm_dw.patient_identifier di on di.patient_id = basTable.patient_id ");
+		query.append(" inner join gfatm_dw.dim_location dl on dl.location_id = di.location_id ");
+		query.append(" left join gfatm_dw.dim_location hdl on hdl.location_id =dp.health_center   ");
+		query.append(" left join gfatm_dw.enc_cc___tb_investigation_fup ccifup on ccifup.patient_id = basTable.patient_id and ccifup.facility_visit_date is not null and  date(ccifup.date_entered) = (select max(date_entered) from enc_cc___tb_investigation_fup where patient_id =ccifup.patient_id)  ");
+		query.append(" left join gfatm_dw.dim_user duFup on duFup.identifier= ccifup.provider  ");
+		query.append(" left join gfatm_dw.enc_cc___diagnostic_test_result_available ccdtra on ccdtra.patient_id=basTable.patient_id and ccdtra.facility_visit_date is not null and date(ccdtra.date_entered) = (select max(date_entered) from enc_cc___diagnostic_test_result_available where patient_id =ccdtra.patient_id) ");
+		query.append(" left join gfatm_dw.dim_user dudtra on dudtra.identifier= ccdtra.provider ");
+		query.append(" left join gfatm_dw.enc_fast_missed_visit_followup ccfmvf on ccfmvf.patient_id=basTable.patient_id and ccfmvf.location_name='IBEX-KHI' and ccfmvf.return_visit_date is not null  and date(ccfmvf.date_entered) = (select max(date_entered) from enc_fast_missed_visit_followup where patient_id =ccfmvf.patient_id)  ");
+		query.append(" left join gfatm_dw.dim_user dufmvf on dufmvf.identifier= ccfmvf.provider ");
+		query.append(" left join gfatm_dw.enc_childhood_tb_missed_visit_followup cccmvf on cccmvf.patient_id=basTable.patient_id and cccmvf.location_name='IBEX-KHI' and cccmvf.return_visit_date is not null and date(cccmvf.date_entered) = (select max(date_entered) from enc_childhood_tb_missed_visit_followup where patient_id =cccmvf.patient_id) ");
+		query.append(" left join gfatm_dw.dim_user ducmvf on ducmvf.identifier= cccmvf.provider ");
+		query.append(" left join gfatm_dw.enc_pet_missed_visit_followup ccpmvf on ccpmvf.patient_id=basTable.patient_id and ccpmvf.location_name='IBEX-KHI' and ccpmvf.return_visit_date is not null  and date(ccpmvf.date_entered) = (select max(date_entered) from enc_pet_missed_visit_followup where patient_id =ccpmvf.patient_id)  ");
+		query.append(" left join gfatm_dw.dim_user dupmvf on dupmvf.identifier= ccpmvf.provider ");
+		query.append(" where ( date(basTable.facility_visit_date) between '"
+				+ startDate + "' and '" + endDate
+				+ "' ||  date (basTable.return_visit_date) between '"
+				+ startDate + "' and '" + endDate + "' ) ; ");
+
+		String jsonString = queryToJson(query.toString());
+		Type listType = new TypeToken<List<PatientScheduled>>() {
+		}.getType();
 		Gson gson = new Gson();
-	    ArrayList<PatientScheduled> patientScheduledList = gson.fromJson(jsonString, listType);
-	    UtilityCollection.getInstance().setPatientScheduledsList(patientScheduledList);
-	 
-	   return  UtilityCollection.getInstance().getPatientScheduledsList();
-   }
+		ArrayList<PatientScheduled> patientScheduledList = gson.fromJson(
+				jsonString, listType);
+		UtilityCollection.getInstance().setPatientScheduledsList(
+				patientScheduledList);
 
-   public ArrayList<PatientScheduled> getPatientByScheduledFacilityName(String facilityName)
-   {   
-	   ArrayList<PatientScheduled> filterList = new ArrayList<PatientScheduled>();
-	   if (UtilityCollection.getInstance().getPatientScheduledsList().isEmpty()) {
-   		   return null;
+		return UtilityCollection.getInstance().getPatientScheduledsList();
+	}
+
+	public ArrayList<PatientScheduled> getPatientByScheduledFacilityName(
+			String facilityName) {
+		ArrayList<PatientScheduled> filterList = new ArrayList<PatientScheduled>();
+		if (UtilityCollection.getInstance().getPatientScheduledsList()
+				.isEmpty()) {
+			return null;
+		} else {
+			try {
+				for (PatientScheduled patientScheduled : UtilityCollection
+						.getInstance().getPatientScheduledsList()) {
+					if (patientScheduled.getFacilityScheduled().equals(
+							facilityName)) {
+						filterList.add(patientScheduled);
+					}
+				}
+			} catch (Exception e) {
+				log.warning(e.getMessage());
+			}
 		}
-	   else{
-		   try{		   
-			    for (PatientScheduled patientScheduled : UtilityCollection.getInstance().getPatientScheduledsList()) {
-			    	if (patientScheduled.getFacilityScheduled().equals(facilityName))
-						    filterList.add(patientScheduled);
-			      }
-		   }catch(Exception e){
-			   log.warning(e.getMessage());
-		   }
-		   }
-	    return  filterList;
-   }
+		return filterList;
+	}
 
 }
