@@ -79,9 +79,9 @@ public class SwingControl {
 	public void showLabelDemoAfter() {
 		headerLabel.setText("GFATM LIST OF EMAILS");
 
-		String[] emails = new String[UtilityCollection.getEmailList().size()];
-		for (int i = 0; i < UtilityCollection.getEmailList().size(); i++) {
-			emails[i] = UtilityCollection.getEmailList().get(i)
+		String[] emails = new String[UtilityCollection.getInstance().getEmailList().size()];
+		for (int i = 0; i < UtilityCollection.getInstance().getEmailList().size(); i++) {
+			emails[i] = UtilityCollection.getInstance().getEmailList().get(i)
 					.getEmailAdress();
 		}
 		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);

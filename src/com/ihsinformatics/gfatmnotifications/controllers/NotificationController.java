@@ -16,7 +16,6 @@ public class NotificationController implements IConsumer {
 	@Override
 	public void process() {
 		// do some common validatin notification validation, manipulation logic
-		// etc
 		service.loader();
 		service.run();
 	}

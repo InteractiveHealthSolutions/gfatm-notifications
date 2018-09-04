@@ -1,6 +1,6 @@
 package com.ihsinformatics.gfatmnotifications.Implementer;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import org.joda.time.DateTime;
 
@@ -13,10 +13,10 @@ import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 
 public class EmailServiceImpl implements NotificationService {
 
-	private Calendar	calendar	= Calendar.getInstance();
-	private OpenMrsUtil	openMrsUtil;
-	private Iemail		email;
-	private DateTime	startVisitDate, endVisitDate;
+	private OpenMrsUtil		openMrsUtil;
+	private Iemail			email;
+	private DateTime		startVisitDate, endVisitDate;
+	public SimpleDateFormat	DATE_FORMATWH	= new SimpleDateFormat("yyyy-MM-dd");
 
 	public EmailServiceImpl() {
 		startVisitDate = new DateTime();
@@ -25,45 +25,45 @@ public class EmailServiceImpl implements NotificationService {
 
 	@Override
 	public void run() {
-		// Gfatm email Notification (daily)
-		email = new GfatmEmailJob();
-		email.execute(new OpenMrsUtil(UtilityCollection.getWarehouseDb()));
-		// Call Center Email Notification (Bi-week -> MONDAY and THURSDAY )
-		if (getBiWeekCondition()) {
+
+		try {
+			// Module One: Gfatm email Notification (daily)
+		    System.out.println("/*************Start Gfatm Email Notification ... **************/");
+			email = new GfatmEmailJob();
+			email.initializeProperties();
+			email.execute(new OpenMrsUtil(UtilityCollection.getInstance()
+					.getWarehouseDb()));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// if the emailjob class thrown any exception then we handle this
+			// except right here so our below process not stop...
+		}
+
+		try {
+			// Module Two: Call Center Email Notification (daily)
+			System.out.println("/*************Start Call Center Email Notification ... **************/");
 			email = new CallCenterEmailJob();
-			email.execute(new OpenMrsUtil(UtilityCollection.getWarehouseDb()));
-		}
-	}
+			email.initializeProperties();
+			email.execute(new OpenMrsUtil(UtilityCollection.getInstance()
+					.getWarehouseDb()));
 
-	public boolean getBiWeekCondition() {
-
-		boolean isExecutionDay = false;
-		switch (calendar.get(Calendar.DAY_OF_WEEK)) {
-			case Calendar.MONDAY:
-				isExecutionDay = true;
-				break;
-			case Calendar.THURSDAY:
-				isExecutionDay = true;
-				break;
-			case Calendar.TUESDAY:
-				isExecutionDay = true;
-				break;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		return isExecutionDay;
 	}
 
 	@Override
 	public void loader() {
-
-		openMrsUtil = new OpenMrsUtil(UtilityCollection.getWarehouseDb());
+		System.out
+				.println("/*************Loading Email Adress and Locations ... **************/");
+		openMrsUtil = new OpenMrsUtil(UtilityCollection.getInstance()
+				.getWarehouseDb());
 		openMrsUtil.LoadAllUsersEmail();
-		if (getBiWeekCondition()) {
-			openMrsUtil.getPatientScheduledForVisit(
-					Constants.DATE_FORMATWH.format(startVisitDate.toDate()),
-					Constants.DATE_FORMATWH.format(endVisitDate.toDate()));
-		}
-
+		openMrsUtil.getPatientScheduledForVisit(
+				DATE_FORMATWH.format(startVisitDate.toDate()),
+				DATE_FORMATWH.format(endVisitDate.toDate()));
 	}
 
 }

@@ -13,6 +13,7 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 package com.ihsinformatics.gfatmnotifications.jobs;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Properties;
@@ -45,11 +46,12 @@ public class EmailNotificationsJobLegacy {
 	private OpenMrsUtil			warehouseOpenmrsInstance;
 	private EmailController		emailController;
 	private Properties			props;
-
+	public   SimpleDateFormat	DATE_FORMATWH						= new SimpleDateFormat("yyyy-MM-dd");
+	
 	public EmailNotificationsJobLegacy() {
 
-		props = Connections.prop;
-		warehouseDb = UtilityCollection.getWarehouseDb();
+		props = Connections.props;
+		warehouseDb = UtilityCollection.getInstance().getWarehouseDb();
 		warehouseOpenmrsInstance = new OpenMrsUtil(warehouseDb);
 		emailController = new EmailController();
 	}
@@ -87,7 +89,7 @@ public class EmailNotificationsJobLegacy {
 
 	public void fastDailyReport(DateTime dateFrom) {
 
-		String todayDate = Constants.DATE_FORMATWH.format(dateFrom.toDate());
+		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
 		// First we need to get All the Fast Fact-Table
 		ArrayList<FastFact> factFast = warehouseOpenmrsInstance
 				.getFactFast(todayDate);
@@ -106,7 +108,7 @@ public class EmailNotificationsJobLegacy {
 			}
 		} else {
 			sendEmail(props.getProperty("emailer.admin-email"), HtmlUtile
-					.getInstance().getMessageFormate(),
+					.getInstance().getMessageFormate("","",""),
 					props.getProperty("mail.subject.title"));
 			log.warning("No updates are avaiable...");
 		}
@@ -161,7 +163,7 @@ public class EmailNotificationsJobLegacy {
 
 	public void childhoodDailyReport(DateTime dateFrom) {
 
-		String todayDate = Constants.DATE_FORMATWH.format(dateFrom.toDate());
+		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
 		ArrayList<ChilhoodFact> factChildhood = warehouseOpenmrsInstance
 				.getFactChildhood(todayDate);
 		if (!factChildhood.isEmpty()) {
@@ -179,7 +181,7 @@ public class EmailNotificationsJobLegacy {
 			}
 		} else {
 			sendEmail(props.getProperty("emailer.admin-email"), HtmlUtile
-					.getInstance().getMessageFormate(),
+					.getInstance().getMessageFormate("","",""),
 					props.getProperty("mail.childhood.subject.title"));
 			log.warning("No updates are avaiable...");
 		}
@@ -237,7 +239,7 @@ public class EmailNotificationsJobLegacy {
 
 	public void petDailyReport(DateTime dateFrom) {
 
-		String todayDate = Constants.DATE_FORMATWH.format(dateFrom.toDate());
+		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
 		ArrayList<PetFact> factPet = warehouseOpenmrsInstance
 				.getPetFact(todayDate);
 		if (!factPet.isEmpty()) {
@@ -255,7 +257,7 @@ public class EmailNotificationsJobLegacy {
 			}
 		} else {
 			sendEmail(props.getProperty("emailer.admin-email"), HtmlUtile
-					.getInstance().getMessageFormate(),
+					.getInstance().getMessageFormate("","",""),
 					props.getProperty("mail.pet.subject.title"));
 			log.warning("No updates are avaiable...");
 		}

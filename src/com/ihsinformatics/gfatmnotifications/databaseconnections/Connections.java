@@ -1,14 +1,11 @@
 package com.ihsinformatics.gfatmnotifications.databaseconnections;
 
-import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.logging.Logger;
-
-import javax.swing.JOptionPane;
 
 import org.ihs.emailer.EmailEngine;
 import org.ihs.emailer.EmailException;
@@ -26,21 +23,15 @@ public class Connections {
 	private static final Logger	log				= Logger.getLogger(Class.class
 														.getName());
 
-	private static final String	userHome		= System.getProperty("user.home")
-														+ System.getProperty("file.separator")
-														+ "gfatm";
-	private static String		propFilePath	= userHome
-														+ System.getProperty("file.separator")
-														+ "gfatm-notifications.properties";
-	private static Properties	props;
-	private static String		title			= "GFATM Notifications ";
+	public static Properties	props;
+	private static String		title			= "GFATM Notifications";
 	private static DatabaseUtil	localDb, whLocalDb;
-	public static Properties	prop;
 	public static String		guestUsername	= "";
 	public static String		guestPassword	= "";
+	boolean						isEnginStart	= true;
 
 	public Connections() {
-		readProperties(propFilePath);
+		readProperties();
 	}
 
 	/**
@@ -54,8 +45,8 @@ public class Connections {
 			return false;
 		}
 		System.out.println("*** Starting up " + title + " ***");
-		System.out.println("Reading properties...");
-		System.out.println(propFilePath);
+		System.out.println("Openmrs Reading properties...");
+		
 		String url = props.getProperty("local.connection.url");
 		String driverName = props.getProperty("local.connection.driver_class");
 		String dbName = props.getProperty("local.connection.database");
@@ -66,10 +57,8 @@ public class Connections {
 		localDb = new DatabaseUtil(url, dbName, driverName, userName, password);
 		if (!localDb.tryConnection()) {
 			return false;
-			// System.exit(-1);
 		}
-
-		UtilityCollection.setLocalDb(localDb);
+		UtilityCollection.getInstance().setLocalDb(localDb);
 		return true;
 
 	}
@@ -82,7 +71,7 @@ public class Connections {
 	public boolean wareHouseConnection() {
 
 		System.out.println("*** Starting up " + title + " ***");
-		System.out.println("Reading properties...");
+		System.out.println("Warehouse Reading properties...");
 		// get connection of data ware house
 		String whUrl = props.getProperty("local.wh.connection.url");
 		String whDriverName = props
@@ -90,13 +79,14 @@ public class Connections {
 		String whDbName = props.getProperty("local.wh.connection.database");
 		String whUserName = props.getProperty("local.wh.connection.username");
 		String whPassword = props.getProperty("local.wh.connection.password");
+
 		whLocalDb = new DatabaseUtil(whUrl, whDbName, whDriverName, whUserName,
 				whPassword);
 		if (!whLocalDb.tryConnection()) {
 			System.out.println("*** Warehouse database is not connected ***");
 			return false;
 		}
-		UtilityCollection.setWarehouseDb(whLocalDb);
+		UtilityCollection.getInstance().setWarehouseDb(whLocalDb);
 		// System.out.println("*** Starting Email Engine ***");
 		return startEmailEngine();
 
@@ -105,25 +95,17 @@ public class Connections {
 	/**
 	 * Read properties from properties file
 	 */
-	public void readProperties(String propertiesFile) {
+	public void readProperties() {
 		InputStream propFile;
 		try {
-			if (!(new File(userHome).exists())) {
-				boolean checkDir = new File(userHome).mkdir();
-				if (!checkDir) {
-					JOptionPane
-					.showMessageDialog(
-							null,
-							"Could not create properties file. Please check the permissions of your home folder.",
-							"Error!", JOptionPane.ERROR_MESSAGE);
-				}
-			}
-			propFile = new FileInputStream(propertiesFile);
+			/*propFile = Thread.currentThread().getContextClassLoader()
+					.getResourceAsStream(Constants.PROP_FILE_NAME);*/
+		    propFile =Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
 			if (propFile != null) {
+				
 				props = new Properties();
 				props.load(propFile);
-				title += props.getProperty("app.version");
-
+				title += props.getProperty("app.version");			
 			}
 		} catch (FileNotFoundException e1) {
 			log.severe("Properties file not found or is inaccessible.");
@@ -136,31 +118,19 @@ public class Connections {
 	 * Start Email Engine instance
 	 */
 	public boolean startEmailEngine() {
-		boolean isEnginStart = true;
-		try {
-			InputStream inputStream = Thread.currentThread()
-					.getContextClassLoader()
-					.getResourceAsStream(Constants.PROP_FILE_NAME);
-			// InputStream inputStream =
-			// Connections.class.getResourceAsStream(Constants.PROP_FILE_NAME);
-			prop = new Properties();
-			prop.load(inputStream);
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.warning("InpuStream In Email Engine method : " + e.getMessage());
-			isEnginStart = false;
-		}
-		guestUsername = prop.getProperty("mail.user.username");
-		guestPassword = prop.getProperty("mail.user.password");
-		UtilityCollection.minutes = prop.getProperty("mail.notifiation.minute");
-		UtilityCollection.seconds = prop
+
+		guestUsername = props.getProperty("mail.user.username");
+		guestPassword = props.getProperty("mail.user.password");
+		UtilityCollection.minutes = props.getProperty("mail.notifiation.minute");
+		UtilityCollection.seconds = props
 				.getProperty("mail.notification.second");
-		UtilityCollection.hours = prop.getProperty("mail.notification.hour");
-		UtilityCollection.setProps(prop);
+		UtilityCollection.hours = props.getProperty("mail.notification.hour");
+		UtilityCollection.getInstance().setProps(props);
+		
 		try {
-			System.out.println("*** Values **" + prop.isEmpty());
+			System.out.println("*** Values **" + props.isEmpty());
 			System.out.println("*** Starting Email Engine ***");
-			EmailEngine.instantiateEmailEngine(prop);
+			EmailEngine.instantiateEmailEngine(props);
 			isEnginStart = true;
 
 		} catch (EmailException e) {

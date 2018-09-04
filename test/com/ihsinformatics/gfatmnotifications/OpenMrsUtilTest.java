@@ -69,17 +69,17 @@ public class OpenMrsUtilTest {
 
 	@Test
 	public final void testLoadLocations() {
-		UtilityCollection.setLocations(null);
+		UtilityCollection.getInstance().setLocations(null);
 		util.loadLocations();
-		List<Location> locations = UtilityCollection.getLocations();
+		List<Location> locations = UtilityCollection.getInstance().getLocations();
 		Assert.assertTrue("Should load locations", locations.size() > 0);
 	}
 
 	@Test
 	public final void testLoadUsers() {
-		UtilityCollection.setUsers(null);
+		UtilityCollection.getInstance().setUsers(null);
 		util.loadUsers();
-		List<User> users = UtilityCollection.getUsers();
+		List<User> users = UtilityCollection.getInstance().getUsers();
 		Assert.assertTrue("Should load users", users.size() > 0);
 	}
 

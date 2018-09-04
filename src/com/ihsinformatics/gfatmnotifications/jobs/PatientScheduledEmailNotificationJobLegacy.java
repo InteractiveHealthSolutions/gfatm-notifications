@@ -1,5 +1,6 @@
 package com.ihsinformatics.gfatmnotifications.jobs;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,16 +37,17 @@ public class PatientScheduledEmailNotificationJobLegacy {
 			from;
 	private Set<String>					locationsSet;
 	private String						noUpdateAvailableSubject;
+	public   SimpleDateFormat	DATE_FORMATWH						= new SimpleDateFormat("yyyy-MM-dd");
 
 	public PatientScheduledEmailNotificationJobLegacy() {
 
 		emailController = new EmailController();
-		openMrsUtil = new OpenMrsUtil(UtilityCollection.getWarehouseDb());
+		openMrsUtil = new OpenMrsUtil(UtilityCollection.getInstance().getWarehouseDb());
 		startVisitDate = new DateTime();
 		endVisitDate = startVisitDate.plusDays(3);
 		scheduledPatientList = new ArrayList<PatientScheduled>();
 		locationsSet = new HashSet<String>();
-		props = Connections.prop;
+		props = Connections.props;
 		watcherEmail = props.getProperty("emailer.watcher.email.address");
 		subject = props.getProperty("mail.patient.schedule.subject");
 		subjectNotFound = props.getProperty("mail.location.subject");
@@ -55,9 +57,9 @@ public class PatientScheduledEmailNotificationJobLegacy {
 
 	public void execute() {
 
-		String startVisitDateStr = Constants.DATE_FORMATWH
+		String startVisitDateStr =DATE_FORMATWH
 				.format(startVisitDate.toDate());
-		String endVisitDateStr = Constants.DATE_FORMATWH.format(endVisitDate
+		String endVisitDateStr = DATE_FORMATWH.format(endVisitDate
 				.toDate());
 		// load emails.
 		openMrsUtil.LoadAllUsersEmail();
@@ -124,7 +126,7 @@ public class PatientScheduledEmailNotificationJobLegacy {
 			}
 		} else {
 			sendEmail(watcherEmail,
-					HtmlUtile.getInstance().getMessageFormate(),
+					HtmlUtile.getInstance().getMessageFormate("","",""),
 					noUpdateAvailableSubject);
 		}
 	}

@@ -52,16 +52,19 @@ public class SmsNotificationsJob implements Job {
 
 	private DateTime			dateFrom;
 	private DateTime			dateTo;
-
+	public   SimpleDateFormat	DATE_FORMATWH						= new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat	DATE_FORMAT							= new SimpleDateFormat("dd-MMM-yyyy");
 	public SmsNotificationsJob() {
 	}
 
 	private void initialize(SmsNotificationsJob smsJob) {
+		
 		setLocalDb(smsJob.getLocalDb());
 		setOpenmrs(smsJob.getOpenmrs());
 		setDateFrom(smsJob.getDateFrom());
 		setDateTo(smsJob.getDateTo());
 		setSmsController(smsJob.getSmsController());
+	
 	}
 
 	/*
@@ -86,14 +89,15 @@ public class SmsNotificationsJob implements Job {
 		dateFrom = dateFrom.minusHours(24);
 		System.out.println(dateFrom + " " + dateTo);
 
-		executeFastSms(dateFrom, dateTo);
-		// executeChildhoodTBSms(dateFrom, dateTo);
+		 executeFastSms(dateFrom, dateTo);
+		///executeChildhoodTBSms(dateFrom, dateTo);
 		// TODO: executePetSms(dateFrom, dateTo);
 		// TODO: executeComorbiditiesSms(dateFrom, dateTo);
 		// TODO: executePmdtSms(dateFrom, dateTo);
 	}
 
 	private void executeFastSms(DateTime dateFrom, DateTime dateTo) {
+		
 		List<Encounter> encounters = new ArrayList<Encounter>();
 		for (int type : Constants.FAST_ENCOUNTER_TYPE_IDS) {
 			List<Encounter> temp = getOpenmrs().getEncounters(dateFrom, dateTo,
@@ -235,9 +239,9 @@ public class SmsNotificationsJob implements Job {
 
 			dueDate = dueDate.plusDays(1);
 			Date parsDate = new SimpleDateFormat("dd-MMM-yyyy")
-			.parse(Constants.DATE_FORMAT.format(dueDate.toDate()));
+			.parse(DATE_FORMAT.format(dueDate.toDate()));
 			Date currentDate = new SimpleDateFormat("dd-MMM-yyyy")
-			.parse(Constants.DATE_FORMAT.format(new Date()));
+			.parse(DATE_FORMAT.format(new Date()));
 			if (parsDate.before(currentDate)) {
 				return false;
 			}
@@ -305,7 +309,7 @@ public class SmsNotificationsJob implements Job {
 		String returnVisitStr = observations.get("return_visit_date")
 				.toString().toUpperCase();
 		/************ Conditions ***************/
-		if (returnVisitStr.equals(null)
+		if (returnVisitStr == null
 				|| !openmrs.isTransferOrReferel(encounter)) {
 			return false;
 		}
@@ -315,7 +319,7 @@ public class SmsNotificationsJob implements Job {
 			returnVisitDate = DateTimeUtil.getDateFromString(returnVisitStr,
 					DateTimeUtil.SQL_DATETIME);
 			Date currentDate = new SimpleDateFormat("dd-MMM-yyyy")
-			.parse(Constants.DATE_FORMAT.format(new Date()));
+			.parse(DATE_FORMAT.format(new Date()));
 
 			if (returnVisitDate.before(currentDate)) {
 				return false;
@@ -356,8 +360,8 @@ public class SmsNotificationsJob implements Job {
 			message.append("Janab " + encounter.getPatientName() + ",");
 			message.append("" + encounter.getLocation()
 					+ " pe ap ko doctor ke paas ");
-			Constants.DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
-			message.append(Constants.DATE_FORMAT.format(returnVisitDate) + " ");
+			DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
+			message.append(DATE_FORMAT.format(returnVisitDate) + " ");
 			message.append("ko moainey aur adwiyaat hasil karne ke liyey tashreef lana hai. ");
 			message.append("Agar is mutaliq ap kuch poochna chahain tou AaoTBMitao helpline ");
 			message.append("021-111-111-982 pe rabta karain.");
@@ -420,7 +424,7 @@ public class SmsNotificationsJob implements Job {
 			return false;
 		}
 		// we need to check the treatment_outcome from end of follow of form
-		if (rtnVisitDate.equals(null) || patient.isDead()) {
+		if (rtnVisitDate == null || patient.isDead()) {
 			return false;
 		}
 		// check if the
@@ -455,7 +459,7 @@ public class SmsNotificationsJob implements Job {
 				encounter.setLocation(referralLocation.getName());
 
 			}
-			Constants.DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
+			DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
 			/* String df=DateFormat.getDateInstance().format(dueDate.getTime()); */
 
 			/********************* antibiotic = yes then message change ***************/
@@ -465,7 +469,7 @@ public class SmsNotificationsJob implements Job {
 				message.append("Janab " + encounter.getPatientName() + ", ");
 				message.append("" + encounter.getLocation());
 				message.append(" pe ap ko doctor ke paas "
-						+ Constants.DATE_FORMAT.format(returnVisitDate)
+						+ DATE_FORMAT.format(returnVisitDate)
 						+ " ko moainey ke liyey tashreef lana hai. "
 						+ "Agar is mutaliq ap kuch poochna chahain tou AaoTBMitao "
 						+ "helpline 021-111-111-982 pe rabta karain.");
@@ -474,7 +478,7 @@ public class SmsNotificationsJob implements Job {
 				message.append("Janab " + encounter.getPatientName() + ", ");
 				message.append("" + encounter.getLocation());
 				message.append(" pe ap ko doctor ke paas "
-						+ Constants.DATE_FORMAT.format(returnVisitDate)
+						+ DATE_FORMAT.format(returnVisitDate)
 						+ "ko moainey aur adwiyaat hasil karne ke liyey "
 						+ "tashreef lana hai. Agar is mutaliq ap kuch poochna chahain tou AaoTBMitao "
 						+ "helpline 021-111-111-982 pe rabta karain.");

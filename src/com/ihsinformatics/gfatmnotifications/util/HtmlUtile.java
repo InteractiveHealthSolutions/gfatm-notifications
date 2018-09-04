@@ -26,13 +26,13 @@ public class HtmlUtile {
 	}
 
 	// this method used for the static email content ...
-	public String getMessageFormate() {
+	public String getMessageFormate(String concernPerson,String bodyMessage,String program) {
 
 		StringBuilder buf = new StringBuilder();
 		buf.append("<html><body style='font-family: Arial, Helvetica, Monospace;'>");
 		buf.append("<p>");
-		buf.append("Dear Sadeeqa,<br><br>");
-		buf.append("This is to inform you that warehouse database is not sync today. <br><br>");
+		buf.append("Dear  "+concernPerson+",<br><br>");
+		buf.append(""+program+" "+bodyMessage+" <br><br>");
 		buf.append("Thanks");
 		buf.append("</p></body></html>");
 
@@ -84,31 +84,36 @@ public class HtmlUtile {
 				.getFacilityName());
 		buf.append("</code></caption>"
 				+ "<tr>"
-				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Internal ID</th>"
+				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>External ID</th>"
 				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>PID</th>"
+				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Program(s) Enrolled</th>"
 				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Reason For Visit</th>"
 				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Facility Visit Date</th>"
 				+ "</tr>");
 		for (PatientScheduled patientScheduled : mapping) {
 			buf.append(
 					"<tr><td style = 'border: 1px solid #ddd;padding: 8px;'>")
-					.append(patientScheduled.getPatientId())
+					.append(StringUtils
+							.isBlank(patientScheduled.getExternalId())? "":patientScheduled.getExternalId())
 					.append("</td><td style = 'border: 1px solid #ddd;padding: 8px;'>")
-					.append(patientScheduled.getPatientIdentifier())
+				    .append(patientScheduled.getPatientIdentifier())
 					.append("</td><td style = 'border: 1px solid #ddd;padding: 8px;'>")
 					.append(StringUtils
+							.isBlank(patientScheduled.getProgram())? "":patientScheduled.getProgram())
+					.append("</td><td style = 'border: 1px solid #ddd;padding: 8px;'>")
+					.append(patientScheduled.getTaFacilityVisitDate() == null ?(StringUtils
 							.isBlank(missedFupConditions(patientScheduled)) ? (StringUtils
 							.isBlank(patientScheduled.getTestType()) ? patientScheduled
 							.getReasonForCall() : patientScheduled
 							.getTestType())
-							: missedFupConditions(patientScheduled))
+							: missedFupConditions(patientScheduled)):"CC-Treatment Adherence")
 					.append("</td><td style = 'border: 1px solid #ddd;padding: 8px;'>")
-					.append(StringUtils
+					.append( patientScheduled.getTaFacilityVisitDate() == null ? (StringUtils
 							.isBlank(missedFupConditions(patientScheduled)) ? (StringUtils
 							.isBlank(patientScheduled.getRaFacilityVisitDate()) ? patientScheduled
 							.getFupFacilityVisitDate() : patientScheduled
 							.getRaFacilityVisitDate())
-							: getMisedFupReturnVisitDate(patientScheduled))
+							: getMisedFupReturnVisitDate(patientScheduled)):patientScheduled.getTaFacilityVisitDate())
 					.append("</td></tr>");
 		}
 		buf.append("</table>" + "</body>" + "</html>");
@@ -151,26 +156,34 @@ public class HtmlUtile {
 
 	public String missedFupConditions(PatientScheduled patientRecords) {
 
-		if (patientRecords.getcReturnVisitDate() != null) {
+		/*if (patientRecords.getcReturnVisitDate() != null) {
 			return "Childhood TB-Missed Visit Followup";
 		} else if (patientRecords.getpReturnVisitDate() != null) {
 			return "PET-Missed Visit Followup";
 		} else if (patientRecords.getfReturnVisitDate() != null) {
 			return "FAST-Missed Visit Followup";
-		} else {
+		} */
+		if (patientRecords.getMvfReturnVisitDate() != null) {
+			return "Missed Visit Followup";
+		}
+		else {
 			return null;
 		}
 	}
 
 	public String getMisedFupReturnVisitDate(PatientScheduled patientRecords) {
 
-		if (patientRecords.getcReturnVisitDate() != null) {
+		/*if (patientRecords.getcReturnVisitDate() != null) {
 			return patientRecords.getcReturnVisitDate();
 		} else if (patientRecords.getpReturnVisitDate() != null) {
 			return patientRecords.getpReturnVisitDate();
 		} else if (patientRecords.getfReturnVisitDate() != null) {
 			return patientRecords.getfReturnVisitDate();
-		} else {
+		} */ 
+		if (patientRecords.getMvfReturnVisitDate() != null) {
+			return patientRecords.getMvfReturnVisitDate();
+		}
+		else {
 			return null;
 		}
 	}

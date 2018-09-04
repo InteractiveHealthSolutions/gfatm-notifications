@@ -49,7 +49,8 @@ public class SmsNotificationJobTest {
 	private static Properties	props;
 	private static String		title			= "GFATM Notifications ";
 	private static DatabaseUtil	localDb;
-
+	public final SimpleDateFormat	DATE_FORMAT	= new SimpleDateFormat("dd-MMM-yyyy");
+	
 	@Before
 	public void setUp() throws Exception {
 		sms = new SmsNotificationsJob();
@@ -294,7 +295,7 @@ public class SmsNotificationJobTest {
 				encounter.setLocation(referralLocation.getName());
 
 			}
-			Constants.DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
+			 DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
 			/* String df=DateFormat.getDateInstance().format(dueDate.getTime()); */
 
 			/********************* antibiotic = yes then message change ***************/
@@ -304,7 +305,7 @@ public class SmsNotificationJobTest {
 				message.append("Janab " + encounter.getPatientName() + ", ");
 				message.append("" + encounter.getLocation());
 				message.append(" pe ap ko doctor ke paas "
-						+ Constants.DATE_FORMAT.format(returnVisitDate)
+						+ DATE_FORMAT.format(returnVisitDate)
 						+ " ko moainey ke liyey tashreef lana hai. "
 						+ "Agar is mutaliq ap kuch poochna chahain tou Aao TB Mitao "
 						+ "helpline 021-111-111-982 pe rabta karain.");
@@ -313,7 +314,7 @@ public class SmsNotificationJobTest {
 				message.append("Janab " + encounter.getPatientName() + ", ");
 				message.append("" + encounter.getLocation());
 				message.append(" pe ap ko doctor ke paas "
-						+ Constants.DATE_FORMAT.format(returnVisitDate)
+						+ DATE_FORMAT.format(returnVisitDate)
 						+ "ko moainey aur adwiyaat hasil karne ke liyey "
 						+ "tashreef lana hai. Agar is mutaliq ap kuch poochna chahain tou Aao TB Mitao "
 						+ "helpline 021-111-111-982 pe rabta karain.");
@@ -345,9 +346,9 @@ public class SmsNotificationJobTest {
 
 			dueDate = dueDate.plusDays(1);
 			Date parsDate = new SimpleDateFormat("dd-MMM-yyyy")
-			.parse(Constants.DATE_FORMAT.format(dueDate.toDate()));
+			 .parse(DATE_FORMAT.format(dueDate.toDate()));
 			Date currentDate = new SimpleDateFormat("dd-MMM-yyyy")
-			.parse(Constants.DATE_FORMAT.format(new Date()));
+			.parse(DATE_FORMAT.format(new Date()));
 			if (parsDate.before(currentDate)) {
 				return false;
 			}
@@ -424,7 +425,7 @@ public class SmsNotificationJobTest {
 			returnVisitDate = DateTimeUtil.getDateFromString(returnVisitStr,
 					DateTimeUtil.SQL_DATETIME);
 			Date currentDate = new SimpleDateFormat("dd-MMM-yyyy")
-			.parse(Constants.DATE_FORMAT.format(new Date()));
+			.parse(DATE_FORMAT.format(new Date()));
 
 			if (returnVisitDate.before(currentDate)) {
 				return false;
@@ -464,8 +465,8 @@ public class SmsNotificationJobTest {
 			message.append("Janab " + encounter.getPatientName() + ",");
 			message.append("" + encounter.getLocation()
 					+ " pe ap ko doctor ke paas ");
-			Constants.DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
-			message.append(Constants.DATE_FORMAT.format(returnVisitDate) + " ");
+			DATE_FORMAT.applyPattern("EEEE d MMM yyyy");
+			message.append(DATE_FORMAT.format(returnVisitDate) + " ");
 			message.append("ko moainey aur adwiyaat hasil karne ke liyey tashreef lana hai. ");
 			message.append("Agar is mutaliq ap kuch poochna chahain tou AaoTBMitao helpline ");
 			message.append("021-111-111-982 pe rabta karain.");

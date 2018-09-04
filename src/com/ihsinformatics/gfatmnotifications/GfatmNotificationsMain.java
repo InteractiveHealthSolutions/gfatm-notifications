@@ -13,7 +13,6 @@ package com.ihsinformatics.gfatmnotifications;
 
 import java.util.Date;
 import java.util.logging.Logger;
-
 import org.joda.time.DateTime;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -23,7 +22,6 @@ import org.quartz.SimpleScheduleBuilder;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
-
 import com.ihsinformatics.gfatmnotifications.Interface.IConsumer;
 import com.ihsinformatics.gfatmnotifications.controllers.SmsController;
 import com.ihsinformatics.gfatmnotifications.databaseconnections.Connections;
@@ -62,24 +60,22 @@ public class GfatmNotificationsMain {
 			consumer = injector.getConsumer();
 			consumer.getConnection(Constants.WAREHOUSE_CONNECTION);
 			consumer.process();
-			log.info("Email Notification execution is complete : " + new Date());
-			
-			/*
-			 * //SMS Notification injector = new SmsServiceInjector(); consumer
-			 * = injector.getConsumer();
-			 * consumer.getConnection(Constants.OPENMRS_CONNECTION);//Here we
-			 * can pass string or required database connection e.g warehosue and
-			 * openmrs database connecion etc . consumer.process();
-			 */
-			log.info("Application is processed today : " + new Date());
+			log.info("Email Notification execution is complete on : " + new Date());
+				
+				//SMS Notification injector = new SmsServiceInjector(); consumer
+			/*	injector = new SmsServiceInjector();
+				consumer = injector.getConsumer();
+				consumer.getConnection(Constants.OPENMRS_CONNECTION);
+				consumer.process();*/
+			 
 			System.exit(0);
 
 		} catch (Exception e) {
 			log.info("Exception : " + e.getMessage());
-			System.exit(-1);
+			System.exit(-1); //this will be remove 
 		}
 	}
-
+      
 	public GfatmNotificationsMain() {
 
 		Connections connection = new Connections();
@@ -104,8 +100,8 @@ public class GfatmNotificationsMain {
 		JobDetail smsJob = JobBuilder.newJob(SmsNotificationsJob.class)
 				.withIdentity("smsJob", "smsGroup").build();
 		SmsNotificationsJob smsJobObj = new SmsNotificationsJob();
-		smsJobObj.setLocalDb(UtilityCollection.getLocalDb());
-		smsJobObj.setOpenmrs(new OpenMrsUtil(UtilityCollection.getLocalDb()));
+		smsJobObj.setLocalDb(UtilityCollection.getInstance().getLocalDb());
+		smsJobObj.setOpenmrs(new OpenMrsUtil(UtilityCollection.getInstance().getLocalDb()));
 		smsJobObj.setDateFrom(from);
 		smsJobObj.setDateTo(to);
 		smsJobObj.setSmsController(new SmsController(

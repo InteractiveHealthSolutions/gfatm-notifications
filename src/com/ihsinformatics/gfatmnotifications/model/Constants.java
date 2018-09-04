@@ -12,7 +12,6 @@ Interactive Health Solutions, hereby disclaims all copyright interest in this pr
 
 package com.ihsinformatics.gfatmnotifications.model;
 
-import java.text.SimpleDateFormat;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -36,8 +35,7 @@ public final class Constants {
 	public static final int					EMAIL_SCHEDULE_INTERVAL_IN_HOURS	= 4;
 
 	// Integer identifiers of FAST types
-	// public static final int[] FAST_ENCOUNTER_TYPE_IDS = {17, 18, 19, 20, 21,
-	// 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 88, 89, 90};
+	// public static final int[] FAST_ENCOUNTER_TYPE_IDS = {17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 88, 89, 90};
 	public static final int[]				FAST_ENCOUNTER_TYPE_IDS				= { 29 };
 
 	/*
@@ -45,7 +43,9 @@ public final class Constants {
 	 * 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
 	 * 72, 73, 74, 81, 82, 83, 84, 85, 86, 87 };
 	 */
-	public static final int[]				CHILDHOOD_TB_ENCOUNTER_TYPE_IDS		= { 67 };
+	public static final int[]		CHILDHOOD_TB_ENCOUNTER_TYPE_IDS		= { 67 };
+	
+	public static final int[]		PET_ENCOUNTER_TYPE_IDS		= { 67 };
 
 	/********************** Constant values *********************/
 
@@ -53,10 +53,10 @@ public final class Constants {
 	public static final String				PATIENT_TRANSFERRED					= "PATIENT TRANSFERRED OUT";
 
 	/***********************/
-	public static final SimpleDateFormat	DATE_FORMAT							= new SimpleDateFormat(
+/*	public static final SimpleDateFormat	DATE_FORMAT							= new SimpleDateFormat(
 																						"dd-MMM-yyyy");
 	public static final SimpleDateFormat	DATE_FORMATWH						= new SimpleDateFormat(
-																						"yyyy-MM-dd");
+																						"yyyy-MM-dd");*/
 	/******************* Extra Variable ***********************/
 
 	public static final int					REFERREL_ENCOUNTER_TYPE				= 28;
@@ -68,11 +68,12 @@ public final class Constants {
 	/******************* Connection Name ***********************/
 	public static final String				WAREHOUSE_CONNECTION				= "warehouse";
 	public static final String				OPENMRS_CONNECTION					= "openmrs";
-	public static final int					NUMBERDAYS							= 3;
+	public static final int					NUMBERDAYS							= 1;
 	/********************* Email Properties ******************/
 
-	// public static final String PROP_FILE_NAME =
-	// "/src/tbreach-api.properties";
-	public static final String				PROP_FILE_NAME						= "tbreach-api.properties";
+      //this path used  on production time      
+	   public static final String PROP_FILE_NAME = "/src/tbreach-api.properties";
+	   //Local path
+	  // public static final String PROP_FILE_NAME	= "tbreach-api.properties";
 
 }

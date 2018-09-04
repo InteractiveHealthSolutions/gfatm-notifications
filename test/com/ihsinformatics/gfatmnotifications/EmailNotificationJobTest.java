@@ -18,7 +18,7 @@ import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
 import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
 import com.ihsinformatics.util.DatabaseUtil;
 
-@SuppressWarnings({ "unused", "deprecation" })
+@SuppressWarnings({ "deprecation" })
 public class EmailNotificationJobTest {
 	OpenMrsUtil	openMrsUtil;
 
@@ -45,7 +45,7 @@ public class EmailNotificationJobTest {
 	@Test
 	public void connectionTest() {
 
-		DatabaseUtil localDb = UtilityCollection.getWarehouseDb();
+		DatabaseUtil localDb = UtilityCollection.getInstance().getWarehouseDb();
 		Assert.assertTrue(localDb.tryConnection());
 	}
 
@@ -53,7 +53,7 @@ public class EmailNotificationJobTest {
 	public void checkTheFastFactTable() {
 
 		System.out.println("start the execution");
-		openMrsUtil = new OpenMrsUtil(UtilityCollection.getWarehouseDb());
+		openMrsUtil = new OpenMrsUtil(UtilityCollection.getInstance().getWarehouseDb());
 		openMrsUtil.LoadAllUsersEmail();
 		// check the email agains the location id
 		assertNotNull(openMrsUtil.getEmailByLocationId(2));
@@ -62,13 +62,13 @@ public class EmailNotificationJobTest {
 	@Test
 	public void sendEmail() {
 		System.out.println("sending email");
-		openMrsUtil = new OpenMrsUtil(UtilityCollection.getWarehouseDb());
+		openMrsUtil = new OpenMrsUtil(UtilityCollection.getInstance().getWarehouseDb());
 		openMrsUtil.LoadAllUsersEmail();
 		Email email = openMrsUtil.getEmailByLocationId(2);
 		System.out.println("" + email.getEmailAdress());
 
 		EmailController emailController = new EmailController();
-		String fromEmail = UtilityCollection.getProps().getProperty(
+		String fromEmail = UtilityCollection.getInstance().getProps().getProperty(
 				"mail.user.username");
 		Assert.assertTrue(emailController.sendEmailWithHtml(
 				"shujaat.ali@ihsinformatics.com", "Test Subject",

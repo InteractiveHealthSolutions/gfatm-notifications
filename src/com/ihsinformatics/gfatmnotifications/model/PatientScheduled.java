@@ -7,6 +7,7 @@ package com.ihsinformatics.gfatmnotifications.model;
 public class PatientScheduled {
 
 	private Integer	patientId;
+	private String	externalId;
 	private String	patientIdentifier;
 	private String	reasonForCall;
 	private String	fupFacilityScheduled;
@@ -20,6 +21,72 @@ public class PatientScheduled {
 	private String	fReturnVisitDate;
 	private String	pReturnVisitDate;
 	private String	facilityName;
+	private String	program;
+	private String	taFacilityScheduled;
+	private String	taFacilityVisitDate;
+	private String mvfReturnVisitDate;
+
+
+	
+	
+	/**
+	 * @return the mvfReturnVisitDate
+	 */
+	public String getMvfReturnVisitDate() {
+		return mvfReturnVisitDate;
+	}
+
+	/**
+	 * @param mvfReturnVisitDate the mvfReturnVisitDate to set
+	 */
+	public void setMvfReturnVisitDate(String mvfReturnVisitDate) {
+		this.mvfReturnVisitDate = mvfReturnVisitDate;
+	}
+
+	/**
+	 * @return the taFacilityScheduled
+	 */
+	public String getTaFacilityScheduled() {
+		return taFacilityScheduled;
+	}
+
+	/**
+	 * @param taFacilityScheduled
+	 *            the taFacilityScheduled to set
+	 */
+	public void setTaFacilityScheduled(String taFacilityScheduled) {
+		this.taFacilityScheduled = taFacilityScheduled;
+	}
+
+	/**
+	 * @return the taFacilityVisitDate
+	 */
+	public String getTaFacilityVisitDate() {
+		return taFacilityVisitDate;
+	}
+
+	/**
+	 * @param taFacilityVisitDate
+	 *            the taFacilityVisitDate to set
+	 */
+	public void setTaFacilityVisitDate(String taFacilityVisitDate) {
+		this.taFacilityVisitDate = taFacilityVisitDate;
+	}
+
+	/**
+	 * @return the program
+	 */
+	public String getProgram() {
+		return program;
+	}
+
+	/**
+	 * @param program
+	 *            the program to set
+	 */
+	public void setProgram(String program) {
+		this.program = program;
+	}
 
 	/**
 	 * @return the patientId
@@ -229,6 +296,21 @@ public class PatientScheduled {
 	 */
 	public void setFacilityName(String facilityName) {
 		this.facilityName = facilityName;
+	}
+
+	/**
+	 * @return the externalId
+	 */
+	public String getExternalId() {
+		return externalId;
+	}
+
+	/**
+	 * @param externalId
+	 *            the externalId to set
+	 */
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
 	}
 
 }
