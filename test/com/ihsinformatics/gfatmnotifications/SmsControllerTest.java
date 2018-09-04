@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ihsinformatics.gfatmnotifications.controllers.SmsController;
+import com.ihsinformatics.gfatmnotifications.controller.SmsController;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -49,7 +49,7 @@ public class SmsControllerTest {
 
 	/**
 	 * Test method for
-	 * {@link com.ihsinformatics.gfatmnotifications.controllers.SmsController#createSms(java.lang.String, java.lang.String, java.util.Date, java.lang.String, java.lang.String)}
+	 * {@link com.ihsinformatics.gfatmnotifications.controller.SmsController#createSms(java.lang.String, java.lang.String, java.util.Date, java.lang.String, java.lang.String)}
 	 * .
 	 */
 	@Test
@@ -78,7 +78,7 @@ public class SmsControllerTest {
 
 	/**
 	 * Test method for
-	 * {@link com.ihsinformatics.gfatmnotifications.controllers.SmsController#postSecure(java.lang.String, java.lang.String)}
+	 * {@link com.ihsinformatics.gfatmnotifications.controller.SmsController#postSecure(java.lang.String, java.lang.String)}
 	 * .
 	 */
 	@Test

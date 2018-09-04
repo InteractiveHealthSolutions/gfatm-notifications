@@ -21,8 +21,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ihsinformatics.gfatmnotifications.controllers.SmsController;
-import com.ihsinformatics.gfatmnotifications.jobs.SmsNotificationsJob;
+import com.ihsinformatics.gfatmnotifications.controller.SmsController;
+import com.ihsinformatics.gfatmnotifications.job.SmsNotificationsJob;
 import com.ihsinformatics.gfatmnotifications.model.Constants;
 import com.ihsinformatics.gfatmnotifications.model.Encounter;
 import com.ihsinformatics.gfatmnotifications.model.Location;

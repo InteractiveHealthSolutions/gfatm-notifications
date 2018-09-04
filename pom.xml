@@ -32,7 +32,12 @@
 		<dependency>
 			<groupId>com.ihsinformatics</groupId>
 			<artifactId>utilities</artifactId>
-			<version>1.2.5</version>
+			<version>1.5.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.ihsinformatics.emailer</groupId>
+			<artifactId>ihs-emailer</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.quartz-scheduler</groupId>

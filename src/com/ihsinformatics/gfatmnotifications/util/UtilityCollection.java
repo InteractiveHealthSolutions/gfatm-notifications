@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
+import com.ihsinformatics.gfatmnotifications.controller.EmailController;
 import com.ihsinformatics.gfatmnotifications.model.ChilhoodFact;
 import com.ihsinformatics.gfatmnotifications.model.Email;
 import com.ihsinformatics.gfatmnotifications.model.FastFact;
@@ -18,50 +18,50 @@ import com.ihsinformatics.util.DatabaseUtil;
 
 public class UtilityCollection {
 
-	private static UtilityCollection instance	= null;
+	private static UtilityCollection instance = null;
 	// static variable should be remove...
-	private  List<User>	 users;
-	private  List<Location>	locations;
-	private  List<Patient>			patients;
-	private  List<String>				userRoles;
-	private  ArrayList<FastFact>		factFast;
-	private  ArrayList<ChilhoodFact>	factChildhood;
-	private  ArrayList<PetFact>		factPet;
-	private ArrayList<PatientScheduled>		patientScheduledsList;
+	private List<User> users;
+	private List<Location> locations;
+	private List<Patient> patients;
+	private List<String> userRoles;
+	private ArrayList<FastFact> factFast;
+	private ArrayList<ChilhoodFact> factChildhood;
+	private ArrayList<PetFact> factPet;
+	private ArrayList<PatientScheduled> patientScheduledsList;
 	/* private static List<Person> */
-	private  Map<Integer, String>		encounterTypes;
-	private  List<Email>				emailList;
+	private Map<Integer, String> encounterTypes;
+	private List<Email> emailList;
 	// Email Jobs Instance
-	private  OpenMrsUtil				warehouseInstance;
-	private  EmailController			emailController;
-	private  Properties				    props;
-	private  DatabaseUtil				warehouseDb;
-	private  DatabaseUtil				localDb;
+	private OpenMrsUtil warehouseInstance;
+	private EmailController emailController;
+	private Properties props;
+	private DatabaseUtil warehouseDb;
+	private DatabaseUtil localDb;
 
-	public static String					minutes;
-	public static  String					seconds;
-	public  static String					hours;
+	public static String minutes;
+	public static String seconds;
+	public static String hours;
 
 	private UtilityCollection() {
 
 		/*
 		 * users = new ArrayList<User>(); locations = new ArrayList<Location>();
-		 * patients = new ArrayList<Patient>(); userRoles = new
-		 * ArrayList<String>(); emailList = new ArrayList<Email>();
+		 * patients = new ArrayList<Patient>(); userRoles = new ArrayList<String>();
+		 * emailList = new ArrayList<Email>();
 		 */
 	}
 
 	// static method to create instance of Singleton class
 	public static UtilityCollection getInstance() {
-		
-		if(instance == null){
-	        synchronized (UtilityCollection.class) {
-	            if(instance == null){
-	            	
-	                instance = new UtilityCollection();
-	            }
-	        }
-	    }
+
+		if (instance == null) {
+			synchronized (UtilityCollection.class) {
+				if (instance == null) {
+
+					instance = new UtilityCollection();
+				}
+			}
+		}
 		return instance;
 	}
 
@@ -173,8 +173,7 @@ public class UtilityCollection {
 	/**
 	 * @param patientScheduledsList the patientScheduledsList to set
 	 */
-	public void setPatientScheduledsList(
-			ArrayList<PatientScheduled> patientScheduledsList) {
+	public void setPatientScheduledsList(ArrayList<PatientScheduled> patientScheduledsList) {
 		this.patientScheduledsList = patientScheduledsList;
 	}
 
@@ -276,6 +275,4 @@ public class UtilityCollection {
 		this.localDb = localDb;
 	}
 
-	
-	
 }

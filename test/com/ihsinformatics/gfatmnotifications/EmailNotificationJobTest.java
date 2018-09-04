@@ -11,8 +11,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ihsinformatics.gfatmnotifications.controllers.EmailController;
-import com.ihsinformatics.gfatmnotifications.databaseconnections.Connections;
+import com.ihsinformatics.gfatmnotifications.controller.EmailController;
 import com.ihsinformatics.gfatmnotifications.model.Email;
 import com.ihsinformatics.gfatmnotifications.util.OpenMrsUtil;
 import com.ihsinformatics.gfatmnotifications.util.UtilityCollection;
@@ -30,7 +29,7 @@ public class EmailNotificationJobTest {
 	public void setUp() throws Exception {
 
 		// make a database connection
-		Connections con = new Connections();
+		DatabaseConnection con = new DatabaseConnection();
 		if (con.openmrsDbConnection()) {
 			System.out.println("Openmrs Database Connection");
 		}

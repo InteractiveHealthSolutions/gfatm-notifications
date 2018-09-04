@@ -19,32 +19,32 @@ import java.util.Date;
  *
  */
 public class User {
-	private Integer	userId;
-	private Integer	personId;
-	private String	systemId;
-	private String	username;
-	private String	givenName;
-	private String	lastName;
-	private String	gender;
-	private String	healthCenter;
-	private String	healthDistrict;
-	private String	primaryContact;
-	private String	secondaryContact;
-	private String	educationLevel;
-	private String	employmentStatus;
-	private String	occupation;
-	private String	motherTongue;
-	private String	nationalID;
-	private String	address1;
-	private String	address2;
-	private String	district;
-	private String	cityVillage;
-	private String	country;
-	private String	landmark;
-	private String	intervention;
-	private Date	dateCreated;
-	private String	uuid;
-	private String	userRole;
+	private Integer userId;
+	private Integer personId;
+	private String systemId;
+	private String username;
+	private String givenName;
+	private String lastName;
+	private String gender;
+	private String healthCenter;
+	private String healthDistrict;
+	private String primaryContact;
+	private String secondaryContact;
+	private String educationLevel;
+	private String employmentStatus;
+	private String occupation;
+	private String motherTongue;
+	private String nationalID;
+	private String address1;
+	private String address2;
+	private String district;
+	private String cityVillage;
+	private String country;
+	private String landmark;
+	private String intervention;
+	private Date dateCreated;
+	private String uuid;
+	private String userRole;
 
 	/**
 	 * @return the userId
@@ -54,8 +54,7 @@ public class User {
 	}
 
 	/**
-	 * @param userId
-	 *            the userId to set
+	 * @param userId the userId to set
 	 */
 	public void setUserId(Integer userId) {
 		this.userId = userId;
@@ -69,8 +68,7 @@ public class User {
 	}
 
 	/**
-	 * @param personId
-	 *            the personId to set
+	 * @param personId the personId to set
 	 */
 	public void setPersonId(Integer personId) {
 		this.personId = personId;
@@ -84,8 +82,7 @@ public class User {
 	}
 
 	/**
-	 * @param systemId
-	 *            the systemId to set
+	 * @param systemId the systemId to set
 	 */
 	public void setSystemId(String systemId) {
 		this.systemId = systemId;
@@ -99,8 +96,7 @@ public class User {
 	}
 
 	/**
-	 * @param username
-	 *            the username to set
+	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -114,8 +110,7 @@ public class User {
 	}
 
 	/**
-	 * @param givenName
-	 *            the givenName to set
+	 * @param givenName the givenName to set
 	 */
 	public void setGivenName(String givenName) {
 		this.givenName = givenName;
@@ -129,8 +124,7 @@ public class User {
 	}
 
 	/**
-	 * @param lastName
-	 *            the lastName to set
+	 * @param lastName the lastName to set
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
@@ -144,8 +138,7 @@ public class User {
 	}
 
 	/**
-	 * @param gender
-	 *            the gender to set
+	 * @param gender the gender to set
 	 */
 	public void setGender(String gender) {
 		this.gender = gender;
@@ -159,8 +152,7 @@ public class User {
 	}
 
 	/**
-	 * @param healthCenter
-	 *            the healthCenter to set
+	 * @param healthCenter the healthCenter to set
 	 */
 	public void setHealthCenter(String healthCenter) {
 		this.healthCenter = healthCenter;
@@ -174,8 +166,7 @@ public class User {
 	}
 
 	/**
-	 * @param healthDistrict
-	 *            the healthDistrict to set
+	 * @param healthDistrict the healthDistrict to set
 	 */
 	public void setHealthDistrict(String healthDistrict) {
 		this.healthDistrict = healthDistrict;
@@ -189,8 +180,7 @@ public class User {
 	}
 
 	/**
-	 * @param primaryContact
-	 *            the primaryContact to set
+	 * @param primaryContact the primaryContact to set
 	 */
 	public void setPrimaryContact(String primaryContact) {
 		this.primaryContact = primaryContact;
@@ -204,8 +194,7 @@ public class User {
 	}
 
 	/**
-	 * @param secondaryContact
-	 *            the secondaryContact to set
+	 * @param secondaryContact the secondaryContact to set
 	 */
 	public void setSecondaryContact(String secondaryContact) {
 		this.secondaryContact = secondaryContact;
@@ -219,8 +208,7 @@ public class User {
 	}
 
 	/**
-	 * @param educationLevel
-	 *            the educationLevel to set
+	 * @param educationLevel the educationLevel to set
 	 */
 	public void setEducationLevel(String educationLevel) {
 		this.educationLevel = educationLevel;
@@ -234,8 +222,7 @@ public class User {
 	}
 
 	/**
-	 * @param employmentStatus
-	 *            the employmentStatus to set
+	 * @param employmentStatus the employmentStatus to set
 	 */
 	public void setEmploymentStatus(String employmentStatus) {
 		this.employmentStatus = employmentStatus;
@@ -249,8 +236,7 @@ public class User {
 	}
 
 	/**
-	 * @param occupation
-	 *            the occupation to set
+	 * @param occupation the occupation to set
 	 */
 	public void setOccupation(String occupation) {
 		this.occupation = occupation;
@@ -264,8 +250,7 @@ public class User {
 	}
 
 	/**
-	 * @param motherTongue
-	 *            the motherTongue to set
+	 * @param motherTongue the motherTongue to set
 	 */
 	public void setMotherTongue(String motherTongue) {
 		this.motherTongue = motherTongue;
@@ -279,8 +264,7 @@ public class User {
 	}
 
 	/**
-	 * @param nationalID
-	 *            the nationalID to set
+	 * @param nationalID the nationalID to set
 	 */
 	public void setNationalID(String nationalID) {
 		this.nationalID = nationalID;
@@ -294,8 +278,7 @@ public class User {
 	}
 
 	/**
-	 * @param address1
-	 *            the address1 to set
+	 * @param address1 the address1 to set
 	 */
 	public void setAddress1(String address1) {
 		this.address1 = address1;
@@ -309,8 +292,7 @@ public class User {
 	}
 
 	/**
-	 * @param address2
-	 *            the address2 to set
+	 * @param address2 the address2 to set
 	 */
 	public void setAddress2(String address2) {
 		this.address2 = address2;
@@ -324,8 +306,7 @@ public class User {
 	}
 
 	/**
-	 * @param district
-	 *            the district to set
+	 * @param district the district to set
 	 */
 	public void setDistrict(String district) {
 		this.district = district;
@@ -339,8 +320,7 @@ public class User {
 	}
 
 	/**
-	 * @param cityVillage
-	 *            the cityVillage to set
+	 * @param cityVillage the cityVillage to set
 	 */
 	public void setCityVillage(String cityVillage) {
 		this.cityVillage = cityVillage;
@@ -354,8 +334,7 @@ public class User {
 	}
 
 	/**
-	 * @param country
-	 *            the country to set
+	 * @param country the country to set
 	 */
 	public void setCountry(String country) {
 		this.country = country;
@@ -369,8 +348,7 @@ public class User {
 	}
 
 	/**
-	 * @param landmark
-	 *            the landmark to set
+	 * @param landmark the landmark to set
 	 */
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
@@ -384,8 +362,7 @@ public class User {
 	}
 
 	/**
-	 * @param intervention
-	 *            the intervention to set
+	 * @param intervention the intervention to set
 	 */
 	public void setIntervention(String intervention) {
 		this.intervention = intervention;
@@ -399,8 +376,7 @@ public class User {
 	}
 
 	/**
-	 * @param dateCreated
-	 *            the dateCreated to set
+	 * @param dateCreated the dateCreated to set
 	 */
 	public void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
@@ -414,8 +390,7 @@ public class User {
 	}
 
 	/**
-	 * @param uuid
-	 *            the uuid to set
+	 * @param uuid the uuid to set
 	 */
 	public void setUuid(String uuid) {
 		this.uuid = uuid;

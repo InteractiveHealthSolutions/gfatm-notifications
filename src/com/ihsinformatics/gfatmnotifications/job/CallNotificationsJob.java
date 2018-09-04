@@ -10,7 +10,7 @@ You can also access the license on the internet at the address: http://www.gnu.o
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
  */
 
-package com.ihsinformatics.gfatmnotifications.jobs;
+package com.ihsinformatics.gfatmnotifications.job;
 
 import org.joda.time.DateTime;
 import org.quartz.Job;
@@ -25,11 +25,11 @@ import com.ihsinformatics.util.DatabaseUtil;
  */
 public class CallNotificationsJob implements Job {
 
-	private DatabaseUtil	localDb;
+	private DatabaseUtil localDb;
 
-	private boolean			filterDate	= true;
-	private DateTime		dateFrom;
-	private DateTime		dateTo;
+	private boolean filterDate = true;
+	private DateTime dateFrom;
+	private DateTime dateTo;
 
 	public CallNotificationsJob() {
 	}
@@ -40,8 +40,7 @@ public class CallNotificationsJob implements Job {
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
 	@Override
-	public void execute(JobExecutionContext context)
-			throws JobExecutionException {
+	public void execute(JobExecutionContext context) throws JobExecutionException {
 		// TODO Auto-generated method stub
 
 	}

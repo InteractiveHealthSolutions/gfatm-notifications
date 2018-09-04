@@ -1,13 +1,13 @@
-package com.ihsinformatics.gfatmnotifications.controllers;
+package com.ihsinformatics.gfatmnotifications.controller;
 
 import java.util.logging.Logger;
 
 import javax.mail.MessagingException;
 
-import org.ihs.emailer.EmailEngine;
+import com.ihsinformatics.emailer.EmailEngine;
 
 public class EmailController {
-	private static final Logger	log	= Logger.getLogger(Class.class.getName());
+	private static final Logger log = Logger.getLogger(Class.class.getName());
 
 	public EmailController() {
 	}
@@ -21,15 +21,13 @@ public class EmailController {
 	 * @param from
 	 * @return
 	 */
-	public boolean sendEmailWithHtml(String recipientList, String subject,
-			String message, String from) {
+	public boolean sendEmailWithHtml(String recipientList, String subject, String message, String from) {
 
 		boolean isSent;
 		String[] recipient = { recipientList };
 
 		try {
-			isSent = EmailEngine.getInstance().postHtmlMail(recipient, subject,
-					message, from);
+			isSent = EmailEngine.getInstance().postHtmlMail(recipient, subject, message, from);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 			log.warning("Email not send due to :- " + e.getMessage());
@@ -47,15 +45,13 @@ public class EmailController {
 	 * @param from
 	 * @return
 	 */
-	public boolean sendEmail(String recipientList, String subject,
-			String message, String from) {
+	public boolean sendEmail(String recipientList, String subject, String message, String from) {
 
 		boolean isSent;
 		String[] recipient = { recipientList };
 
 		try {
-			isSent = EmailEngine.getInstance().postSimpleMail(recipient,
-					subject, message, from);
+			isSent = EmailEngine.getInstance().postSimpleMail(recipient, subject, message, from);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 			return false;

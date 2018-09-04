@@ -2,26 +2,26 @@ package com.ihsinformatics.gfatmnotifications.model;
 
 public class PetFact {
 
-	private Integer	locationId;
-	private String	locationName;
-	private String	locationDescription;
-	private String	dateTime;
-	private Integer	noOfIndexPatientRegistered;
-	private Integer	noOfDSTBPatients;
-	private Integer	noOfDRTBPatients;
-	private Integer	noOfBaselineScreening;
-	private Integer	noOfIndexPatientsAgreed;
-	private Integer	noOfAdultsContacts;
-	private Integer	noOfPeadsContacts;
-	private Integer	noOfIndexNotEligibleStudy;
-	private Integer	noOfContactScreeningCounselingDone;
-	private Integer	noOfBaselineCounselingDone;
-	private Integer	noOfContactsInvestigated;
-	private Integer	noOfContactsDiagnosedTB;
-	private Integer	noOfContactsEligiblePET;
-	private Integer	noOfContactsAgreedPET;
-	private Integer	noOfContactsCompletedTreatment;
-	private String	emailAddress;
+	private Integer locationId;
+	private String locationName;
+	private String locationDescription;
+	private String dateTime;
+	private Integer noOfIndexPatientRegistered;
+	private Integer noOfDSTBPatients;
+	private Integer noOfDRTBPatients;
+	private Integer noOfBaselineScreening;
+	private Integer noOfIndexPatientsAgreed;
+	private Integer noOfAdultsContacts;
+	private Integer noOfPeadsContacts;
+	private Integer noOfIndexNotEligibleStudy;
+	private Integer noOfContactScreeningCounselingDone;
+	private Integer noOfBaselineCounselingDone;
+	private Integer noOfContactsInvestigated;
+	private Integer noOfContactsDiagnosedTB;
+	private Integer noOfContactsEligiblePET;
+	private Integer noOfContactsAgreedPET;
+	private Integer noOfContactsCompletedTreatment;
+	private String emailAddress;
 
 	/**
 	 * @return the locationId
@@ -31,8 +31,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param locationId
-	 *            the locationId to set
+	 * @param locationId the locationId to set
 	 */
 	public void setLocationId(Integer locationId) {
 		this.locationId = locationId;
@@ -46,8 +45,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param locationName
-	 *            the locationName to set
+	 * @param locationName the locationName to set
 	 */
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
@@ -61,8 +59,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param locationDescription
-	 *            the locationDescription to set
+	 * @param locationDescription the locationDescription to set
 	 */
 	public void setLocationDescription(String locationDescription) {
 		this.locationDescription = locationDescription;
@@ -76,8 +73,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param dateTime
-	 *            the dateTime to set
+	 * @param dateTime the dateTime to set
 	 */
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
@@ -91,8 +87,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfIndexPatientRegistered
-	 *            the noOfIndexPatientRegistered to set
+	 * @param noOfIndexPatientRegistered the noOfIndexPatientRegistered to set
 	 */
 	public void setNoOfIndexPatientRegistered(Integer noOfIndexPatientRegistered) {
 		this.noOfIndexPatientRegistered = noOfIndexPatientRegistered;
@@ -106,8 +101,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfDSTBPatients
-	 *            the noOfDSTBPatients to set
+	 * @param noOfDSTBPatients the noOfDSTBPatients to set
 	 */
 	public void setNoOfDSTBPatients(Integer noOfDSTBPatients) {
 		this.noOfDSTBPatients = noOfDSTBPatients;
@@ -121,8 +115,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfDRTBPatients
-	 *            the noOfDRTBPatients to set
+	 * @param noOfDRTBPatients the noOfDRTBPatients to set
 	 */
 	public void setNoOfDRTBPatients(Integer noOfDRTBPatients) {
 		this.noOfDRTBPatients = noOfDRTBPatients;
@@ -136,8 +129,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfBaselineScreening
-	 *            the noOfBaselineScreening to set
+	 * @param noOfBaselineScreening the noOfBaselineScreening to set
 	 */
 	public void setNoOfBaselineScreening(Integer noOfBaselineScreening) {
 		this.noOfBaselineScreening = noOfBaselineScreening;
@@ -151,8 +143,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfIndexPatientsAgreed
-	 *            the noOfIndexPatientsAgreed to set
+	 * @param noOfIndexPatientsAgreed the noOfIndexPatientsAgreed to set
 	 */
 	public void setNoOfIndexPatientsAgreed(Integer noOfIndexPatientsAgreed) {
 		this.noOfIndexPatientsAgreed = noOfIndexPatientsAgreed;
@@ -166,8 +157,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfAdultsContacts
-	 *            the noOfAdultsContacts to set
+	 * @param noOfAdultsContacts the noOfAdultsContacts to set
 	 */
 	public void setNoOfAdultsContacts(Integer noOfAdultsContacts) {
 		this.noOfAdultsContacts = noOfAdultsContacts;
@@ -181,8 +171,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfPeadsContacts
-	 *            the noOfPeadsContacts to set
+	 * @param noOfPeadsContacts the noOfPeadsContacts to set
 	 */
 	public void setNoOfPeadsContacts(Integer noOfPeadsContacts) {
 		this.noOfPeadsContacts = noOfPeadsContacts;
@@ -196,8 +185,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfIndexNotEligibleStudy
-	 *            the noOfIndexNotEligibleStudy to set
+	 * @param noOfIndexNotEligibleStudy the noOfIndexNotEligibleStudy to set
 	 */
 	public void setNoOfIndexNotEligibleStudy(Integer noOfIndexNotEligibleStudy) {
 		this.noOfIndexNotEligibleStudy = noOfIndexNotEligibleStudy;
@@ -211,11 +199,11 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfContactScreeningCounselingDone
-	 *            the noOfContactScreeningCounselingDone to set
+	 * @param noOfContactScreeningCounselingDone the
+	 *                                           noOfContactScreeningCounselingDone
+	 *                                           to set
 	 */
-	public void setNoOfContactScreeningCounselingDone(
-			Integer noOfContactScreeningCounselingDone) {
+	public void setNoOfContactScreeningCounselingDone(Integer noOfContactScreeningCounselingDone) {
 		this.noOfContactScreeningCounselingDone = noOfContactScreeningCounselingDone;
 	}
 
@@ -227,8 +215,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfBaselineCounselingDone
-	 *            the noOfBaselineCounselingDone to set
+	 * @param noOfBaselineCounselingDone the noOfBaselineCounselingDone to set
 	 */
 	public void setNoOfBaselineCounselingDone(Integer noOfBaselineCounselingDone) {
 		this.noOfBaselineCounselingDone = noOfBaselineCounselingDone;
@@ -242,8 +229,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfContactsInvestigated
-	 *            the noOfContactsInvestigated to set
+	 * @param noOfContactsInvestigated the noOfContactsInvestigated to set
 	 */
 	public void setNoOfContactsInvestigated(Integer noOfContactsInvestigated) {
 		this.noOfContactsInvestigated = noOfContactsInvestigated;
@@ -257,8 +243,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfContactsDiagnosedTB
-	 *            the noOfContactsDiagnosedTB to set
+	 * @param noOfContactsDiagnosedTB the noOfContactsDiagnosedTB to set
 	 */
 	public void setNoOfContactsDiagnosedTB(Integer noOfContactsDiagnosedTB) {
 		this.noOfContactsDiagnosedTB = noOfContactsDiagnosedTB;
@@ -272,8 +257,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfContactsEligiblePET
-	 *            the noOfContactsEligiblePET to set
+	 * @param noOfContactsEligiblePET the noOfContactsEligiblePET to set
 	 */
 	public void setNoOfContactsEligiblePET(Integer noOfContactsEligiblePET) {
 		this.noOfContactsEligiblePET = noOfContactsEligiblePET;
@@ -287,8 +271,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfContactsAgreedPET
-	 *            the noOfContactsAgreedPET to set
+	 * @param noOfContactsAgreedPET the noOfContactsAgreedPET to set
 	 */
 	public void setNoOfContactsAgreedPET(Integer noOfContactsAgreedPET) {
 		this.noOfContactsAgreedPET = noOfContactsAgreedPET;
@@ -302,11 +285,10 @@ public class PetFact {
 	}
 
 	/**
-	 * @param noOfContactsCompletedTreatment
-	 *            the noOfContactsCompletedTreatment to set
+	 * @param noOfContactsCompletedTreatment the noOfContactsCompletedTreatment to
+	 *                                       set
 	 */
-	public void setNoOfContactsCompletedTreatment(
-			Integer noOfContactsCompletedTreatment) {
+	public void setNoOfContactsCompletedTreatment(Integer noOfContactsCompletedTreatment) {
 		this.noOfContactsCompletedTreatment = noOfContactsCompletedTreatment;
 	}
 
@@ -318,8 +300,7 @@ public class PetFact {
 	}
 
 	/**
-	 * @param emailAddress
-	 *            the emailAddress to set
+	 * @param emailAddress the emailAddress to set
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;

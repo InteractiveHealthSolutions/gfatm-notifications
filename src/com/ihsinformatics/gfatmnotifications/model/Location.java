@@ -23,30 +23,30 @@ public class Location implements Serializable {
 	/**
 	 *
 	 */
-	private static final long	serialVersionUID	= -4675815525012531145L;
-	private Integer				location_id;
-	private String				name;
-	private Integer				parentId;
-	private String				uuid;
-	private Boolean				fast;
-	private Boolean				pet;
-	private Boolean				childhoodTb;
-	private Boolean				comorbidities;
-	private Boolean				pmdt;
-	private String				primaryContact;
-	private String				primaryContactName;
-	private String				secondaryContact;
-	private String				secondaryContactName;
-	private String				locationType;
-	private String				address1;
-	private String				address2;
-	private String				address3;
-	private String				city_village;
-	private String				state_province;
-	private String				description;
-	private String				country;
-	private long				date_created;
-	private Boolean				status;
+	private static final long serialVersionUID = -4675815525012531145L;
+	private Integer location_id;
+	private String name;
+	private Integer parentId;
+	private String uuid;
+	private Boolean fast;
+	private Boolean pet;
+	private Boolean childhoodTb;
+	private Boolean comorbidities;
+	private Boolean pmdt;
+	private String primaryContact;
+	private String primaryContactName;
+	private String secondaryContact;
+	private String secondaryContactName;
+	private String locationType;
+	private String address1;
+	private String address2;
+	private String address3;
+	private String city_village;
+	private String state_province;
+	private String description;
+	private String country;
+	private long date_created;
+	private Boolean status;
 
 	/**
 	 * @return the locationId
@@ -56,8 +56,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param locationId
-	 *            the locationId to set
+	 * @param locationId the locationId to set
 	 */
 	public void setLocationId(Integer locationId) {
 		location_id = locationId;
@@ -71,8 +70,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -86,8 +84,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param parentId
-	 *            the parentId to set
+	 * @param parentId the parentId to set
 	 */
 	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
@@ -101,8 +98,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param uuid
-	 *            the uuid to set
+	 * @param uuid the uuid to set
 	 */
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
@@ -116,8 +112,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param fast
-	 *            the fast to set
+	 * @param fast the fast to set
 	 */
 	public void setFast(Boolean fast) {
 		this.fast = fast;
@@ -131,8 +126,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param pet
-	 *            the pet to set
+	 * @param pet the pet to set
 	 */
 	public void setPet(Boolean pet) {
 		this.pet = pet;
@@ -146,8 +140,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param childhoodTb
-	 *            the childhoodTb to set
+	 * @param childhoodTb the childhoodTb to set
 	 */
 	public void setChildhoodTb(Boolean childhoodTb) {
 		this.childhoodTb = childhoodTb;
@@ -161,8 +154,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param comorbidities
-	 *            the comorbidities to set
+	 * @param comorbidities the comorbidities to set
 	 */
 	public void setComorbidities(Boolean comorbidities) {
 		this.comorbidities = comorbidities;
@@ -176,8 +168,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param pmdt
-	 *            the pmdt to set
+	 * @param pmdt the pmdt to set
 	 */
 	public void setPmdt(Boolean pmdt) {
 		this.pmdt = pmdt;
@@ -191,8 +182,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param primaryContact
-	 *            the primaryContact to set
+	 * @param primaryContact the primaryContact to set
 	 */
 	public void setPrimaryContact(String primaryContact) {
 		this.primaryContact = primaryContact;
@@ -206,8 +196,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param primaryContactName
-	 *            the primaryContactName to set
+	 * @param primaryContactName the primaryContactName to set
 	 */
 	public void setPrimaryContactName(String primaryContactName) {
 		this.primaryContactName = primaryContactName;
@@ -221,8 +210,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param secondaryContact
-	 *            the secondaryContact to set
+	 * @param secondaryContact the secondaryContact to set
 	 */
 	public void setSecondaryContact(String secondaryContact) {
 		this.secondaryContact = secondaryContact;
@@ -236,8 +224,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param secondaryContactName
-	 *            the secondaryContactName to set
+	 * @param secondaryContactName the secondaryContactName to set
 	 */
 	public void setSecondaryContactName(String secondaryContactName) {
 		this.secondaryContactName = secondaryContactName;
@@ -251,8 +238,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param locationType
-	 *            the locationType to set
+	 * @param locationType the locationType to set
 	 */
 	public void setLocationType(String locationType) {
 		this.locationType = locationType;
@@ -266,8 +252,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param address1
-	 *            the address1 to set
+	 * @param address1 the address1 to set
 	 */
 	public void setAddress1(String address1) {
 		this.address1 = address1;
@@ -281,8 +266,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param address2
-	 *            the address2 to set
+	 * @param address2 the address2 to set
 	 */
 	public void setAddress2(String address2) {
 		this.address2 = address2;
@@ -296,8 +280,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param address3
-	 *            the address3 to set
+	 * @param address3 the address3 to set
 	 */
 	public void setAddress3(String address3) {
 		this.address3 = address3;
@@ -311,8 +294,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param cityVillage
-	 *            the cityVillage to set
+	 * @param cityVillage the cityVillage to set
 	 */
 	public void setCityVillage(String cityVillage) {
 		city_village = cityVillage;
@@ -326,8 +308,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param stateProvince
-	 *            the stateProvince to set
+	 * @param stateProvince the stateProvince to set
 	 */
 	public void setStateProvince(String stateProvince) {
 		state_province = stateProvince;
@@ -341,8 +322,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param description
-	 *            the description to set
+	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
 		this.description = description;
@@ -356,8 +336,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param dateCreated
-	 *            the dateCreated to set
+	 * @param dateCreated the dateCreated to set
 	 */
 	public void setDateCreated(long dateCreated) {
 		date_created = dateCreated;
@@ -371,8 +350,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param status
-	 *            the status to set
+	 * @param status the status to set
 	 */
 	public void setStatus(Boolean status) {
 		this.status = status;
@@ -386,8 +364,7 @@ public class Location implements Serializable {
 	}
 
 	/**
-	 * @param country
-	 *            the country to set
+	 * @param country the country to set
 	 */
 	public void setCountry(String country) {
 		this.country = country;

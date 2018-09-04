@@ -2,34 +2,34 @@ package com.ihsinformatics.gfatmnotifications.model;
 
 public class FastFact {
 
-	private Integer	locationId;
-	private String	locationName;
-	private String	locationDescription;
-	private String	dateTime;
-	private Integer	totalScreeingForm;
-	private Integer	chestXrays;
-	private Integer	verbalScreenPresumptives;
-	private Integer	chestXrayPresumptives;
-	private Integer	samplesCollectedVerbalScreenPresumptives;
-	private Integer	samplesCollectedCXRPresumptives;
-	private Integer	gxpTestsDone;
-	private Integer	internalTests;
-	private Integer	externalTests;
-	private Integer	mTBpveInternal;
-	private Integer	mTBpveExternal;
-	private Integer	mTBpveRRpveInternal;
-	private Integer	mTBpveRRpveExternal;
-	private Integer	allError;
-	private Integer	noResult;
-	private Integer	invalidAllTest;
-	private Integer	pendingSamples;
-	private Integer	errorNoResultInvalid;
-	private Integer	clinicallyDiagnosed;
-	private Integer	initiatedOnAntibiotic;
-	private Integer	initiatedOnTBTx;
-	private String	emailAddress;
-	private String	primaryContact;
-	private String	secondaryContct;
+	private Integer locationId;
+	private String locationName;
+	private String locationDescription;
+	private String dateTime;
+	private Integer totalScreeingForm;
+	private Integer chestXrays;
+	private Integer verbalScreenPresumptives;
+	private Integer chestXrayPresumptives;
+	private Integer samplesCollectedVerbalScreenPresumptives;
+	private Integer samplesCollectedCXRPresumptives;
+	private Integer gxpTestsDone;
+	private Integer internalTests;
+	private Integer externalTests;
+	private Integer mTBpveInternal;
+	private Integer mTBpveExternal;
+	private Integer mTBpveRRpveInternal;
+	private Integer mTBpveRRpveExternal;
+	private Integer allError;
+	private Integer noResult;
+	private Integer invalidAllTest;
+	private Integer pendingSamples;
+	private Integer errorNoResultInvalid;
+	private Integer clinicallyDiagnosed;
+	private Integer initiatedOnAntibiotic;
+	private Integer initiatedOnTBTx;
+	private String emailAddress;
+	private String primaryContact;
+	private String secondaryContct;
 
 	// public static Map<String, String>
 
@@ -45,8 +45,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param locationId
-	 *            the locationId to set
+	 * @param locationId the locationId to set
 	 */
 	public void setLocationId(Integer locationId) {
 		this.locationId = locationId;
@@ -60,8 +59,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param locationName
-	 *            the locationName to set
+	 * @param locationName the locationName to set
 	 */
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
@@ -75,8 +73,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param locationDescription
-	 *            the locationDescription to set
+	 * @param locationDescription the locationDescription to set
 	 */
 	public void setLocationDescription(String locationDescription) {
 		this.locationDescription = locationDescription;
@@ -90,8 +87,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param dateTime
-	 *            the dateTime to set
+	 * @param dateTime the dateTime to set
 	 */
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
@@ -105,8 +101,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param totalScreeingForm
-	 *            the totalScreeingForm to set
+	 * @param totalScreeingForm the totalScreeingForm to set
 	 */
 	public void setTotalScreeingForm(Integer totalScreeingForm) {
 		this.totalScreeingForm = totalScreeingForm;
@@ -120,8 +115,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param chestXrays
-	 *            the chestXrays to set
+	 * @param chestXrays the chestXrays to set
 	 */
 	public void setChestXrays(Integer chestXrays) {
 		this.chestXrays = chestXrays;
@@ -135,8 +129,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param verbalScreenPresumptives
-	 *            the verbalScreenPresumptives to set
+	 * @param verbalScreenPresumptives the verbalScreenPresumptives to set
 	 */
 	public void setVerbalScreenPresumptives(Integer verbalScreenPresumptives) {
 		this.verbalScreenPresumptives = verbalScreenPresumptives;
@@ -150,8 +143,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param chestXrayPresumptives
-	 *            the chestXrayPresumptives to set
+	 * @param chestXrayPresumptives the chestXrayPresumptives to set
 	 */
 	public void setChestXrayPresumptives(Integer chestXrayPresumptives) {
 		this.chestXrayPresumptives = chestXrayPresumptives;
@@ -165,11 +157,11 @@ public class FastFact {
 	}
 
 	/**
-	 * @param samplesCollectedVerbalScreenPresumptives
-	 *            the samplesCollectedVerbalScreenPresumptives to set
+	 * @param samplesCollectedVerbalScreenPresumptives the
+	 *                                                 samplesCollectedVerbalScreenPresumptives
+	 *                                                 to set
 	 */
-	public void setSamplesCollectedVerbalScreenPresumptives(
-			Integer samplesCollectedVerbalScreenPresumptives) {
+	public void setSamplesCollectedVerbalScreenPresumptives(Integer samplesCollectedVerbalScreenPresumptives) {
 		this.samplesCollectedVerbalScreenPresumptives = samplesCollectedVerbalScreenPresumptives;
 	}
 
@@ -181,11 +173,10 @@ public class FastFact {
 	}
 
 	/**
-	 * @param samplesCollectedCXRPresumptives
-	 *            the samplesCollectedCXRPresumptives to set
+	 * @param samplesCollectedCXRPresumptives the samplesCollectedCXRPresumptives to
+	 *                                        set
 	 */
-	public void setSamplesCollectedCXRPresumptives(
-			Integer samplesCollectedCXRPresumptives) {
+	public void setSamplesCollectedCXRPresumptives(Integer samplesCollectedCXRPresumptives) {
 		this.samplesCollectedCXRPresumptives = samplesCollectedCXRPresumptives;
 	}
 
@@ -197,8 +188,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param gxpTestsDone
-	 *            the gxpTestsDone to set
+	 * @param gxpTestsDone the gxpTestsDone to set
 	 */
 	public void setGxpTestsDone(Integer gxpTestsDone) {
 		this.gxpTestsDone = gxpTestsDone;
@@ -212,8 +202,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param internalTests
-	 *            the internalTests to set
+	 * @param internalTests the internalTests to set
 	 */
 	public void setInternalTests(Integer internalTests) {
 		this.internalTests = internalTests;
@@ -227,8 +216,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param externalTests
-	 *            the externalTests to set
+	 * @param externalTests the externalTests to set
 	 */
 	public void setExternalTests(Integer externalTests) {
 		this.externalTests = externalTests;
@@ -242,8 +230,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param mTBpveInternal
-	 *            the mTBpveInternal to set
+	 * @param mTBpveInternal the mTBpveInternal to set
 	 */
 	public void setmTBpveInternal(Integer mTBpveInternal) {
 		this.mTBpveInternal = mTBpveInternal;
@@ -257,8 +244,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param mTBpveExternal
-	 *            the mTBpveExternal to set
+	 * @param mTBpveExternal the mTBpveExternal to set
 	 */
 	public void setmTBpveExternal(Integer mTBpveExternal) {
 		this.mTBpveExternal = mTBpveExternal;
@@ -272,8 +258,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param mTBpveRRpveInternal
-	 *            the mTBpveRRpveInternal to set
+	 * @param mTBpveRRpveInternal the mTBpveRRpveInternal to set
 	 */
 	public void setmTBpveRRpveInternal(Integer mTBpveRRpveInternal) {
 		this.mTBpveRRpveInternal = mTBpveRRpveInternal;
@@ -287,8 +272,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param mTBpveRRpveExternal
-	 *            the mTBpveRRpveExternal to set
+	 * @param mTBpveRRpveExternal the mTBpveRRpveExternal to set
 	 */
 	public void setmTBpveRRpveExternal(Integer mTBpveRRpveExternal) {
 		this.mTBpveRRpveExternal = mTBpveRRpveExternal;
@@ -302,8 +286,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param allError
-	 *            the allError to set
+	 * @param allError the allError to set
 	 */
 	public void setAllError(Integer allError) {
 		this.allError = allError;
@@ -317,8 +300,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param noResult
-	 *            the noResult to set
+	 * @param noResult the noResult to set
 	 */
 	public void setNoResult(Integer noResult) {
 		this.noResult = noResult;
@@ -332,8 +314,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param invalidAllTest
-	 *            the invalidAllTest to set
+	 * @param invalidAllTest the invalidAllTest to set
 	 */
 	public void setInvalidAllTest(Integer invalidAllTest) {
 		this.invalidAllTest = invalidAllTest;
@@ -347,8 +328,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param pendingSamples
-	 *            the pendingSamples to set
+	 * @param pendingSamples the pendingSamples to set
 	 */
 	public void setPendingSamples(Integer pendingSamples) {
 		this.pendingSamples = pendingSamples;
@@ -362,8 +342,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param clinicallyDiagnosed
-	 *            the clinicallyDiagnosed to set
+	 * @param clinicallyDiagnosed the clinicallyDiagnosed to set
 	 */
 	public void setClinicallyDiagnosed(Integer clinicallyDiagnosed) {
 		this.clinicallyDiagnosed = clinicallyDiagnosed;
@@ -377,8 +356,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param initiatedOnAntibiotic
-	 *            the initiatedOnAntibiotic to set
+	 * @param initiatedOnAntibiotic the initiatedOnAntibiotic to set
 	 */
 	public void setInitiatedOnAntibiotic(Integer initiatedOnAntibiotic) {
 		this.initiatedOnAntibiotic = initiatedOnAntibiotic;
@@ -392,8 +370,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param initiatedOnTBTx
-	 *            the initiatedOnTBTx to set
+	 * @param initiatedOnTBTx the initiatedOnTBTx to set
 	 */
 	public void setInitiatedOnTBTx(Integer initiatedOnTBTx) {
 		this.initiatedOnTBTx = initiatedOnTBTx;
@@ -407,8 +384,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param emailAddress
-	 *            the emailAddress to set
+	 * @param emailAddress the emailAddress to set
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
@@ -422,8 +398,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param primaryContact
-	 *            the primaryContact to set
+	 * @param primaryContact the primaryContact to set
 	 */
 	public void setPrimaryContact(String primaryContact) {
 		this.primaryContact = primaryContact;
@@ -437,8 +412,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param secondaryContct
-	 *            the secondaryContct to set
+	 * @param secondaryContct the secondaryContct to set
 	 */
 	public void setSecondaryContct(String secondaryContct) {
 		this.secondaryContct = secondaryContct;
@@ -452,8 +426,7 @@ public class FastFact {
 	}
 
 	/**
-	 * @param errorNoResultInvalid
-	 *            the errorNoResultInvalid to set
+	 * @param errorNoResultInvalid the errorNoResultInvalid to set
 	 */
 	public void setErrorNoResultInvalid(Integer errorNoResultInvalid) {
 		this.errorNoResultInvalid = errorNoResultInvalid;

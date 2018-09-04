@@ -18,45 +18,45 @@ package com.ihsinformatics.gfatmnotifications.model;
  */
 public class Patient {
 
-	private Integer	personId;
-	private String	givenName;
-	private String	lastName;
-	private String	gender;
-	private String	birthdate;
-	private String	estimated;
-	private String	birthplace;
-	private String	maritalStatus;
-	private String	healthCenter;
-	private String	healthDistrict;
-	private String	motherName;
-	private String	primaryContact;
-	private String	primaryContactOwner;
-	private String	secondaryContact;
-	private String	secondaryContactOwner;
-	private String	ethnicity;
-	private String	educationLevel;
-	private String	employmentStatus;
-	private String	occupation;
-	private String	motherTongue;
-	private String	incomeClass;
-	private String	nationalID;
-	private String	nationalIDOwner;
-	private String	guardianName;
-	private String	treatmentSupporter;
-	private String	otherIdentificationNumber;
-	private String	transgender;
-	private String	patientType;
-	private Boolean	dead;
-	private String	creator;
-	private long	dateCreated;
-	private String	address1;
-	private String	address2;
-	private String	district;
-	private String	cityVillage;
-	private String	country;
-	private String	landmark;
-	private String	patientIdentifier;
-	private String	uuid;
+	private Integer personId;
+	private String givenName;
+	private String lastName;
+	private String gender;
+	private String birthdate;
+	private String estimated;
+	private String birthplace;
+	private String maritalStatus;
+	private String healthCenter;
+	private String healthDistrict;
+	private String motherName;
+	private String primaryContact;
+	private String primaryContactOwner;
+	private String secondaryContact;
+	private String secondaryContactOwner;
+	private String ethnicity;
+	private String educationLevel;
+	private String employmentStatus;
+	private String occupation;
+	private String motherTongue;
+	private String incomeClass;
+	private String nationalID;
+	private String nationalIDOwner;
+	private String guardianName;
+	private String treatmentSupporter;
+	private String otherIdentificationNumber;
+	private String transgender;
+	private String patientType;
+	private Boolean dead;
+	private String creator;
+	private long dateCreated;
+	private String address1;
+	private String address2;
+	private String district;
+	private String cityVillage;
+	private String country;
+	private String landmark;
+	private String patientIdentifier;
+	private String uuid;
 
 	public Patient() {
 	}
@@ -69,8 +69,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param personId
-	 *            the personId to set
+	 * @param personId the personId to set
 	 */
 	public void setPersonId(Integer personId) {
 		this.personId = personId;
@@ -84,8 +83,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param givenName
-	 *            the givenName to set
+	 * @param givenName the givenName to set
 	 */
 	public void setGivenName(String givenName) {
 		this.givenName = givenName;
@@ -99,8 +97,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param lastName
-	 *            the lastName to set
+	 * @param lastName the lastName to set
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
@@ -114,8 +111,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param gender
-	 *            the gender to set
+	 * @param gender the gender to set
 	 */
 	public void setGender(String gender) {
 		this.gender = gender;
@@ -129,8 +125,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param birthdate
-	 *            the birthdate to set
+	 * @param birthdate the birthdate to set
 	 */
 	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
@@ -144,8 +139,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param estimated
-	 *            the estimated to set
+	 * @param estimated the estimated to set
 	 */
 	public void setEstimated(String estimated) {
 		this.estimated = estimated;
@@ -159,8 +153,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param birthplace
-	 *            the birthplace to set
+	 * @param birthplace the birthplace to set
 	 */
 	public void setBirthplace(String birthplace) {
 		this.birthplace = birthplace;
@@ -174,8 +167,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param maritalStatus
-	 *            the maritalStatus to set
+	 * @param maritalStatus the maritalStatus to set
 	 */
 	public void setMaritalStatus(String maritalStatus) {
 		this.maritalStatus = maritalStatus;
@@ -189,8 +181,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param healthCenter
-	 *            the healthCenter to set
+	 * @param healthCenter the healthCenter to set
 	 */
 	public void setHealthCenter(String healthCenter) {
 		this.healthCenter = healthCenter;
@@ -204,8 +195,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param healthDistrict
-	 *            the healthDistrict to set
+	 * @param healthDistrict the healthDistrict to set
 	 */
 	public void setHealthDistrict(String healthDistrict) {
 		this.healthDistrict = healthDistrict;
@@ -219,8 +209,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param motherName
-	 *            the motherName to set
+	 * @param motherName the motherName to set
 	 */
 	public void setMotherName(String motherName) {
 		this.motherName = motherName;
@@ -234,8 +223,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param primaryContact
-	 *            the primaryContact to set
+	 * @param primaryContact the primaryContact to set
 	 */
 	public void setPrimaryContact(String primaryContact) {
 		this.primaryContact = primaryContact;
@@ -249,8 +237,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param primaryContactOwner
-	 *            the primaryContactOwner to set
+	 * @param primaryContactOwner the primaryContactOwner to set
 	 */
 	public void setPrimaryContactOwner(String primaryContactOwner) {
 		this.primaryContactOwner = primaryContactOwner;
@@ -264,8 +251,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param secondaryContact
-	 *            the secondaryContact to set
+	 * @param secondaryContact the secondaryContact to set
 	 */
 	public void setSecondaryContact(String secondaryContact) {
 		this.secondaryContact = secondaryContact;
@@ -279,8 +265,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param secondaryContactOwner
-	 *            the secondaryContactOwner to set
+	 * @param secondaryContactOwner the secondaryContactOwner to set
 	 */
 	public void setSecondaryContactOwner(String secondaryContactOwner) {
 		this.secondaryContactOwner = secondaryContactOwner;
@@ -294,8 +279,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param ethnicity
-	 *            the ethnicity to set
+	 * @param ethnicity the ethnicity to set
 	 */
 	public void setEthnicity(String ethnicity) {
 		this.ethnicity = ethnicity;
@@ -309,8 +293,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param educationLevel
-	 *            the educationLevel to set
+	 * @param educationLevel the educationLevel to set
 	 */
 	public void setEducationLevel(String educationLevel) {
 		this.educationLevel = educationLevel;
@@ -324,8 +307,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param employmentStatus
-	 *            the employmentStatus to set
+	 * @param employmentStatus the employmentStatus to set
 	 */
 	public void setEmploymentStatus(String employmentStatus) {
 		this.employmentStatus = employmentStatus;
@@ -339,8 +321,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param occupation
-	 *            the occupation to set
+	 * @param occupation the occupation to set
 	 */
 	public void setOccupation(String occupation) {
 		this.occupation = occupation;
@@ -354,8 +335,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param motherTongue
-	 *            the motherTongue to set
+	 * @param motherTongue the motherTongue to set
 	 */
 	public void setMotherTongue(String motherTongue) {
 		this.motherTongue = motherTongue;
@@ -369,8 +349,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param incomeClass
-	 *            the incomeClass to set
+	 * @param incomeClass the incomeClass to set
 	 */
 	public void setIncomeClass(String incomeClass) {
 		this.incomeClass = incomeClass;
@@ -384,8 +363,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param nationalID
-	 *            the nationalID to set
+	 * @param nationalID the nationalID to set
 	 */
 	public void setNationalID(String nationalID) {
 		this.nationalID = nationalID;
@@ -399,8 +377,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param nationalIDOwner
-	 *            the nationalIDOwner to set
+	 * @param nationalIDOwner the nationalIDOwner to set
 	 */
 	public void setNationalIDOwner(String nationalIDOwner) {
 		this.nationalIDOwner = nationalIDOwner;
@@ -414,8 +391,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param guardianName
-	 *            the guardianName to set
+	 * @param guardianName the guardianName to set
 	 */
 	public void setGuardianName(String guardianName) {
 		this.guardianName = guardianName;
@@ -429,8 +405,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param treatmentSupporter
-	 *            the treatmentSupporter to set
+	 * @param treatmentSupporter the treatmentSupporter to set
 	 */
 	public void setTreatmentSupporter(String treatmentSupporter) {
 		this.treatmentSupporter = treatmentSupporter;
@@ -444,8 +419,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param otherIdentificationNumber
-	 *            the otherIdentificationNumber to set
+	 * @param otherIdentificationNumber the otherIdentificationNumber to set
 	 */
 	public void setOtherIdentificationNumber(String otherIdentificationNumber) {
 		this.otherIdentificationNumber = otherIdentificationNumber;
@@ -459,8 +433,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param transgender
-	 *            the transgender to set
+	 * @param transgender the transgender to set
 	 */
 	public void setTransgender(String transgender) {
 		this.transgender = transgender;
@@ -474,8 +447,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param patientType
-	 *            the patientType to set
+	 * @param patientType the patientType to set
 	 */
 	public void setPatientType(String patientType) {
 		this.patientType = patientType;
@@ -489,8 +461,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param dead
-	 *            the dead to set
+	 * @param dead the dead to set
 	 */
 	public void setDead(Boolean dead) {
 		this.dead = dead;
@@ -504,8 +475,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param creator
-	 *            the creator to set
+	 * @param creator the creator to set
 	 */
 	public void setCreator(String creator) {
 		this.creator = creator;
@@ -519,8 +489,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param dateCreated
-	 *            the dateCreated to set
+	 * @param dateCreated the dateCreated to set
 	 */
 	public void setDateCreated(long dateCreated) {
 		this.dateCreated = dateCreated;
@@ -534,8 +503,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param address1
-	 *            the address1 to set
+	 * @param address1 the address1 to set
 	 */
 	public void setAddress1(String address1) {
 		this.address1 = address1;
@@ -549,8 +517,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param address2
-	 *            the address2 to set
+	 * @param address2 the address2 to set
 	 */
 	public void setAddress2(String address2) {
 		this.address2 = address2;
@@ -564,8 +531,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param district
-	 *            the district to set
+	 * @param district the district to set
 	 */
 	public void setDistrict(String district) {
 		this.district = district;
@@ -579,8 +545,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param cityVillage
-	 *            the cityVillage to set
+	 * @param cityVillage the cityVillage to set
 	 */
 	public void setCityVillage(String cityVillage) {
 		this.cityVillage = cityVillage;
@@ -594,8 +559,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param country
-	 *            the country to set
+	 * @param country the country to set
 	 */
 	public void setCountry(String country) {
 		this.country = country;
@@ -609,8 +573,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param landmark
-	 *            the landmark to set
+	 * @param landmark the landmark to set
 	 */
 	public void setLandmark(String landmark) {
 		this.landmark = landmark;
@@ -624,8 +587,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param patientIdentifier
-	 *            the patientIdentifier to set
+	 * @param patientIdentifier the patientIdentifier to set
 	 */
 	public void setPatientIdentifier(String patientIdentifier) {
 		this.patientIdentifier = patientIdentifier;
@@ -639,8 +601,7 @@ public class Patient {
 	}
 
 	/**
-	 * @param uuid
-	 *            the uuid to set
+	 * @param uuid the uuid to set
 	 */
 	public void setUuid(String uuid) {
 		this.uuid = uuid;

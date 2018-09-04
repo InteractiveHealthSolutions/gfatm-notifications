@@ -22,28 +22,27 @@ import org.joda.time.DateTime;
  */
 public class Encounter {
 
-	Integer				encounter_id;
-	String				encounter_type;
-	long				encounter_datetime;
-	String				patientId;
-	String				identifier;
-	String				patient_name;
-	String				patient_contact;
-	String				encounter_location;
-	String				location_contact;
-	String				provider;
-	String				provider_contact;
-	String				username;
-	long				date_created;
-	String				uuid;
-	Map<String, Object>	observations;
+	Integer encounter_id;
+	String encounter_type;
+	long encounter_datetime;
+	String patientId;
+	String identifier;
+	String patient_name;
+	String patient_contact;
+	String encounter_location;
+	String location_contact;
+	String provider;
+	String provider_contact;
+	String username;
+	long date_created;
+	String uuid;
+	Map<String, Object> observations;
 
 	public Encounter() {
 	}
 
-	public Encounter(Integer encounterId, String encounterType,
-			DateTime encounterDate, String patientId, String provider,
-			String location, String uuid) {
+	public Encounter(Integer encounterId, String encounterType, DateTime encounterDate, String patientId,
+			String provider, String location, String uuid) {
 		super();
 		encounter_id = encounterId;
 		encounter_type = encounterType;

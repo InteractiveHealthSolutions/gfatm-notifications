@@ -6,29 +6,26 @@ package com.ihsinformatics.gfatmnotifications.model;
 
 public class PatientScheduled {
 
-	private Integer	patientId;
-	private String	externalId;
-	private String	patientIdentifier;
-	private String	reasonForCall;
-	private String	fupFacilityScheduled;
-	private String	fupFacilityVisitDate;
-	private String	testType;
-	private String	raFacilityScheduled;
-	private String	raFacilityVisitDate;
-	private String	facilityScheduled;
-	private String	facilityVisitDate;
-	private String	cReturnVisitDate;
-	private String	fReturnVisitDate;
-	private String	pReturnVisitDate;
-	private String	facilityName;
-	private String	program;
-	private String	taFacilityScheduled;
-	private String	taFacilityVisitDate;
+	private Integer patientId;
+	private String externalId;
+	private String patientIdentifier;
+	private String reasonForCall;
+	private String fupFacilityScheduled;
+	private String fupFacilityVisitDate;
+	private String testType;
+	private String raFacilityScheduled;
+	private String raFacilityVisitDate;
+	private String facilityScheduled;
+	private String facilityVisitDate;
+	private String cReturnVisitDate;
+	private String fReturnVisitDate;
+	private String pReturnVisitDate;
+	private String facilityName;
+	private String program;
+	private String taFacilityScheduled;
+	private String taFacilityVisitDate;
 	private String mvfReturnVisitDate;
 
-
-	
-	
 	/**
 	 * @return the mvfReturnVisitDate
 	 */
@@ -51,8 +48,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param taFacilityScheduled
-	 *            the taFacilityScheduled to set
+	 * @param taFacilityScheduled the taFacilityScheduled to set
 	 */
 	public void setTaFacilityScheduled(String taFacilityScheduled) {
 		this.taFacilityScheduled = taFacilityScheduled;
@@ -66,8 +62,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param taFacilityVisitDate
-	 *            the taFacilityVisitDate to set
+	 * @param taFacilityVisitDate the taFacilityVisitDate to set
 	 */
 	public void setTaFacilityVisitDate(String taFacilityVisitDate) {
 		this.taFacilityVisitDate = taFacilityVisitDate;
@@ -81,8 +76,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param program
-	 *            the program to set
+	 * @param program the program to set
 	 */
 	public void setProgram(String program) {
 		this.program = program;
@@ -96,8 +90,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param patientId
-	 *            the patientId to set
+	 * @param patientId the patientId to set
 	 */
 	public void setPatientId(Integer patientId) {
 		this.patientId = patientId;
@@ -111,8 +104,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param patientIdentifier
-	 *            the patientIdentifier to set
+	 * @param patientIdentifier the patientIdentifier to set
 	 */
 	public void setPatientIdentifier(String patientIdentifier) {
 		this.patientIdentifier = patientIdentifier;
@@ -126,8 +118,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param reasonForCall
-	 *            the reasonForCall to set
+	 * @param reasonForCall the reasonForCall to set
 	 */
 	public void setReasonForCall(String reasonForCall) {
 		this.reasonForCall = reasonForCall;
@@ -141,8 +132,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param fupFacilityScheduled
-	 *            the fupFacilityScheduled to set
+	 * @param fupFacilityScheduled the fupFacilityScheduled to set
 	 */
 	public void setFupFacilityScheduled(String fupFacilityScheduled) {
 		this.fupFacilityScheduled = fupFacilityScheduled;
@@ -156,8 +146,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param fupFacilityVisitDate
-	 *            the fupFacilityVisitDate to set
+	 * @param fupFacilityVisitDate the fupFacilityVisitDate to set
 	 */
 	public void setFupFacilityVisitDate(String fupFacilityVisitDate) {
 		this.fupFacilityVisitDate = fupFacilityVisitDate;
@@ -171,8 +160,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param testType
-	 *            the testType to set
+	 * @param testType the testType to set
 	 */
 	public void setTestType(String testType) {
 		this.testType = testType;
@@ -186,8 +174,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param raFacilityScheduled
-	 *            the raFacilityScheduled to set
+	 * @param raFacilityScheduled the raFacilityScheduled to set
 	 */
 	public void setRaFacilityScheduled(String raFacilityScheduled) {
 		this.raFacilityScheduled = raFacilityScheduled;
@@ -201,8 +188,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param raFacilityVisitDate
-	 *            the raFacilityVisitDate to set
+	 * @param raFacilityVisitDate the raFacilityVisitDate to set
 	 */
 	public void setRaFacilityVisitDate(String raFacilityVisitDate) {
 		this.raFacilityVisitDate = raFacilityVisitDate;
@@ -216,8 +202,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param facilityScheduled
-	 *            the facilityScheduled to set
+	 * @param facilityScheduled the facilityScheduled to set
 	 */
 	public void setFacilityScheduled(String facilityScheduled) {
 		this.facilityScheduled = facilityScheduled;
@@ -231,8 +216,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param facilityVisitDate
-	 *            the facilityVisitDate to set
+	 * @param facilityVisitDate the facilityVisitDate to set
 	 */
 	public void setFacilityVisitDate(String facilityVisitDate) {
 		this.facilityVisitDate = facilityVisitDate;
@@ -246,8 +230,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param cReturnVisitDate
-	 *            the cReturnVisitDate to set
+	 * @param cReturnVisitDate the cReturnVisitDate to set
 	 */
 	public void setcReturnVisitDate(String cReturnVisitDate) {
 		this.cReturnVisitDate = cReturnVisitDate;
@@ -261,8 +244,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param fReturnVisitDate
-	 *            the fReturnVisitDate to set
+	 * @param fReturnVisitDate the fReturnVisitDate to set
 	 */
 	public void setfReturnVisitDate(String fReturnVisitDate) {
 		this.fReturnVisitDate = fReturnVisitDate;
@@ -276,8 +258,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param pReturnVisitDate
-	 *            the pReturnVisitDate to set
+	 * @param pReturnVisitDate the pReturnVisitDate to set
 	 */
 	public void setpReturnVisitDate(String pReturnVisitDate) {
 		this.pReturnVisitDate = pReturnVisitDate;
@@ -291,8 +272,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param facilityName
-	 *            the facilityName to set
+	 * @param facilityName the facilityName to set
 	 */
 	public void setFacilityName(String facilityName) {
 		this.facilityName = facilityName;
@@ -306,8 +286,7 @@ public class PatientScheduled {
 	}
 
 	/**
-	 * @param externalId
-	 *            the externalId to set
+	 * @param externalId the externalId to set
 	 */
 	public void setExternalId(String externalId) {
 		this.externalId = externalId;

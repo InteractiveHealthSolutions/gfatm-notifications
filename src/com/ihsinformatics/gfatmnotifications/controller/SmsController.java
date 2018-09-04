@@ -10,7 +10,7 @@ You can also access the license on the internet at the address: http://www.gnu.o
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
  */
 
-package com.ihsinformatics.gfatmnotifications.controllers;
+package com.ihsinformatics.gfatmnotifications.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,12 +35,11 @@ import com.ihsinformatics.util.DateTimeUtil;
  */
 public class SmsController {
 
-	private String	serverAddress;
-	private String	apiKey;
-	private boolean	useSsl;
+	private String serverAddress;
+	private String apiKey;
+	private boolean useSsl;
 
-	public SmsController(final String serverAddress, final String apiKey,
-			boolean useSsl) {
+	public SmsController(final String serverAddress, final String apiKey, boolean useSsl) {
 		this.serverAddress = serverAddress;
 		this.apiKey = apiKey;
 		this.useSsl = useSsl;
@@ -54,15 +53,13 @@ public class SmsController {
 	}
 
 	@SuppressWarnings("deprecation")
-	public String createSms(String sendTo, String message, Date sendOn,
-			String projectId, String additionalInfo) throws Exception {
+	public String createSms(String sendTo, String message, Date sendOn, String projectId, String additionalInfo)
+			throws Exception {
 
 		StringBuffer content = new StringBuffer();
 		content.append("send_to=" + sendTo + "&");
 		content.append("message=" + URLEncoder.encode(message, "UTF-8") + "&");
-		content.append("schedule_time="
-				+ URLEncoder.encode(DateTimeUtil.getSqlDateTime(sendOn),
-						"UTF-8") + "&");
+		content.append("schedule_time=" + URLEncoder.encode(DateTimeUtil.getSqlDateTime(sendOn), "UTF-8") + "&");
 		content.append("project_id=" + projectId + "&");
 		String response = null;
 		if (useSsl) {
@@ -85,8 +82,7 @@ public class SmsController {
 		System.out.println("\nSending 'POST' request to URL : " + url);
 		System.out.println("Post parameters : " + content);
 		System.out.println("Response Code : " + responseCode);
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				con.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 		while ((inputLine = in.readLine()) != null) {
@@ -109,8 +105,7 @@ public class SmsController {
 		System.out.println("\nSending 'POST' request to URL : " + url);
 		System.out.println("Post parameters : " + content);
 		System.out.println("Response Code : " + responseCode);
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				con.getInputStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		String inputLine;
 		StringBuffer response = new StringBuffer();
 		while ((inputLine = in.readLine()) != null) {
@@ -126,20 +121,15 @@ public class SmsController {
 			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 			if (printCertificate) {
 				try {
-					System.out.println("Response Code : "
-							+ con.getResponseCode());
-					System.out
-					.println("Cipher Suite : " + con.getCipherSuite());
+					System.out.println("Response Code : " + con.getResponseCode());
+					System.out.println("Cipher Suite : " + con.getCipherSuite());
 					System.out.println("\n");
 					Certificate[] certs = con.getServerCertificates();
 					for (Certificate cert : certs) {
 						System.out.println("Cert Type : " + cert.getType());
-						System.out.println("Cert Hash Code : "
-								+ cert.hashCode());
-						System.out.println("Cert Public Key Algorithm : "
-								+ cert.getPublicKey().getAlgorithm());
-						System.out.println("Cert Public Key Format : "
-								+ cert.getPublicKey().getFormat());
+						System.out.println("Cert Hash Code : " + cert.hashCode());
+						System.out.println("Cert Public Key Algorithm : " + cert.getPublicKey().getAlgorithm());
+						System.out.println("Cert Public Key Format : " + cert.getPublicKey().getFormat());
 						System.out.println("\n");
 					}
 				} catch (SSLPeerUnverifiedException e) {

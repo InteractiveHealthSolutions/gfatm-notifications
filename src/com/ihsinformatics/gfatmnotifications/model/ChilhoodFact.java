@@ -2,33 +2,33 @@ package com.ihsinformatics.gfatmnotifications.model;
 
 public class ChilhoodFact {
 
-	private Integer	locationId;
-	private String	locationName;
-	private String	locationDescription;
-	private String	dateTime;
-	private Integer	screenedByNurse;
-	private Integer	presumptiveByNurse;
-	private Integer	screeningLocationForms;
-	private Integer	registrationForms;
-	private Integer	presumptiveCaseConfirmedForms;
-	private Integer	tbPresumptiveConfirmed;
-	private Integer	testIndication;
-	private Integer	cbcIndicated;
-	private Integer	esrIndicated;
-	private Integer	cxrIndicated;
-	private Integer	mtIndicated;
-	private Integer	ultrasoundIndicated;
-	private Integer	histopathologyFNACIndicated;
-	private Integer	ctScanIndicated;
-	private Integer	gxpIndicated;
-	private Integer	tbTreatmentIntiated;
-	private Integer	antibioticTrialInitiated;
-	private Integer	iptTreatmentInitiated;
-	private Integer	tbTreatmentFUP;
-	private Integer	antibioticTrialFUP;
-	private Integer	iptFUP;
-	private String	emailAddress;
-	private Integer	endOfFUP;
+	private Integer locationId;
+	private String locationName;
+	private String locationDescription;
+	private String dateTime;
+	private Integer screenedByNurse;
+	private Integer presumptiveByNurse;
+	private Integer screeningLocationForms;
+	private Integer registrationForms;
+	private Integer presumptiveCaseConfirmedForms;
+	private Integer tbPresumptiveConfirmed;
+	private Integer testIndication;
+	private Integer cbcIndicated;
+	private Integer esrIndicated;
+	private Integer cxrIndicated;
+	private Integer mtIndicated;
+	private Integer ultrasoundIndicated;
+	private Integer histopathologyFNACIndicated;
+	private Integer ctScanIndicated;
+	private Integer gxpIndicated;
+	private Integer tbTreatmentIntiated;
+	private Integer antibioticTrialInitiated;
+	private Integer iptTreatmentInitiated;
+	private Integer tbTreatmentFUP;
+	private Integer antibioticTrialFUP;
+	private Integer iptFUP;
+	private String emailAddress;
+	private Integer endOfFUP;
 
 	/**
 	 * @return the emailAddress
@@ -38,8 +38,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param emailAddress
-	 *            the emailAddress to set
+	 * @param emailAddress the emailAddress to set
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
@@ -53,8 +52,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param locationId
-	 *            the locationId to set
+	 * @param locationId the locationId to set
 	 */
 	public void setLocationId(Integer locationId) {
 		this.locationId = locationId;
@@ -68,8 +66,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param locationName
-	 *            the locationName to set
+	 * @param locationName the locationName to set
 	 */
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
@@ -83,8 +80,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param locationDescription
-	 *            the locationDescription to set
+	 * @param locationDescription the locationDescription to set
 	 */
 	public void setLocationDescription(String locationDescription) {
 		this.locationDescription = locationDescription;
@@ -98,8 +94,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param dateTime
-	 *            the dateTime to set
+	 * @param dateTime the dateTime to set
 	 */
 	public void setDateTime(String dateTime) {
 		this.dateTime = dateTime;
@@ -113,8 +108,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param screenedByNurse
-	 *            the screenedByNurse to set
+	 * @param screenedByNurse the screenedByNurse to set
 	 */
 	public void setScreenedByNurse(Integer screenedByNurse) {
 		this.screenedByNurse = screenedByNurse;
@@ -128,8 +122,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param presumptiveByNurse
-	 *            the presumptiveByNurse to set
+	 * @param presumptiveByNurse the presumptiveByNurse to set
 	 */
 	public void setPresumptiveByNurse(Integer presumptiveByNurse) {
 		this.presumptiveByNurse = presumptiveByNurse;
@@ -143,8 +136,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param screeningLocationForms
-	 *            the screeningLocationForms to set
+	 * @param screeningLocationForms the screeningLocationForms to set
 	 */
 	public void setScreeningLocationForms(Integer screeningLocationForms) {
 		this.screeningLocationForms = screeningLocationForms;
@@ -158,8 +150,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param registrationForms
-	 *            the registrationForms to set
+	 * @param registrationForms the registrationForms to set
 	 */
 	public void setRegistrationForms(Integer registrationForms) {
 		this.registrationForms = registrationForms;
@@ -173,11 +164,9 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param presumptiveCaseConfirmedForms
-	 *            the presumptiveCaseConfirmedForms to set
+	 * @param presumptiveCaseConfirmedForms the presumptiveCaseConfirmedForms to set
 	 */
-	public void setPresumptiveCaseConfirmedForms(
-			Integer presumptiveCaseConfirmedForms) {
+	public void setPresumptiveCaseConfirmedForms(Integer presumptiveCaseConfirmedForms) {
 		this.presumptiveCaseConfirmedForms = presumptiveCaseConfirmedForms;
 	}
 
@@ -189,8 +178,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param tbPresumptiveConfirmed
-	 *            the tbPresumptiveConfirmed to set
+	 * @param tbPresumptiveConfirmed the tbPresumptiveConfirmed to set
 	 */
 	public void setTbPresumptiveConfirmed(Integer tbPresumptiveConfirmed) {
 		this.tbPresumptiveConfirmed = tbPresumptiveConfirmed;
@@ -204,8 +192,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param testIndication
-	 *            the testIndication to set
+	 * @param testIndication the testIndication to set
 	 */
 	public void setTestIndication(Integer testIndication) {
 		this.testIndication = testIndication;
@@ -219,8 +206,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param cbcIndicated
-	 *            the cbcIndicated to set
+	 * @param cbcIndicated the cbcIndicated to set
 	 */
 	public void setCbcIndicated(Integer cbcIndicated) {
 		this.cbcIndicated = cbcIndicated;
@@ -234,8 +220,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param esrIndicated
-	 *            the esrIndicated to set
+	 * @param esrIndicated the esrIndicated to set
 	 */
 	public void setEsrIndicated(Integer esrIndicated) {
 		this.esrIndicated = esrIndicated;
@@ -249,8 +234,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param cxrIndicated
-	 *            the cxrIndicated to set
+	 * @param cxrIndicated the cxrIndicated to set
 	 */
 	public void setCxrIndicated(Integer cxrIndicated) {
 		this.cxrIndicated = cxrIndicated;
@@ -264,8 +248,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param mtIndicated
-	 *            the mtIndicated to set
+	 * @param mtIndicated the mtIndicated to set
 	 */
 	public void setMtIndicated(Integer mtIndicated) {
 		this.mtIndicated = mtIndicated;
@@ -279,8 +262,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param ultrasoundIndicated
-	 *            the ultrasoundIndicated to set
+	 * @param ultrasoundIndicated the ultrasoundIndicated to set
 	 */
 	public void setUltrasoundIndicated(Integer ultrasoundIndicated) {
 		this.ultrasoundIndicated = ultrasoundIndicated;
@@ -294,11 +276,9 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param histopathologyFNACIndicated
-	 *            the histopathologyFNACIndicated to set
+	 * @param histopathologyFNACIndicated the histopathologyFNACIndicated to set
 	 */
-	public void setHistopathologyFNACIndicated(
-			Integer histopathologyFNACIndicated) {
+	public void setHistopathologyFNACIndicated(Integer histopathologyFNACIndicated) {
 		this.histopathologyFNACIndicated = histopathologyFNACIndicated;
 	}
 
@@ -310,8 +290,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param ctScanIndicated
-	 *            the ctScanIndicated to set
+	 * @param ctScanIndicated the ctScanIndicated to set
 	 */
 	public void setCtScanIndicated(Integer ctScanIndicated) {
 		this.ctScanIndicated = ctScanIndicated;
@@ -325,8 +304,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param gxpIndicated
-	 *            the gxpIndicated to set
+	 * @param gxpIndicated the gxpIndicated to set
 	 */
 	public void setGxpIndicated(Integer gxpIndicated) {
 		this.gxpIndicated = gxpIndicated;
@@ -340,8 +318,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param tbTreatmentIntiated
-	 *            the tbTreatmentIntiated to set
+	 * @param tbTreatmentIntiated the tbTreatmentIntiated to set
 	 */
 	public void setTbTreatmentIntiated(Integer tbTreatmentIntiated) {
 		this.tbTreatmentIntiated = tbTreatmentIntiated;
@@ -355,8 +332,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param antibioticTrialInitiated
-	 *            the antibioticTrialInitiated to set
+	 * @param antibioticTrialInitiated the antibioticTrialInitiated to set
 	 */
 	public void setAntibioticTrialInitiated(Integer antibioticTrialInitiated) {
 		this.antibioticTrialInitiated = antibioticTrialInitiated;
@@ -370,8 +346,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param iptTreatmentInitiated
-	 *            the iptTreatmentInitiated to set
+	 * @param iptTreatmentInitiated the iptTreatmentInitiated to set
 	 */
 	public void setIptTreatmentInitiated(Integer iptTreatmentInitiated) {
 		this.iptTreatmentInitiated = iptTreatmentInitiated;
@@ -385,8 +360,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param tbTreatmentFUP
-	 *            the tbTreatmentFUP to set
+	 * @param tbTreatmentFUP the tbTreatmentFUP to set
 	 */
 	public void setTbTreatmentFUP(Integer tbTreatmentFUP) {
 		this.tbTreatmentFUP = tbTreatmentFUP;
@@ -400,8 +374,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param antibioticTrialFUP
-	 *            the antibioticTrialFUP to set
+	 * @param antibioticTrialFUP the antibioticTrialFUP to set
 	 */
 	public void setAntibioticTrialFUP(Integer antibioticTrialFUP) {
 		this.antibioticTrialFUP = antibioticTrialFUP;
@@ -415,8 +388,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param iptFUP
-	 *            the iptFUP to set
+	 * @param iptFUP the iptFUP to set
 	 */
 	public void setIptFUP(Integer iptFUP) {
 		this.iptFUP = iptFUP;
@@ -430,8 +402,7 @@ public class ChilhoodFact {
 	}
 
 	/**
-	 * @param endOfFUP
-	 *            the endOfFUP to set
+	 * @param endOfFUP the endOfFUP to set
 	 */
 	public void setEndOfFUP(Integer endOfFUP) {
 		this.endOfFUP = endOfFUP;

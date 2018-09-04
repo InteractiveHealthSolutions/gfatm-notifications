@@ -1,13 +1,13 @@
-package com.ihsinformatics.gfatmnotifications.controllers;
+package com.ihsinformatics.gfatmnotifications.controller;
 
+import com.ihsinformatics.gfatmnotifications.DatabaseConnection;
 import com.ihsinformatics.gfatmnotifications.Implementer.NotificationService;
-import com.ihsinformatics.gfatmnotifications.Interface.IConsumer;
-import com.ihsinformatics.gfatmnotifications.databaseconnections.Connections;
 import com.ihsinformatics.gfatmnotifications.model.Constants;
+import com.ihsinformatics.gfatmnotifications.service.ConsumerService;
 
-public class NotificationController implements IConsumer {
+public class NotificationController implements ConsumerService {
 
-	private NotificationService	service;
+	private NotificationService service;
 
 	public void setService(NotificationService service) {
 		this.service = service;
@@ -23,13 +23,12 @@ public class NotificationController implements IConsumer {
 	@Override
 	public boolean getConnection(String requiredConnection) {
 
-		Connections connection = new Connections();
+		DatabaseConnection connection = new DatabaseConnection();
 
 		if (requiredConnection.equals(Constants.WAREHOUSE_CONNECTION)) {
 
 			if (!connection.wareHouseConnection()) {
-				System.out
-						.println("Failed to connect with warehouse local database. Exiting");
+				System.out.println("Failed to connect with warehouse local database. Exiting");
 				System.exit(-1);
 			}
 
@@ -37,14 +36,12 @@ public class NotificationController implements IConsumer {
 		}
 		if (requiredConnection.equals(Constants.OPENMRS_CONNECTION)) {
 			if (!connection.openmrsDbConnection()) {
-				System.out
-						.println("Failed to connect with local database. Exiting");
+				System.out.println("Failed to connect with local database. Exiting");
 				System.exit(-1);
 			}
 			return true;
 		} else {
-			System.out
-					.println("Connection Requested String is not match...Exiting");
+			System.out.println("Connection Requested String is not match...Exiting");
 			System.exit(-1);
 			return false;
 		}
