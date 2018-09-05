@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 
 import com.ihsinformatics.emailer.EmailEngine;
 import com.ihsinformatics.emailer.EmailException;
+import com.ihsinformatics.gfatmnotifications.common.service.UtilityCollection;
 import com.ihsinformatics.gfatmnotifications.email.model.Constants;
-import com.ihsinformatics.gfatmnotifications.email.util.UtilityCollection;
 import com.ihsinformatics.util.ClassLoaderUtil;
 import com.ihsinformatics.util.DatabaseUtil;
 

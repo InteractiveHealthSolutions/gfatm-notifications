@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.ihsinformatics.gfatmnotifications.email.model.PatientScheduled;
+import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
 
 public class HtmlUtil {
 	private static HtmlUtil instance = null;

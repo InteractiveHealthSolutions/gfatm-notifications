@@ -14,25 +14,10 @@ package com.ihsinformatics.gfatmnotifications.email;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import org.joda.time.DateTime;
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
-import org.quartz.impl.StdSchedulerFactory;
-
-import com.ihsinformatics.gfatmnotifications.email.controller.SmsController;
-import com.ihsinformatics.gfatmnotifications.email.job.CallNotificationsJob;
-import com.ihsinformatics.gfatmnotifications.email.job.SmsNotificationsJob;
 import com.ihsinformatics.gfatmnotifications.email.model.Constants;
 import com.ihsinformatics.gfatmnotifications.email.service.ConsumerService;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailServiceInjector;
 import com.ihsinformatics.gfatmnotifications.email.service.NotificationInjector;
-import com.ihsinformatics.gfatmnotifications.email.util.OpenMrsUtil;
-import com.ihsinformatics.gfatmnotifications.email.util.UtilityCollection;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -43,8 +28,6 @@ import com.ihsinformatics.gfatmnotifications.email.util.UtilityCollection;
 public class GfatmNotificationsMain {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
-	private Scheduler smsScheduler;
-	private Scheduler callScheduler;
 	private static NotificationInjector injector;
 	private static ConsumerService consumer;
 
@@ -62,12 +45,6 @@ public class GfatmNotificationsMain {
 			consumer.getConnection(Constants.WAREHOUSE_CONNECTION);
 			consumer.process();
 			log.info("Email Notification execution is complete on : " + new Date());
-
-			// SMS Notification injector = new SmsServiceInjector(); consumer
-			/*
-			 * injector = new SmsServiceInjector(); consumer = injector.getConsumer();
-			 * consumer.getConnection(Constants.OPENMRS_CONNECTION); consumer.process();
-			 */
 			System.exit(0);
 		} catch (Exception e) {
 			log.info("Exception : " + e.getMessage());
@@ -76,7 +53,6 @@ public class GfatmNotificationsMain {
 	}
 
 	public GfatmNotificationsMain() {
-
 		DatabaseConnection connection = new DatabaseConnection();
 		/*
 		 * if (!connection.openmrsDbConnection()) {
@@ -86,55 +62,6 @@ public class GfatmNotificationsMain {
 			System.out.println("Failed to connect with warehouse local database. Exiting");
 			System.exit(-1);
 		}
-
-	}
-
-	public void createSmsJob() throws SchedulerException {
-		DateTime from = new DateTime();
-		from.minusHours(Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS);
-		DateTime to = new DateTime();
-		smsScheduler = StdSchedulerFactory.getDefaultScheduler();
-		JobDetail smsJob = JobBuilder.newJob(SmsNotificationsJob.class).withIdentity("smsJob", "smsGroup").build();
-		SmsNotificationsJob smsJobObj = new SmsNotificationsJob();
-		smsJobObj.setLocalDb(UtilityCollection.getInstance().getLocalDb());
-		smsJobObj.setOpenmrs(new OpenMrsUtil(UtilityCollection.getInstance().getLocalDb()));
-		smsJobObj.setDateFrom(from);
-		smsJobObj.setDateTo(to);
-		smsJobObj.setSmsController(
-				new SmsController(Constants.SMS_SERVER_ADDRESS, Constants.SMS_API_KEY, Constants.SMS_USE_SSL));
-		smsJob.getJobDataMap().put("smsJob", smsJobObj);
-
-		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-				.withIntervalInMinutes(Constants.SMS_SCHEDULE_INTERVAL_IN_HOURS).repeatForever();
-
-		Trigger trigger = TriggerBuilder.newTrigger().withIdentity("smsTrigger", "smsGroup")
-				.withSchedule(scheduleBuilder).build();
-		smsScheduler.scheduleJob(smsJob, trigger);
-		smsScheduler.start();
-	}
-
-	public void createCallJob() throws SchedulerException {
-		DateTime from = new DateTime();
-		from.minusHours(Constants.CALL_SCHEDULE_INTERVAL_IN_HOURS);
-		callScheduler = StdSchedulerFactory.getDefaultScheduler();
-		JobDetail callJob = JobBuilder.newJob(CallNotificationsJob.class).withIdentity("callJob", "callGroup").build();
-		/*
-		 * CallNotificationsJob callJobObj = new CallNotificationsJob();
-		 * callJobObj.setLocalDb(localDb); callJobObj.setDateFrom(from);
-		 * callJobObj.setDateTo(to); callJob.getJobDataMap().put("callJob", callJobObj);
-		 */
-
-		SimpleScheduleBuilder scheduleBuilder = SimpleScheduleBuilder.simpleSchedule()
-				.withIntervalInHours(Constants.CALL_SCHEDULE_INTERVAL_IN_HOURS);
-
-		Trigger trigger = TriggerBuilder.newTrigger().withIdentity("callTrigger", "notificationsGroup")
-				.withSchedule(scheduleBuilder).build();
-
-		callScheduler.scheduleJob(callJob, trigger);
-		callScheduler.start();
-	}
-
-	public void createEmailJob() {
 
 	}
 }

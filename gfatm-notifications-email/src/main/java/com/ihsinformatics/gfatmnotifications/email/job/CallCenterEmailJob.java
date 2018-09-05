@@ -12,19 +12,19 @@ import javax.mail.MessagingException;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ihsinformatics.emailer.EmailEngine;
+import com.ihsinformatics.gfatmnotifications.common.model.Contact;
+import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
+import com.ihsinformatics.gfatmnotifications.common.service.UtilityCollection;
 import com.ihsinformatics.gfatmnotifications.email.DatabaseConnection;
-import com.ihsinformatics.gfatmnotifications.email.model.Email;
-import com.ihsinformatics.gfatmnotifications.email.model.PatientScheduled;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailService;
+import com.ihsinformatics.gfatmnotifications.email.util.CustomOpenMrsUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
-import com.ihsinformatics.gfatmnotifications.email.util.OpenMrsUtil;
-import com.ihsinformatics.gfatmnotifications.email.util.UtilityCollection;
 
 public class CallCenterEmailJob implements EmailService {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
 	private ArrayList<PatientScheduled> scheduledPatientList;
-	private OpenMrsUtil openMrsUtil;
+	private CustomOpenMrsUtil openMrsUtil;
 	private Properties props;
 	private String subject, subjectNotFound, watcherEmail, from, bodyMessage, developerEmailAddress;
 	private Set<String> locationsSet;
@@ -47,14 +47,14 @@ public class CallCenterEmailJob implements EmailService {
 	}
 
 	@Override
-	public void execute(OpenMrsUtil openMrsUtil) {
+	public void execute(CustomOpenMrsUtil openMrsUtil) {
 		this.openMrsUtil = openMrsUtil;
 		scheduledPatient();
 		log.info("Call Center Patient Schedule is successfully executed...");
 	}
 
 	protected void scheduledPatient() {
-		Email supervisorEmail;
+		Contact supervisorEmail;
 		String htmlConvertStr;
 		// First Step1
 		scheduledPatientList = UtilityCollection.getInstance().getPatientScheduledsList();
@@ -63,9 +63,9 @@ public class CallCenterEmailJob implements EmailService {
 			while (iterator.hasNext()) {
 				PatientScheduled patientScheduled = iterator.next();
 				if (StringUtils.isBlank(HtmlUtil.getInstance().missedFupConditions(patientScheduled))) {
-					supervisorEmail = openMrsUtil.getEmailByLocationName(patientScheduled.getFacilityScheduled());
+					supervisorEmail = openMrsUtil.getContactByLocationName(patientScheduled.getFacilityScheduled());
 				} else {
-					supervisorEmail = openMrsUtil.getEmailByLocationName(patientScheduled.getFacilityName());
+					supervisorEmail = openMrsUtil.getContactByLocationName(patientScheduled.getFacilityName());
 				}
 
 				if (supervisorEmail == null) {

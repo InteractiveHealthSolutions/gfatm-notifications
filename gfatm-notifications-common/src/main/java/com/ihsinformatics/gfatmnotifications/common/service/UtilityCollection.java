@@ -1,19 +1,18 @@
-package com.ihsinformatics.gfatmnotifications.email.util;
+package com.ihsinformatics.gfatmnotifications.common.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.ihsinformatics.gfatmnotifications.email.controller.EmailController;
-import com.ihsinformatics.gfatmnotifications.email.model.ChilhoodFact;
-import com.ihsinformatics.gfatmnotifications.email.model.Email;
-import com.ihsinformatics.gfatmnotifications.email.model.FastFact;
-import com.ihsinformatics.gfatmnotifications.email.model.Location;
-import com.ihsinformatics.gfatmnotifications.email.model.Patient;
-import com.ihsinformatics.gfatmnotifications.email.model.PatientScheduled;
-import com.ihsinformatics.gfatmnotifications.email.model.PetFact;
-import com.ihsinformatics.gfatmnotifications.email.model.User;
+import com.ihsinformatics.gfatmnotifications.common.model.ChilhoodFact;
+import com.ihsinformatics.gfatmnotifications.common.model.Contact;
+import com.ihsinformatics.gfatmnotifications.common.model.FastFact;
+import com.ihsinformatics.gfatmnotifications.common.model.Location;
+import com.ihsinformatics.gfatmnotifications.common.model.Patient;
+import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
+import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
+import com.ihsinformatics.gfatmnotifications.common.model.User;
 import com.ihsinformatics.util.DatabaseUtil;
 
 public class UtilityCollection {
@@ -30,10 +29,9 @@ public class UtilityCollection {
 	private ArrayList<PatientScheduled> patientScheduledsList;
 	/* private static List<Person> */
 	private Map<Integer, String> encounterTypes;
-	private List<Email> emailList;
+	private List<Contact> emailList;
 	// Email Jobs Instance
-	private OpenMrsUtil warehouseInstance;
-	private EmailController emailController;
+	private GfatmDatabaseUtil warehouseInstance;
 	private Properties props;
 	private DatabaseUtil warehouseDb;
 	private DatabaseUtil localDb;
@@ -43,21 +41,13 @@ public class UtilityCollection {
 	public static String hours;
 
 	private UtilityCollection() {
-
-		/*
-		 * users = new ArrayList<User>(); locations = new ArrayList<Location>();
-		 * patients = new ArrayList<Patient>(); userRoles = new ArrayList<String>();
-		 * emailList = new ArrayList<Email>();
-		 */
 	}
 
 	// static method to create instance of Singleton class
 	public static UtilityCollection getInstance() {
-
 		if (instance == null) {
 			synchronized (UtilityCollection.class) {
 				if (instance == null) {
-
 					instance = new UtilityCollection();
 				}
 			}
@@ -194,43 +184,29 @@ public class UtilityCollection {
 	/**
 	 * @return the emailList
 	 */
-	public List<Email> getEmailList() {
+	public List<Contact> getEmailList() {
 		return emailList;
 	}
 
 	/**
 	 * @param emailList the emailList to set
 	 */
-	public void setEmailList(List<Email> emailList) {
+	public void setEmailList(List<Contact> emailList) {
 		this.emailList = emailList;
 	}
 
 	/**
 	 * @return the warehouseInstance
 	 */
-	public OpenMrsUtil getWarehouseInstance() {
+	public GfatmDatabaseUtil getWarehouseInstance() {
 		return warehouseInstance;
 	}
 
 	/**
 	 * @param warehouseInstance the warehouseInstance to set
 	 */
-	public void setWarehouseInstance(OpenMrsUtil warehouseInstance) {
+	public void setWarehouseInstance(GfatmDatabaseUtil warehouseInstance) {
 		this.warehouseInstance = warehouseInstance;
-	}
-
-	/**
-	 * @return the emailController
-	 */
-	public EmailController getEmailController() {
-		return emailController;
-	}
-
-	/**
-	 * @param emailController the emailController to set
-	 */
-	public void setEmailController(EmailController emailController) {
-		this.emailController = emailController;
 	}
 
 	/**

@@ -11,20 +11,20 @@ import javax.mail.MessagingException;
 import org.joda.time.DateTime;
 
 import com.ihsinformatics.emailer.EmailEngine;
+import com.ihsinformatics.gfatmnotifications.common.model.ChilhoodFact;
+import com.ihsinformatics.gfatmnotifications.common.model.Contact;
+import com.ihsinformatics.gfatmnotifications.common.model.FastFact;
+import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
 import com.ihsinformatics.gfatmnotifications.email.DatabaseConnection;
-import com.ihsinformatics.gfatmnotifications.email.model.ChilhoodFact;
-import com.ihsinformatics.gfatmnotifications.email.model.Email;
-import com.ihsinformatics.gfatmnotifications.email.model.FastFact;
-import com.ihsinformatics.gfatmnotifications.email.model.PetFact;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailService;
+import com.ihsinformatics.gfatmnotifications.email.util.CustomOpenMrsUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
-import com.ihsinformatics.gfatmnotifications.email.util.OpenMrsUtil;
 
 public class GfatmEmailJob implements EmailService {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
 	private DateTime dateFrom;
-	private OpenMrsUtil openMrsUtil;
+	private CustomOpenMrsUtil openMrsUtil;
 	private Properties props;
 	private String subjectpet, subjectfast, subjectchildhood, from, businesAnalystEmail;
 	private String gfatmConcernPerson;
@@ -47,7 +47,7 @@ public class GfatmEmailJob implements EmailService {
 	}
 
 	@Override
-	public void execute(OpenMrsUtil openMrsUtil) {
+	public void execute(CustomOpenMrsUtil openMrsUtil) {
 
 		this.openMrsUtil = openMrsUtil;
 		fastDailyEmailReport(dateFrom);
@@ -65,7 +65,7 @@ public class GfatmEmailJob implements EmailService {
 		ArrayList<PetFact> factPet = openMrsUtil.getPetFact(todayDate);
 		if (!factPet.isEmpty()) {
 			for (PetFact petTable : factPet) {
-				Email emailVal = openMrsUtil.getEmailByLocationId(petTable.getLocationId());
+				Contact emailVal = openMrsUtil.getContactByLocationId(petTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + petTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -115,7 +115,7 @@ public class GfatmEmailJob implements EmailService {
 		ArrayList<ChilhoodFact> factChildhood = openMrsUtil.getFactChildhood(todayDate);
 		if (!factChildhood.isEmpty()) {
 			for (ChilhoodFact childhoodTable : factChildhood) {
-				Email emailVal = openMrsUtil.getEmailByLocationId(childhoodTable.getLocationId());
+				Contact emailVal = openMrsUtil.getContactByLocationId(childhoodTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + childhoodTable.getLocationDescription()
 							+ " have not linked with any site supervisor email.");
@@ -170,7 +170,7 @@ public class GfatmEmailJob implements EmailService {
 		ArrayList<FastFact> factFast = openMrsUtil.getFactFast(todayDate);
 		if (!factFast.isEmpty()) {
 			for (FastFact factTable : factFast) {
-				Email emailVal = openMrsUtil.getEmailByLocationId(factTable.getLocationId());
+				Contact emailVal = openMrsUtil.getContactByLocationId(factTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + factTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");

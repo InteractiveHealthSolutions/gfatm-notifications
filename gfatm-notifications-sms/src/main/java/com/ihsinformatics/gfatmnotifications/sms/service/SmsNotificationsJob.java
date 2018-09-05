@@ -1,4 +1,4 @@
-/* Copyright(C) 2017 Interactive Health Solutions, Pvt. Ltd.
+/* Copyright(C) 2018 Interactive Health Solutions, Pvt. Ltd.
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
 published by the Free Software Foundation; either version 3 of the License (GPLv3), or any later version.
@@ -8,33 +8,28 @@ See the GNU General Public License for more details. You should have received a 
 You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
- */
-
-package com.ihsinformatics.gfatmnotifications.email.job;
+*/
+package com.ihsinformatics.gfatmnotifications.sms.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.ihsinformatics.gfatmnotifications.email.controller.SmsController;
-import com.ihsinformatics.gfatmnotifications.email.model.Constants;
-import com.ihsinformatics.gfatmnotifications.email.model.Encounter;
-import com.ihsinformatics.gfatmnotifications.email.model.Location;
-import com.ihsinformatics.gfatmnotifications.email.model.Patient;
-import com.ihsinformatics.gfatmnotifications.email.util.OpenMrsUtil;
-import com.ihsinformatics.gfatmnotifications.email.util.ValidationUtil;
+import com.ihsinformatics.gfatmnotifications.common.model.Encounter;
+import com.ihsinformatics.gfatmnotifications.common.model.Location;
+import com.ihsinformatics.gfatmnotifications.common.model.Patient;
+import com.ihsinformatics.gfatmnotifications.common.service.NotificationService;
+import com.ihsinformatics.gfatmnotifications.common.service.OpenMrsUtil;
+import com.ihsinformatics.gfatmnotifications.sms.controller.SmsController;
 import com.ihsinformatics.util.DatabaseUtil;
 import com.ihsinformatics.util.DateTimeUtil;
 
@@ -42,7 +37,7 @@ import com.ihsinformatics.util.DateTimeUtil;
  * @author owais.hussain@ihsinformatics.com
  *
  */
-public class SmsNotificationsJob implements Job {
+public class SmsNotificationsJob implements NotificationService {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
 	private DatabaseUtil localDb;
@@ -59,7 +54,6 @@ public class SmsNotificationsJob implements Job {
 	}
 
 	private void initialize(SmsNotificationsJob smsJob) {
-
 		setLocalDb(smsJob.getLocalDb());
 		setOpenmrs(smsJob.getOpenmrs());
 		setDateFrom(smsJob.getDateFrom());
@@ -70,7 +64,7 @@ public class SmsNotificationsJob implements Job {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
 	@Override
@@ -88,92 +82,52 @@ public class SmsNotificationsJob implements Job {
 		dateFrom = dateFrom.minusHours(24);
 		System.out.println(dateFrom + " " + dateTo);
 
-		executeFastSms(dateFrom, dateTo);
-		/// executeChildhoodTBSms(dateFrom, dateTo);
-		// TODO: executePetSms(dateFrom, dateTo);
-		// TODO: executeComorbiditiesSms(dateFrom, dateTo);
-		// TODO: executePmdtSms(dateFrom, dateTo);
+		// executeFastSms(dateFrom, dateTo);
+		// executeChildhoodTBSms(dateFrom, dateTo);
+		// executePetSms(dateFrom, dateTo);
+		// executePmdtSms(dateFrom, dateTo);
 	}
 
-	private void executeFastSms(DateTime dateFrom, DateTime dateTo) {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ihsinformatics.gfatmnotifications.common.service.NotificationService#
+	 * initialize()
+	 */
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
 
-		List<Encounter> encounters = new ArrayList<Encounter>();
-		for (int type : Constants.FAST_ENCOUNTER_TYPE_IDS) {
-			List<Encounter> temp = getOpenmrs().getEncounters(dateFrom, dateTo, type);
-			encounters.addAll(temp);
-		}
+	}
 
-		// Some encounters will be removed
-		List<Encounter> toDelete = new ArrayList<Encounter>();
-		for (Encounter encounter : encounters) {
-			// Remove encounters with missing or fake mobile numbers
-			System.out.println(encounter.getPatientContact());
-			if (encounter.getPatientContact() == null) {
-				toDelete.add(encounter);
-			} else if (!ValidationUtil.isValidContactNumber(encounter.getPatientContact())) {
-				toDelete.add(encounter);
-			}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ihsinformatics.gfatmnotifications.common.service.NotificationService#
+	 * readProperties()
+	 */
+	@Override
+	public void readProperties() {
+		// TODO Auto-generated method stub
 
-		}
+	}
 
-		encounters.removeAll(toDelete);
-		// Get observations against each encounter fetched
-		for (Encounter encounter : encounters) {
-
-			Map<String, Object> observations = getObservations(encounter);
-			encounter.setObservations(observations);
-			// System.out.println(observations);
-			switch (encounter.getEncounterType()) {
-			case "FAST-AFB Smear Test Order":
-				break;
-			case "FAST-AFB Smear Test Result":
-				break;
-			case "FAST-Contact Registry":
-				break;
-			case "FAST-DST Culture Test Order":
-				break;
-			case "FAST-DST Culture Test Result":
-				break;
-			case "FAST-End of Followup":
-				break;
-			case "FAST-GXP Specimen Collection":
-				break;
-			case "FAST-GXP Test":
-				// sendGeneXpertSms(encounter);
-				break;
-			case "FAST-Missed Visit Followup":
-				break;
-			case "FAST-Patient Location":
-				break;
-			case "FAST-Presumptive":
-				break;
-			case "FAST-Presumptive Information":
-				break;
-			case "FAST-Prompt":
-				break;
-			case "FAST-Referral Form":
-				sendReferralFormSms(encounter, smsController);
-				break;
-			case "FAST-Screening":
-				break;
-			case "FAST-Screening CXR Test Order":
-				break;
-			case "FAST-Screening CXR Test Result":
-				break;
-			case "FAST-Treatment Followup":
-				sendTreatmentFollowupSms(encounter, smsController);
-				break;
-			case "FAST-Treatment Initiation":
-				sendTreatmentInitiationSms(encounter, smsController);
-				break;
-			default:
-				// Do nothing
-			}
-		}
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.ihsinformatics.gfatmnotifications.common.service.NotificationService#
+	 * sendNotification(java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public boolean sendNotification(String adressTo, String message, String subject) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	public Map<String, Object> getObservations(Encounter encounter) {
-
 		Map<String, Object> observations = getOpenmrs().getEncounterObservations(encounter);
 		return observations;
 	}
@@ -469,11 +423,6 @@ public class SmsNotificationsJob implements Job {
 		return true;
 	}
 
-	/***************************************************************/
-	/********************* CHILDHOOD METHODS ***********************/
-	/***************************************************************/
-
-	// TODO:complete
 	@SuppressWarnings("deprecation")
 	public boolean sendTreatmentInitiationSmsChildhood(Encounter encounter) {
 
@@ -519,27 +468,19 @@ public class SmsNotificationsJob implements Job {
 
 	}
 
-	// TODO:complete
 	public boolean sendIptFupSms(Encounter encounter) {
-
 		return true;
 	}
 
-	// TODO:complete
 	public boolean sendAntibioticTrialFupSms(Encounter encounter) {
-
 		return true;
 	}
 
-	// TODO:complete
 	public boolean sendReferralSms(Encounter encounter) {
-
 		return true;
 	}
 
-	// TODO:complete
 	public boolean sendTbTreatmentFupSms() {
-
 		return true;
 	}
 }

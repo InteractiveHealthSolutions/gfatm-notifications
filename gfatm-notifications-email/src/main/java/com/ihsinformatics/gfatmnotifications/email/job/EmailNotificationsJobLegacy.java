@@ -20,15 +20,15 @@ import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
 
+import com.ihsinformatics.gfatmnotifications.common.model.ChilhoodFact;
+import com.ihsinformatics.gfatmnotifications.common.model.Contact;
+import com.ihsinformatics.gfatmnotifications.common.model.FastFact;
+import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
+import com.ihsinformatics.gfatmnotifications.common.service.UtilityCollection;
 import com.ihsinformatics.gfatmnotifications.email.DatabaseConnection;
 import com.ihsinformatics.gfatmnotifications.email.controller.EmailController;
-import com.ihsinformatics.gfatmnotifications.email.model.ChilhoodFact;
-import com.ihsinformatics.gfatmnotifications.email.model.Email;
-import com.ihsinformatics.gfatmnotifications.email.model.FastFact;
-import com.ihsinformatics.gfatmnotifications.email.model.PetFact;
+import com.ihsinformatics.gfatmnotifications.email.util.CustomOpenMrsUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
-import com.ihsinformatics.gfatmnotifications.email.util.OpenMrsUtil;
-import com.ihsinformatics.gfatmnotifications.email.util.UtilityCollection;
 import com.ihsinformatics.util.DatabaseUtil;
 
 /**
@@ -41,7 +41,7 @@ public class EmailNotificationsJobLegacy {
 	private static final Logger log = Logger.getLogger(Class.class.getName());
 	private DatabaseUtil warehouseDb;
 	private DateTime dateFrom;
-	private OpenMrsUtil warehouseOpenmrsInstance;
+	private CustomOpenMrsUtil warehouseOpenmrsInstance;
 	private EmailController emailController;
 	private Properties props;
 	public SimpleDateFormat DATE_FORMATWH = new SimpleDateFormat("yyyy-MM-dd");
@@ -50,7 +50,7 @@ public class EmailNotificationsJobLegacy {
 
 		props = DatabaseConnection.props;
 		warehouseDb = UtilityCollection.getInstance().getWarehouseDb();
-		warehouseOpenmrsInstance = new OpenMrsUtil(warehouseDb);
+		warehouseOpenmrsInstance = new CustomOpenMrsUtil(warehouseDb);
 		emailController = new EmailController();
 	}
 
@@ -60,7 +60,7 @@ public class EmailNotificationsJobLegacy {
 	public void execute() {
 
 		// load all the site supervisor email from ware database.
-		warehouseOpenmrsInstance.LoadAllUsersEmail();
+		warehouseOpenmrsInstance.LoadAllUsersContact();
 		dateFrom = new DateTime().minusDays(1);
 		fastDailyReport(dateFrom);
 		log.info("Fast Process is successfully executed...");
@@ -80,7 +80,7 @@ public class EmailNotificationsJobLegacy {
 		ArrayList<FastFact> factFast = warehouseOpenmrsInstance.getFactFast(todayDate);
 		if (!factFast.isEmpty()) {
 			for (FastFact factTable : factFast) {
-				Email emailVal = warehouseOpenmrsInstance.getEmailByLocationId(factTable.getLocationId());
+				Contact emailVal = warehouseOpenmrsInstance.getContactByLocationId(factTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + factTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -140,7 +140,7 @@ public class EmailNotificationsJobLegacy {
 		ArrayList<ChilhoodFact> factChildhood = warehouseOpenmrsInstance.getFactChildhood(todayDate);
 		if (!factChildhood.isEmpty()) {
 			for (ChilhoodFact childhoodTable : factChildhood) {
-				Email emailVal = warehouseOpenmrsInstance.getEmailByLocationId(childhoodTable.getLocationId());
+				Contact emailVal = warehouseOpenmrsInstance.getContactByLocationId(childhoodTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + childhoodTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -197,7 +197,7 @@ public class EmailNotificationsJobLegacy {
 		ArrayList<PetFact> factPet = warehouseOpenmrsInstance.getPetFact(todayDate);
 		if (!factPet.isEmpty()) {
 			for (PetFact petTable : factPet) {
-				Email emailVal = warehouseOpenmrsInstance.getEmailByLocationId(petTable.getLocationId());
+				Contact emailVal = warehouseOpenmrsInstance.getContactByLocationId(petTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + petTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");

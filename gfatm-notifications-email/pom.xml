@@ -43,6 +43,10 @@
 			<artifactId>ihs-emailer</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.ihsinformatics.gfatm-notifications</groupId>
+			<artifactId>gfatm-notifications-common</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.ihsinformatics</groupId>
 			<artifactId>utilities</artifactId>
 		</dependency>

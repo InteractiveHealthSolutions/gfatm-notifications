@@ -1,7 +1,9 @@
 package com.ihsinformatics.gfatmnotifications.email.controller;
 
+import org.quartz.JobExecutionException;
+
+import com.ihsinformatics.gfatmnotifications.common.service.NotificationService;
 import com.ihsinformatics.gfatmnotifications.email.DatabaseConnection;
-import com.ihsinformatics.gfatmnotifications.email.impl.NotificationService;
 import com.ihsinformatics.gfatmnotifications.email.model.Constants;
 import com.ihsinformatics.gfatmnotifications.email.service.ConsumerService;
 
@@ -14,10 +16,10 @@ public class NotificationController implements ConsumerService {
 	}
 
 	@Override
-	public void process() {
-		// do some common validatin notification validation, manipulation logic
-		service.loader();
-		service.run();
+	public void process() throws JobExecutionException {
+		// do some common validation notification validation, manipulation logic
+		service.initialize();
+		service.execute(null);
 	}
 
 	@Override

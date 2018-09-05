@@ -1,4 +1,4 @@
-package com.ihsinformatics.gfatmnotifications.email.model;
+package com.ihsinformatics.gfatmnotifications.common.model;
 
 /**
  * @author Shujaat fup->Follow up ra -> result aviable
