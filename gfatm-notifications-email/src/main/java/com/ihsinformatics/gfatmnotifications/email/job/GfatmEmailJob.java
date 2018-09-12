@@ -1,8 +1,8 @@
 package com.ihsinformatics.gfatmnotifications.email.job;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -11,20 +11,20 @@ import javax.mail.MessagingException;
 import org.joda.time.DateTime;
 
 import com.ihsinformatics.emailer.EmailEngine;
+import com.ihsinformatics.gfatmnotifications.common.Context;
 import com.ihsinformatics.gfatmnotifications.common.model.ChilhoodFact;
 import com.ihsinformatics.gfatmnotifications.common.model.Contact;
 import com.ihsinformatics.gfatmnotifications.common.model.FastFact;
 import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
-import com.ihsinformatics.gfatmnotifications.email.DatabaseConnection;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailService;
-import com.ihsinformatics.gfatmnotifications.email.util.CustomOpenMrsUtil;
+import com.ihsinformatics.gfatmnotifications.email.util.CustomGfatmDatabaseUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
 
 public class GfatmEmailJob implements EmailService {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
 	private DateTime dateFrom;
-	private CustomOpenMrsUtil openMrsUtil;
+	private CustomGfatmDatabaseUtil customDbUtil;
 	private Properties props;
 	private String subjectpet, subjectfast, subjectchildhood, from, businesAnalystEmail;
 	private String gfatmConcernPerson;
@@ -34,7 +34,7 @@ public class GfatmEmailJob implements EmailService {
 
 	@Override
 	public void initializeProperties() {
-		props = DatabaseConnection.props;
+		props = Context.getProps();
 		dateFrom = new DateTime().minusDays(1);
 		subjectfast = props.getProperty("mail.subject.title");
 		subjectpet = props.getProperty("mail.pet.subject.title");
@@ -47,9 +47,8 @@ public class GfatmEmailJob implements EmailService {
 	}
 
 	@Override
-	public void execute(CustomOpenMrsUtil openMrsUtil) {
-
-		this.openMrsUtil = openMrsUtil;
+	public void execute(CustomGfatmDatabaseUtil openMrsUtil) {
+		this.customDbUtil = openMrsUtil;
 		fastDailyEmailReport(dateFrom);
 		log.info("Fast Process is successfully executed...");
 		childhoodDailyEmailReport(dateFrom);
@@ -60,12 +59,11 @@ public class GfatmEmailJob implements EmailService {
 
 	/**************** PET EMAIL ***************************/
 	private void petDailyEmailReport(DateTime dateFrom) {
-
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
-		ArrayList<PetFact> factPet = openMrsUtil.getPetFact(todayDate);
+		List<PetFact> factPet = customDbUtil.getPetFact(todayDate);
 		if (!factPet.isEmpty()) {
 			for (PetFact petTable : factPet) {
-				Contact emailVal = openMrsUtil.getContactByLocationId(petTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(petTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + petTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -112,10 +110,10 @@ public class GfatmEmailJob implements EmailService {
 	private void childhoodDailyEmailReport(DateTime dateFrom2) {
 
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
-		ArrayList<ChilhoodFact> factChildhood = openMrsUtil.getFactChildhood(todayDate);
+		List<ChilhoodFact> factChildhood = customDbUtil.getFactChildhood(todayDate);
 		if (!factChildhood.isEmpty()) {
 			for (ChilhoodFact childhoodTable : factChildhood) {
-				Contact emailVal = openMrsUtil.getContactByLocationId(childhoodTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(childhoodTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + childhoodTable.getLocationDescription()
 							+ " have not linked with any site supervisor email.");
@@ -133,9 +131,7 @@ public class GfatmEmailJob implements EmailService {
 	}
 
 	private boolean childhoodMapping(ChilhoodFact chilhoodFact) {
-
 		String facilityName = chilhoodFact.getLocationDescription() + " ( " + chilhoodFact.getLocationName() + " )";
-
 		LinkedHashMap<String, Integer> mapping = new LinkedHashMap<String, Integer>();
 		mapping.put("Screened by nurse", chilhoodFact.getScreenedByNurse());
 		mapping.put("Presumptive by nurse", chilhoodFact.getPresumptiveByNurse());
@@ -167,10 +163,10 @@ public class GfatmEmailJob implements EmailService {
 	private void fastDailyEmailReport(DateTime dateFrom2) {
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
 		// First we need to get All the Fast Fact-Table
-		ArrayList<FastFact> factFast = openMrsUtil.getFactFast(todayDate);
+		List<FastFact> factFast = customDbUtil.getFactFast(todayDate);
 		if (!factFast.isEmpty()) {
 			for (FastFact factTable : factFast) {
-				Contact emailVal = openMrsUtil.getContactByLocationId(factTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(factTable.getLocationId());
 				if (emailVal == null) {
 					log.warning("This Location:" + factTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -191,9 +187,7 @@ public class GfatmEmailJob implements EmailService {
 	}
 
 	private boolean fastMapping(FastFact factTable) {
-
 		String facilityName = factTable.getLocationDescription() + " ( " + factTable.getLocationName() + " )";
-
 		LinkedHashMap<String, Integer> mapping = new LinkedHashMap<String, Integer>();
 		mapping.put("Verbal Screened", factTable.getTotalScreeingForm());
 		mapping.put("Chest X-Rays", factTable.getChestXrays());
@@ -213,7 +207,6 @@ public class GfatmEmailJob implements EmailService {
 		mapping.put("Clinically Diagnosed", factTable.getClinicallyDiagnosed());
 		mapping.put("Initiated on Antibiotic", factTable.getInitiatedOnAntibiotic());
 		mapping.put("Initiated on TB Tx", factTable.getInitiatedOnTBTx());
-
 		String message = HtmlUtil.getInstance().getHtmltableFormat(mapping, facilityName);
 		sendEmail(developerEmail, message, subjectfast);
 		return sendEmail(factTable.getEmailAddress(), message, subjectfast);
@@ -221,7 +214,6 @@ public class GfatmEmailJob implements EmailService {
 
 	@Override
 	public boolean sendEmail(String emailAdress, String message, String subject) {
-
 		boolean isSent;
 		String[] recipient = { emailAdress };
 		try {

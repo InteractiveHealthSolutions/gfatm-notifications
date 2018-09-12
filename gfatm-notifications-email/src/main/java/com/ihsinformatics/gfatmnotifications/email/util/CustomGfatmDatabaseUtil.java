@@ -19,42 +19,27 @@ import java.util.logging.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.ihsinformatics.gfatmnotifications.common.Context;
 import com.ihsinformatics.gfatmnotifications.common.model.ChilhoodFact;
 import com.ihsinformatics.gfatmnotifications.common.model.Encounter;
 import com.ihsinformatics.gfatmnotifications.common.model.FastFact;
 import com.ihsinformatics.gfatmnotifications.common.model.Obs;
-import com.ihsinformatics.gfatmnotifications.common.model.Patient;
 import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
 import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
-import com.ihsinformatics.gfatmnotifications.common.service.GfatmDatabaseUtil;
-import com.ihsinformatics.gfatmnotifications.common.service.UtilityCollection;
-import com.ihsinformatics.util.DatabaseUtil;
 
 /**
  * @author owais.hussain@ihsinformatics.com
  *
  */
-public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
+public class CustomGfatmDatabaseUtil {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
+	private List<PatientScheduled> patientScheduledList;
+	private List<FastFact> factsFast;
+	private List<ChilhoodFact> factChildhood;
+	private List<PetFact> factsPet;
 
-	public CustomOpenMrsUtil() {
-	}
-
-	public CustomOpenMrsUtil(DatabaseUtil db) {
-		setDb(db);
-	}
-
-	public Patient getPatientByIdentifier(String patientIdentifier) {
-		if (UtilityCollection.getInstance().getPatients() == null) {
-			loadPatients();
-		}
-		for (Patient patient : UtilityCollection.getInstance().getPatients()) {
-			if (patient.getPatientIdentifier().equalsIgnoreCase(patientIdentifier)) {
-				return patient;
-			}
-		}
-		return null;
+	public CustomGfatmDatabaseUtil() {
 	}
 
 	/**
@@ -64,7 +49,6 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 	 * @return
 	 */
 	public String checkReferelPresent(Encounter enc) {
-
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT encounter_id from encounter ");
 		query.append(
@@ -73,14 +57,13 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 		query.append("order by date_created desc ");
 		query.append("limit 1");
 		System.out.println(query);
-		Object[][] data = getDb().getTableData(query.toString());
+		Object[][] data = Context.getLocalDb().getTableData(query.toString());
 		String encID = "";
 		if (data.length > 0) {
 			for (Object[] row : data) {
 				int k = 0;
 				try {
-					encID = convertToString(row[k++]);
-
+					encID = Context.convertToString(row[k++]);
 				} catch (Exception ex) {
 					log.severe(ex.getMessage());
 				}
@@ -106,7 +89,7 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 		query.append(" and person_id = (select patient_id from patient_identifier where identifier = '"
 				+ encounter.getIdentifier() + "')");
 
-		String jsonString = queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString());
 		List<Obs> codedValue = new ArrayList<Obs>();
 		Type listType = new TypeToken<List<Obs>>() {
 		}.getType();
@@ -124,10 +107,7 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 		return false;
 	}
 
-	public ArrayList<FastFact> getFactFast(String todayDate) {
-
-		UtilityCollection.getInstance().setFactFast(new ArrayList<FastFact>());
-
+	public List<FastFact> getFactFast(String todayDate) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" select ff.location_id as locationId,l.name as locationName,l.description as locationDescription,dd.full_date as dateTime, ");
@@ -149,20 +129,16 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 		query.append("where dd.full_date='" + todayDate + "';");
 		// query.append("where dd.full_date='2017-12-11';");
 
-		String jsonString = queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString());
 		Type listType = new TypeToken<List<FastFact>>() {
 		}.getType();
 		Gson gson = new Gson();
-		ArrayList<FastFact> factFast = gson.fromJson(jsonString, listType);
-		UtilityCollection.getInstance().setFactFast(factFast);
-
-		return UtilityCollection.getInstance().getFactFast();
+		factsFast = gson.fromJson(jsonString, listType);
+		return factsFast;
 
 	}
 
-	public ArrayList<ChilhoodFact> getFactChildhood(String todayDate) {
-		UtilityCollection.getInstance().setFactChildhood(new ArrayList<ChilhoodFact>());
-
+	public List<ChilhoodFact> getFactChildhood(String todayDate) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" select dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription , dd.full_date as dateTime, fc.Screened_nurse as screenedByNurse, fc.Presumptive_nurse as presumptiveByNurse , ");
@@ -177,20 +153,15 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 		query.append("where dd.full_date='" + todayDate + "';");
 		// query.append("where dd.full_date ='2018-01-13';");
 
-		String jsonString = queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString());
 		Type listType = new TypeToken<List<ChilhoodFact>>() {
 		}.getType();
 		Gson gson = new Gson();
-		ArrayList<ChilhoodFact> chilhoodFacts = gson.fromJson(jsonString, listType);
-		UtilityCollection.getInstance().setFactChildhood(chilhoodFacts);
-
-		return UtilityCollection.getInstance().getFactChildhood();
+		factChildhood = gson.fromJson(jsonString, listType);
+		return factChildhood;
 	}
 
-	public ArrayList<PetFact> getPetFact(String todayDate) {
-
-		UtilityCollection.getInstance().setFactPet(new ArrayList<PetFact>());
-
+	public List<PetFact> getPetFact(String todayDate) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" SELECT dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription,dd.full_date as dateTime,fp.No_Of_Index_Patients_Registered as noOfIndexPatientRegistered ,fp.No_Of_DSTB_Patients as noOfDSTBPatients, ");
@@ -204,23 +175,15 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 		query.append(" inner join dim_location dl on dl.location_id = fp.location_id ");
 		query.append(" inner join dim_datetime dd on dd.datetime_id = fp.datetime_id ");
 		query.append("where dd.full_date='" + todayDate + "';");
-		// query.append(" where dd.full_date ='2018-01-13'; ");
-
-		String jsonString = queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString());
 		Type listType = new TypeToken<List<PetFact>>() {
 		}.getType();
 		Gson gson = new Gson();
-		ArrayList<PetFact> petFacts = gson.fromJson(jsonString, listType);
-		UtilityCollection.getInstance().setFactPet(petFacts);
-
-		return UtilityCollection.getInstance().getFactPet();
-
+		factsPet = gson.fromJson(jsonString, listType);
+		return factsPet;
 	}
 
-	public ArrayList<PatientScheduled> getPatientScheduledForVisit(String startDate, String endDate) {
-
-		UtilityCollection.getInstance().setPatientScheduledsList(new ArrayList<PatientScheduled>());
-
+	public List<PatientScheduled> getPatientScheduledForVisit(String startDate, String endDate) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" SELECT distinct dp.external_id as externalId,GROUP_CONCAT(distinct p.name SEPARATOR ', ') as program ,dp.patient_identifier as patientIdentifier ,if(cctas.facility_scheduled is not null ,cctas.facility_scheduled,if(ccdtra.facility_scheduled is not null,ccdtra.facility_scheduled,ccifup.facility_scheduled) )  as facilityScheduled, ccifup.reason_for_call as reasonForCall,ccifup.facility_scheduled as fupFacilityScheduled ,date(ccifup.facility_visit_date) as fupFacilityVisitDate, ");
@@ -258,35 +221,29 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 		query.append(
 				" where ( (ccifup.facility_visit_date is not null) OR (ccdtra.facility_visit_date is not null )OR (cctas.facility_visit_date is not null) OR  (mvf.return_visit_date is not null) ) GROUP BY basTable.patient_id ; ");
 
-		String jsonString = queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString());
 		Type listType = new TypeToken<List<PatientScheduled>>() {
 		}.getType();
 		Gson gson = new Gson();
-		ArrayList<PatientScheduled> patientScheduledList = gson.fromJson(jsonString, listType);
-		UtilityCollection.getInstance().setPatientScheduledsList(patientScheduledList);
-
-		return UtilityCollection.getInstance().getPatientScheduledsList();
+		patientScheduledList = gson.fromJson(jsonString, listType);
+		return getPatientScheduledList();
 	}
 
-	public ArrayList<PatientScheduled> getPatientByScheduledFacilityName(String facilityName) {
-
-		ArrayList<PatientScheduled> filterList = new ArrayList<PatientScheduled>();
-
-		if (UtilityCollection.getInstance().getPatientScheduledsList().isEmpty()) {
+	public List<PatientScheduled> getPatientByScheduledFacilityName(String facilityName) {
+		List<PatientScheduled> filteredList = new ArrayList<PatientScheduled>();
+		if (getPatientScheduledList().isEmpty()) {
 			return null;
 		} else {
 			try {
-				System.out.println("Array Size : " + UtilityCollection.getInstance().getPatientScheduledsList().size());
-				for (PatientScheduled patientScheduled : UtilityCollection.getInstance().getPatientScheduledsList()) {
-
+				System.out.println("Array Size : " + getPatientScheduledList().size());
+				for (PatientScheduled patientScheduled : getPatientScheduledList()) {
 					if (patientScheduled.getMvfReturnVisitDate() != null) {
-
 						if (patientScheduled.getFacilityName().equals(facilityName)) {
-							filterList.add(patientScheduled);
+							filteredList.add(patientScheduled);
 						}
 					} else {
 						if (patientScheduled.getFacilityScheduled().equals(facilityName)) {
-							filterList.add(patientScheduled);
+							filteredList.add(patientScheduled);
 						}
 					}
 				}
@@ -294,7 +251,21 @@ public class CustomOpenMrsUtil extends GfatmDatabaseUtil {
 				log.warning(e.getMessage());
 			}
 		}
-		return filterList;
+		return filteredList;
+	}
+
+	/**
+	 * @return the patientScheduledsList
+	 */
+	public List<PatientScheduled> getPatientScheduledList() {
+		return patientScheduledList;
+	}
+
+	/**
+	 * @param patientScheduledList
+	 */
+	public void setPatientScheduledList(List<PatientScheduled> patientScheduledList) {
+		this.patientScheduledList = patientScheduledList;
 	}
 
 }

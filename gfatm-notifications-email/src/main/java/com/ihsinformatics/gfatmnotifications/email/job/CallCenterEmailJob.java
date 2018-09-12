@@ -3,6 +3,7 @@ package com.ihsinformatics.gfatmnotifications.email.job;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -12,19 +13,18 @@ import javax.mail.MessagingException;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ihsinformatics.emailer.EmailEngine;
+import com.ihsinformatics.gfatmnotifications.common.Context;
 import com.ihsinformatics.gfatmnotifications.common.model.Contact;
 import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
-import com.ihsinformatics.gfatmnotifications.common.service.UtilityCollection;
-import com.ihsinformatics.gfatmnotifications.email.DatabaseConnection;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailService;
-import com.ihsinformatics.gfatmnotifications.email.util.CustomOpenMrsUtil;
+import com.ihsinformatics.gfatmnotifications.email.util.CustomGfatmDatabaseUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
 
 public class CallCenterEmailJob implements EmailService {
 
 	private static final Logger log = Logger.getLogger(Class.class.getName());
-	private ArrayList<PatientScheduled> scheduledPatientList;
-	private CustomOpenMrsUtil openMrsUtil;
+	private List<PatientScheduled> scheduledPatientList;
+	private CustomGfatmDatabaseUtil openMrsUtil;
 	private Properties props;
 	private String subject, subjectNotFound, watcherEmail, from, bodyMessage, developerEmailAddress;
 	private Set<String> locationsSet;
@@ -32,10 +32,9 @@ public class CallCenterEmailJob implements EmailService {
 
 	@Override
 	public void initializeProperties() {
-
 		scheduledPatientList = new ArrayList<PatientScheduled>();
 		locationsSet = new HashSet<String>();
-		props = DatabaseConnection.props;
+		props = Context.getProps();
 		watcherEmail = props.getProperty("emailer.watcher.email.address");
 		subject = props.getProperty("mail.patient.schedule.subject");
 		subjectNotFound = props.getProperty("mail.location.subject");
@@ -47,7 +46,7 @@ public class CallCenterEmailJob implements EmailService {
 	}
 
 	@Override
-	public void execute(CustomOpenMrsUtil openMrsUtil) {
+	public void execute(CustomGfatmDatabaseUtil openMrsUtil) {
 		this.openMrsUtil = openMrsUtil;
 		scheduledPatient();
 		log.info("Call Center Patient Schedule is successfully executed...");
@@ -57,20 +56,20 @@ public class CallCenterEmailJob implements EmailService {
 		Contact supervisorEmail;
 		String htmlConvertStr;
 		// First Step1
-		scheduledPatientList = UtilityCollection.getInstance().getPatientScheduledsList();
+		scheduledPatientList = openMrsUtil.getPatientScheduledList();
 		if (!scheduledPatientList.isEmpty()) {
 			Iterator<PatientScheduled> iterator = scheduledPatientList.iterator();
 			while (iterator.hasNext()) {
 				PatientScheduled patientScheduled = iterator.next();
 				if (StringUtils.isBlank(HtmlUtil.getInstance().missedFupConditions(patientScheduled))) {
-					supervisorEmail = openMrsUtil.getContactByLocationName(patientScheduled.getFacilityScheduled());
+					supervisorEmail = Context.getUserContactByLocationName(patientScheduled.getFacilityScheduled());
 				} else {
-					supervisorEmail = openMrsUtil.getContactByLocationName(patientScheduled.getFacilityName());
+					supervisorEmail = Context.getUserContactByLocationName(patientScheduled.getFacilityName());
 				}
 
 				if (supervisorEmail == null) {
 					locationsSet.add(patientScheduled.getFacilityScheduled());
-					ArrayList<PatientScheduled> removeLocation = new ArrayList<>();
+					List<PatientScheduled> removeLocation = new ArrayList<>();
 					if (patientScheduled.getMvfReturnVisitDate() != null) {
 
 						removeLocation = openMrsUtil
@@ -91,7 +90,7 @@ public class CallCenterEmailJob implements EmailService {
 					}
 
 				} else {
-					ArrayList<PatientScheduled> patientScheduledResult = new ArrayList<>();
+					List<PatientScheduled> patientScheduledResult = new ArrayList<>();
 					if (patientScheduled.getMvfReturnVisitDate() != null) {
 						patientScheduledResult = openMrsUtil
 								.getPatientByScheduledFacilityName(patientScheduled.getFacilityName());

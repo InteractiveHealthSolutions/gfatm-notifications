@@ -14,7 +14,9 @@ package com.ihsinformatics.gfatmnotifications.email;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import com.ihsinformatics.gfatmnotifications.email.model.Constants;
+import com.ihsinformatics.emailer.EmailEngine;
+import com.ihsinformatics.emailer.EmailException;
+import com.ihsinformatics.gfatmnotifications.common.Context;
 import com.ihsinformatics.gfatmnotifications.email.service.ConsumerService;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailServiceInjector;
 import com.ihsinformatics.gfatmnotifications.email.service.NotificationInjector;
@@ -31,6 +33,10 @@ public class GfatmNotificationsMain {
 	private static NotificationInjector injector;
 	private static ConsumerService consumer;
 
+	public static String guestUsername = "";
+	public static String guestPassword = "";
+	boolean isEnginStart = true;
+
 	/**
 	 * @param args
 	 * @throws InputRequiredException
@@ -42,26 +48,35 @@ public class GfatmNotificationsMain {
 			// Email Notification
 			injector = new EmailServiceInjector();
 			consumer = injector.getConsumer();
-			consumer.getConnection(Constants.WAREHOUSE_CONNECTION);
 			consumer.process();
 			log.info("Email Notification execution is complete on : " + new Date());
 			System.exit(0);
 		} catch (Exception e) {
 			log.info("Exception : " + e.getMessage());
-			System.exit(-1); // this will be remove
+			System.exit(-1); // this will be removed
 		}
 	}
 
 	public GfatmNotificationsMain() {
-		DatabaseConnection connection = new DatabaseConnection();
-		/*
-		 * if (!connection.openmrsDbConnection()) {
-		 * System.out.println("Failed to connect with local database. Exiting"); }
-		 */
-		if (!connection.wareHouseConnection()) {
-			System.out.println("Failed to connect with warehouse local database. Exiting");
+		if (!startEmailEngine()) {
+			log.severe("Unable to start Email engine.");
 			System.exit(-1);
 		}
-
 	}
+
+	public boolean startEmailEngine() {
+		guestUsername = Context.getProps().getProperty("mail.user.username");
+		guestPassword = Context.getProps().getProperty("mail.user.password");
+		try {
+			log.info("*** Starting Email Engine ***");
+			EmailEngine.instantiateEmailEngine(Context.getProps());
+			isEnginStart = true;
+		} catch (EmailException e) {
+			e.printStackTrace();
+			log.warning("Email Engine Exception : " + e.getMessage());
+			isEnginStart = false;
+		}
+		return isEnginStart;
+	}
+
 }

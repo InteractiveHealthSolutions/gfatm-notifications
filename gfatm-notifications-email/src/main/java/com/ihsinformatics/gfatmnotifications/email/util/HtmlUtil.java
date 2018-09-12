@@ -1,8 +1,8 @@
 package com.ihsinformatics.gfatmnotifications.email.util;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,14 +66,15 @@ public class HtmlUtil {
 	}
 
 	//
-	public String getHtmlTableWithMultipleCol(ArrayList<PatientScheduled> mapping) {
+	public String getHtmlTableWithMultipleCol(List<PatientScheduled> patientScheduledResult) {
 
 		StringBuilder buf = new StringBuilder();
 		buf.append("<html>" + "<body>"
 				+ "<table style='font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif; border-spacing: 0px;  border-style:none; width: 100%;'>"
 				+ "<caption style='padding: 8px; padding-top: 12px; padding-bottom: 12px;font-size: 150%;'><code>");
-		buf.append(StringUtils.isBlank(missedFupConditions(mapping.get(0))) ? mapping.get(0).getFacilityScheduled()
-				: mapping.get(0).getFacilityName());
+		buf.append(StringUtils.isBlank(missedFupConditions(patientScheduledResult.get(0)))
+				? patientScheduledResult.get(0).getFacilityScheduled()
+				: patientScheduledResult.get(0).getFacilityName());
 		buf.append("</code></caption>" + "<tr>"
 				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>External ID</th>"
 				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>PID</th>"
@@ -81,7 +82,7 @@ public class HtmlUtil {
 				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Reason For Visit</th>"
 				+ "<th style = ' background-color: #110934;color: white;  border: 1px solid #ddd; padding: 8px; padding-top: 12px; padding-bottom: 12px; text-align: left;'>Facility Visit Date</th>"
 				+ "</tr>");
-		for (PatientScheduled patientScheduled : mapping) {
+		for (PatientScheduled patientScheduled : patientScheduledResult) {
 			buf.append("<tr><td style = 'border: 1px solid #ddd;padding: 8px;'>")
 					.append(StringUtils.isBlank(patientScheduled.getExternalId()) ? ""
 							: patientScheduled.getExternalId())
