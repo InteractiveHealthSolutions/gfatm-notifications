@@ -24,7 +24,7 @@ public class EmailServiceImpl implements NotificationService {
 
 	public EmailServiceImpl() {
 		// Reload contacts
-		Context.loadUserContacts();
+		Context.loadContacts();
 		startVisitDate = new DateTime();
 		endVisitDate = startVisitDate.plusDays(Constants.NUMBERDAYS);
 		openMrsUtil = new CustomGfatmDatabaseUtil();

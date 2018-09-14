@@ -55,7 +55,7 @@ public class EmailNotificationsJobLegacy {
 	public void execute() {
 
 		// load all the site supervisor email from ware database.
-		Context.loadUserContacts();
+		Context.loadContacts();
 		dateFrom = new DateTime().minusDays(1);
 		fastDailyReport(dateFrom);
 		log.info("Fast Process is successfully executed...");

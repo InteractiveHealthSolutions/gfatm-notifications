@@ -23,7 +23,7 @@ import com.ihsinformatics.gfatmnotifications.common.Context;
 import com.ihsinformatics.gfatmnotifications.common.model.ChilhoodFact;
 import com.ihsinformatics.gfatmnotifications.common.model.Encounter;
 import com.ihsinformatics.gfatmnotifications.common.model.FastFact;
-import com.ihsinformatics.gfatmnotifications.common.model.Obs;
+import com.ihsinformatics.gfatmnotifications.common.model.Observation;
 import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
 import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
 
@@ -90,15 +90,15 @@ public class CustomGfatmDatabaseUtil {
 				+ encounter.getIdentifier() + "')");
 
 		String jsonString = Context.queryToJson(query.toString());
-		List<Obs> codedValue = new ArrayList<Obs>();
-		Type listType = new TypeToken<List<Obs>>() {
+		List<Observation> codedValue = new ArrayList<Observation>();
+		Type listType = new TypeToken<List<Observation>>() {
 		}.getType();
 		Gson gson = new Gson();
 		codedValue = gson.fromJson(jsonString, listType);
 		if (codedValue.isEmpty()) {
 			return true;
 		} else {
-			for (Obs obs : codedValue) {
+			for (Observation obs : codedValue) {
 				if (obs.getValueCoded() == 159492 || obs.getValueCoded() == 1648) {
 					return true;
 				}
