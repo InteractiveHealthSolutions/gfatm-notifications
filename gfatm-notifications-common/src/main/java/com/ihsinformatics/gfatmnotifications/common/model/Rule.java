@@ -9,7 +9,7 @@ You can also access the license on the internet at the address: http://www.gnu.o
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
 */
-package com.ihsinformatics.gfatmnotifications.sms.model;
+package com.ihsinformatics.gfatmnotifications.common.model;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -153,4 +153,14 @@ public class Rule {
 		this.stopCondition = stopCondition;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return type + ", " + encounterType + ", " + sendTo + ", " + scheduleDate + ", " + plusMinus + ", "
+				+ plusMinusUnit + ", " + messageCode;
+	}
 }

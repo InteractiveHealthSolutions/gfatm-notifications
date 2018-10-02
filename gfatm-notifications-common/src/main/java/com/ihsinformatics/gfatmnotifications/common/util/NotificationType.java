@@ -9,19 +9,14 @@ You can also access the license on the internet at the address: http://www.gnu.o
 
 Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
 */
-package com.ihsinformatics.gfatmnotifications.sms.service;
+package com.ihsinformatics.gfatmnotifications.common.util;
 
 /**
  * @author owais.hussain@ihsinformatics.com
  *
  */
-public interface RuleExamples {
+public enum NotificationType {
 
-	String testRange(int num);
+	CALL, EMAIL, SMS
 
-	String testExactMatch(String str);
-
-	String testRegex(String str);
-
-	String testDecisionTree(String str);
 }
