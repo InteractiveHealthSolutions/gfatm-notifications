@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import javax.mail.MessagingException;
 
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.ihsinformatics.emailer.EmailEngine;
@@ -19,6 +20,7 @@ import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailService;
 import com.ihsinformatics.gfatmnotifications.email.util.CustomGfatmDatabaseUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
+import com.ihsinformatics.util.DatabaseUtil;
 
 public class CallCenterEmailJob implements EmailService {
 
@@ -29,6 +31,7 @@ public class CallCenterEmailJob implements EmailService {
 	private String subject, subjectNotFound, watcherEmail, from, bodyMessage, developerEmailAddress;
 	private Set<String> locationsSet;
 	private String noUpdateAvailableSubject, ccConcernPerson;
+	private DatabaseUtil dbUtils;
 
 	@Override
 	public void initializeProperties() {
@@ -43,6 +46,7 @@ public class CallCenterEmailJob implements EmailService {
 		ccConcernPerson = props.getProperty("callcenter.concern.person.name");
 		bodyMessage = props.getProperty("mail.body.message");
 		developerEmailAddress = props.getProperty("developer.email.address");
+		dbUtils = Context.getDwDb(); //
 	}
 
 	@Override
@@ -62,9 +66,9 @@ public class CallCenterEmailJob implements EmailService {
 			while (iterator.hasNext()) {
 				PatientScheduled patientScheduled = iterator.next();
 				if (StringUtils.isBlank(HtmlUtil.getInstance().missedFupConditions(patientScheduled))) {
-					supervisorEmail = Context.getUserContactByLocationName(patientScheduled.getFacilityScheduled());
+					supervisorEmail = Context.getUserContactByLocationName(patientScheduled.getFacilityScheduled(),dbUtils);
 				} else {
-					supervisorEmail = Context.getUserContactByLocationName(patientScheduled.getFacilityName());
+					supervisorEmail = Context.getUserContactByLocationName(patientScheduled.getFacilityName(),dbUtils);
 				}
 
 				if (supervisorEmail == null) {

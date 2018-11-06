@@ -19,6 +19,7 @@ import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailService;
 import com.ihsinformatics.gfatmnotifications.email.util.CustomGfatmDatabaseUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
+import com.ihsinformatics.util.DatabaseUtil;
 
 public class GfatmEmailJob implements EmailService {
 
@@ -31,6 +32,7 @@ public class GfatmEmailJob implements EmailService {
 	private String bodyMessage;
 	public SimpleDateFormat DATE_FORMATWH = new SimpleDateFormat("yyyy-MM-dd");
 	private String developerEmail = "shujaat.ali@ihsinformatics.com";
+	private DatabaseUtil dbUtil;
 
 	@Override
 	public void initializeProperties() {
@@ -44,6 +46,7 @@ public class GfatmEmailJob implements EmailService {
 		businesAnalystEmail = props.getProperty("emailer.busines.analyst.email");
 		gfatmConcernPerson = props.getProperty("gfatm.concern.person.name");
 		bodyMessage = props.getProperty("mail.body.message");
+		dbUtil = Context.getDwDb();
 	}
 
 	@Override
@@ -60,10 +63,10 @@ public class GfatmEmailJob implements EmailService {
 	/**************** PET EMAIL ***************************/
 	private void petDailyEmailReport(DateTime dateFrom) {
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
-		List<PetFact> factPet = customDbUtil.getPetFact(todayDate);
+		List<PetFact> factPet = customDbUtil.getPetFact(todayDate,dbUtil);
 		if (!factPet.isEmpty()) {
 			for (PetFact petTable : factPet) {
-				Contact emailVal = Context.getUserContactByLocationId(petTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(petTable.getLocationId(),dbUtil);
 				if (emailVal == null) {
 					log.warning("This Location:" + petTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -110,10 +113,10 @@ public class GfatmEmailJob implements EmailService {
 	private void childhoodDailyEmailReport(DateTime dateFrom2) {
 
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
-		List<ChilhoodFact> factChildhood = customDbUtil.getFactChildhood(todayDate);
+		List<ChilhoodFact> factChildhood = customDbUtil.getFactChildhood(todayDate,dbUtil);
 		if (!factChildhood.isEmpty()) {
 			for (ChilhoodFact childhoodTable : factChildhood) {
-				Contact emailVal = Context.getUserContactByLocationId(childhoodTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(childhoodTable.getLocationId(),dbUtil);
 				if (emailVal == null) {
 					log.warning("This Location:" + childhoodTable.getLocationDescription()
 							+ " have not linked with any site supervisor email.");
@@ -163,10 +166,10 @@ public class GfatmEmailJob implements EmailService {
 	private void fastDailyEmailReport(DateTime dateFrom2) {
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
 		// First we need to get All the Fast Fact-Table
-		List<FastFact> factFast = customDbUtil.getFactFast(todayDate);
+		List<FastFact> factFast = customDbUtil.getFactFast(todayDate,dbUtil);
 		if (!factFast.isEmpty()) {
 			for (FastFact factTable : factFast) {
-				Contact emailVal = Context.getUserContactByLocationId(factTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(factTable.getLocationId(),dbUtil);
 				if (emailVal == null) {
 					log.warning("This Location:" + factTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");

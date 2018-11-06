@@ -14,6 +14,7 @@ import com.ihsinformatics.gfatmnotifications.email.job.GfatmEmailJob;
 import com.ihsinformatics.gfatmnotifications.email.model.Constants;
 import com.ihsinformatics.gfatmnotifications.email.service.EmailService;
 import com.ihsinformatics.gfatmnotifications.email.util.CustomGfatmDatabaseUtil;
+import com.ihsinformatics.util.DatabaseUtil;
 
 public class EmailServiceImpl implements NotificationService {
 
@@ -21,15 +22,16 @@ public class EmailServiceImpl implements NotificationService {
 	private EmailService emailJob;
 	private DateTime startVisitDate, endVisitDate;
 	public SimpleDateFormat DATE_FORMATWH = new SimpleDateFormat("yyyy-MM-dd");
-
+	private DatabaseUtil dbUtil;
 	public EmailServiceImpl() {
 		// Reload contacts
-		Context.loadContacts();
+		dbUtil = Context.getDwDb();
+		Context.loadContacts(dbUtil);
 		startVisitDate = new DateTime();
 		endVisitDate = startVisitDate.plusDays(Constants.NUMBERDAYS);
 		openMrsUtil = new CustomGfatmDatabaseUtil();
 		openMrsUtil.getPatientScheduledForVisit(DATE_FORMATWH.format(startVisitDate.toDate()),
-				DATE_FORMATWH.format(endVisitDate.toDate()));
+				DATE_FORMATWH.format(endVisitDate.toDate()),dbUtil);
 	}
 
 	@Override
