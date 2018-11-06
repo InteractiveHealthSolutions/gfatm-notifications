@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -16,7 +17,7 @@
 		<module>gfatm-notifications-sms</module>
 		<module>gfatm-notifications-call</module>
 	</modules>
-
+<!--  -->
 	<!-- Optional settings -->
 	<name>gfatm-notifications</name>
 	<description>Email, SMS and Call notifications and alerts for GFATM projects</description>
@@ -49,8 +50,8 @@
 			</roles>
 		</developer>
 	</developers>
-	<contributors>
-	</contributors>
+	<contributors />
+
 
 	<!-- Define child projects -->
 
@@ -111,7 +112,7 @@
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.10</version>
-				<scope>test</scope>
+
 				<exclusions>
 					<exclusion>
 						<groupId>org.hamcrest</groupId>
@@ -145,6 +146,7 @@
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz</artifactId>
 				<version>2.3.0</version>
+				
 			</dependency>
 			<dependency>
 				<groupId>joda-time</groupId>
@@ -211,15 +213,15 @@
 
 	<!-- Build Settings -->
 	<build>
-		<sourceDirectory>src</sourceDirectory>
-		<testSourceDirectory>test</testSourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
+		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>

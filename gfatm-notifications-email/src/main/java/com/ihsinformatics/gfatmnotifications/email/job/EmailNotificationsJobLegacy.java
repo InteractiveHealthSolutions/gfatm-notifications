@@ -28,6 +28,7 @@ import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
 import com.ihsinformatics.gfatmnotifications.email.controller.EmailController;
 import com.ihsinformatics.gfatmnotifications.email.util.CustomGfatmDatabaseUtil;
 import com.ihsinformatics.gfatmnotifications.email.util.HtmlUtil;
+import com.ihsinformatics.util.DatabaseUtil;
 
 /**
  * @author owais.hussain@ihsinformatics.com and Shujaat.ali@ihsinformatics.com
@@ -42,11 +43,14 @@ public class EmailNotificationsJobLegacy {
 	private EmailController emailController;
 	private Properties props;
 	public SimpleDateFormat DATE_FORMATWH = new SimpleDateFormat("yyyy-MM-dd");
+	private DatabaseUtil dbUtil;
 
 	public EmailNotificationsJobLegacy() {
 		props = Context.getProps();
 		warehouseOpenmrsInstance = new CustomGfatmDatabaseUtil();
 		emailController = new EmailController();
+		
+		dbUtil = Context.getDwDb();
 	}
 
 	/*
@@ -55,7 +59,7 @@ public class EmailNotificationsJobLegacy {
 	public void execute() {
 
 		// load all the site supervisor email from ware database.
-		Context.loadContacts();
+		Context.loadContacts(dbUtil);
 		dateFrom = new DateTime().minusDays(1);
 		fastDailyReport(dateFrom);
 		log.info("Fast Process is successfully executed...");
@@ -72,10 +76,10 @@ public class EmailNotificationsJobLegacy {
 
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
 		// First we need to get All the Fast Fact-Table
-		List<FastFact> factFast = warehouseOpenmrsInstance.getFactFast(todayDate);
+		List<FastFact> factFast = warehouseOpenmrsInstance.getFactFast(todayDate,Context.getDwDb());
 		if (!factFast.isEmpty()) {
 			for (FastFact factTable : factFast) {
-				Contact emailVal = Context.getUserContactByLocationId(factTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(factTable.getLocationId(),dbUtil);
 				if (emailVal == null) {
 					log.warning("This Location:" + factTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -132,10 +136,10 @@ public class EmailNotificationsJobLegacy {
 	public void childhoodDailyReport(DateTime dateFrom) {
 
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
-		List<ChilhoodFact> factChildhood = warehouseOpenmrsInstance.getFactChildhood(todayDate);
+		List<ChilhoodFact> factChildhood = warehouseOpenmrsInstance.getFactChildhood(todayDate,Context.getDwDb());
 		if (!factChildhood.isEmpty()) {
 			for (ChilhoodFact childhoodTable : factChildhood) {
-				Contact emailVal = Context.getUserContactByLocationId(childhoodTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(childhoodTable.getLocationId(),dbUtil);
 				if (emailVal == null) {
 					log.warning("This Location:" + childhoodTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");
@@ -189,10 +193,10 @@ public class EmailNotificationsJobLegacy {
 	public void petDailyReport(DateTime dateFrom) {
 
 		String todayDate = DATE_FORMATWH.format(dateFrom.toDate());
-		List<PetFact> factPet = warehouseOpenmrsInstance.getPetFact(todayDate);
+		List<PetFact> factPet = warehouseOpenmrsInstance.getPetFact(todayDate,Context.getDwDb());
 		if (!factPet.isEmpty()) {
 			for (PetFact petTable : factPet) {
-				Contact emailVal = Context.getUserContactByLocationId(petTable.getLocationId());
+				Contact emailVal = Context.getUserContactByLocationId(petTable.getLocationId(),dbUtil);
 				if (emailVal == null) {
 					log.warning("This Location:" + petTable.getLocationDescription()
 							+ " have not linked with any site supervisor email ");

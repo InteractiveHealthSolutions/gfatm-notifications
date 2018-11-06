@@ -1,32 +1,13 @@
-/* Copyright(C) 2018 Interactive Health Solutions, Pvt. Ltd.
-
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 3 of the License (GPLv3), or any later version.
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Interactive Health Solutions, info@ihsinformatics.com
-You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
-
-Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
-*/
 package com.ihsinformatics.gfatmnotifications.sms.service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.Field;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.InvalidPropertiesFormatException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -38,7 +19,6 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 
 import org.joda.time.DateTime;
-import org.json.JSONObject;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -59,27 +39,22 @@ import com.ihsinformatics.gfatmnotifications.common.util.ValidationUtil;
 import com.ihsinformatics.gfatmnotifications.sms.SmsContext;
 import com.ihsinformatics.util.DatabaseUtil;
 import com.ihsinformatics.util.DateTimeUtil;
-import com.ihsinformatics.util.JsonUtil;
-import com.ihsinformatics.util.RegexUtil;
 
-/**
- * @author owais.hussain@ihsinformatics.com
- *
- */
-public class SmsNotificationsJob implements NotificationService {
-	private static final boolean DEBUG_MODE = ManagementFactory.getRuntimeMXBean().getInputArguments().toString()
-			.indexOf("-agentlib:jdwp") > 0;
+public class ReminderSmsNotificationsJob implements NotificationService {
+
 	private static final Logger log = Logger.getLogger(Class.class.getName());
-	private List<Message> messages=new ArrayList<>();
-	private String fileName = System.getProperty("user.home")+"/alert.csv";
-	
-	private DatabaseUtil dbUtil;
-	private static Properties props;
+
 	private DateTime dateFrom;
 	private DateTime dateTo;
+	private DatabaseUtil dbUtil;
+	private static Properties props;
 	private FormattedMessageParser messageParser;
+	private List<Message> messages=new ArrayList<>();
+	 private String fileName = System.getProperty("user.home")+"/reminder.csv";
+	private static final boolean DEBUG_MODE = ManagementFactory.getRuntimeMXBean().getInputArguments().toString()
+			.indexOf("-agentlib:jdwp") > 0;
 
-	public SmsNotificationsJob() {
+	public ReminderSmsNotificationsJob() {
 		HostnameVerifier hostNameVerifier = new HostnameVerifier() {
 			@Override
 			public boolean verify(String hostname, SSLSession session) {
@@ -88,17 +63,13 @@ public class SmsNotificationsJob implements NotificationService {
 		};
 		HttpsURLConnection.setDefaultHostnameVerifier(hostNameVerifier);
 		messageParser = new FormattedMessageParser(Decision.LEAVE_EMPTY);
+		props = Context.getProps();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
-	 */
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		JobDataMap dataMap = context.getMergedJobDataMap();
-		SmsNotificationsJob smsJob = (SmsNotificationsJob) dataMap.get("smsJob");
+		ReminderSmsNotificationsJob smsJob = (ReminderSmsNotificationsJob) dataMap.get("smsJob2");
 		this.setDateFrom(smsJob.getDateFrom());
 		this.setDateTo(smsJob.getDateTo());
 		try {
@@ -106,23 +77,21 @@ public class SmsNotificationsJob implements NotificationService {
 			setDateFrom(getDateFrom().minusHours(24));
 			log.info(getDateFrom() + " " + getDateTo());
 
-			DateTime from = DateTime.now().minusDays(2);//minusMonths(12);
+			DateTime from = DateTime.now().minusDays(2);// minusMonths(12);
 			DateTime to = DateTime.now().minusMonths(0);
 
-			run(from, to);
+			run();
 			CsvFileWriter.writeCsvFile(fileName,messages);
 		} catch (IOException e) {
 			log.warning("Unable to initialize context.");
 			throw new JobExecutionException(e.getMessage());
-		} catch (ParseException e) {
-			log.warning("Unable to parse messages.");
-			throw new JobExecutionException(e.getMessage());
-		}
+		}   catch (ParseException e) { log.warning("Unable to parse messages."); throw
+			  new JobExecutionException(e.getMessage()); }
+			 
+
 	}
 
-	
-
-	public void run(DateTime from, DateTime to) throws ParseException, IOException {
+	private void run() throws ParseException {
 		List<Rule> rules = Context.getRuleBook().getSmsRules();
 		// Read each rule and execute the decision
 		for (Rule rule : rules) {
@@ -131,11 +100,21 @@ public class SmsNotificationsJob implements NotificationService {
 			}else if(rule.getDatabaseConnectionName().equals(props.getProperty("db.connection.dwh"))){
 				dbUtil = Context.getDwDb();
 			}
+			
 			if (rule.getEncounterType() == null) {
 				continue;
 			}
-
-			// Fetch all the encounters for this type
+			if (rule.getPlusMinusUnit().equalsIgnoreCase("hours")) {
+				continue;
+			}
+			
+			DateTime from = rule.getFetchDurationDate();
+			DateTime to=new DateTime();
+			//default value if there is no reference/fetch duration is not defined
+			if(from==null) {
+				from=to.minusMonths(2);
+			}
+			// Fetch all the encounters for this type ,the third on your choice 
 			List<Encounter> encounters = Context.getEncounters(from, to,
 					Context.getEncounterTypeId(rule.getEncounterType()),dbUtil);
 
@@ -188,49 +167,47 @@ public class SmsNotificationsJob implements NotificationService {
 						
 						  if(!ValidationUtil.isValidContactNumber(contactNumber)) {
 						  log.info("Patient : "+patient.getPatientIdentifier()
-						  +"  doesnot have an valid number!"); continue; }
+						  +"  doesnot have an valid number!"); 
+						  continue; 
+						  }
 						 
 						isItPatient = true;
 
 					} else if (rule.getSendTo().equalsIgnoreCase("doctor")) {
 						//TODO  to be decided
+						log.severe("SMS could not be send because doctor are not decided yet!");
+						continue;
 					} else if (rule.getSendTo().equalsIgnoreCase("supervisor") || rule.getSendTo().equalsIgnoreCase("facility")) {
 						contactNumber=location.getPrimaryContact();
 
 					}
 					
 					if (sendOn != null) {
-						DateTime now = new DateTime();
-						DateTime beforeNow = now.minusHours(SmsContext.SMS_SCHEDULE_INTERVAL_IN_HOURS);
-						if (sendOn.getTime() > beforeNow.getMillis() && sendOn.getTime() <= now.getMillis()) {
+						DateTime now = new DateTime().plusMinutes(10);
+						//DateTime beforeNow = now.minusHours(SmsContext.);
+						//if (sendOn.getTime() > beforeNow.getMillis() && sendOn.getTime() <= now.getMillis()) {
 							if (!ValidationUtil.validateStopConditions(patient, location, encounter, rule,dbUtil)) {
 								// In debug mode
 								if (DEBUG_MODE) {
 									
 									messages.add(new Message(preparedMessage,contactNumber,Context.PROJECT_NAME, sendOn));
 								}else {
-								//sendNotification(contactNumber, preparedMessage, Context.PROJECT_NAME, sendOn);
+							//	sendNotification(contactNumber, preparedMessage, Context.PROJECT_NAME, sendOn);
 								}
 								if (isItPatient) {
 									imformedPatients.put(patient.getPersonId(), patient);
 								}
 							}
 
-						}
+						//}
 					}
 				}
 			}
 		}
+		
+		
 	}
 
-	
-	
-
-	/*
-	 * @see
-	 * com.ihsinformatics.gfatmnotifications.common.service.NotificationService#
-	 * sendNotification(java.lang.String, java.lang.String, java.lang.String)
-	 */
 	@Override
 	public String sendNotification(String addressTo, String message, String subject, Date sendOn) {
 		String response = null;
@@ -255,38 +232,6 @@ public class SmsNotificationsJob implements NotificationService {
 		}
 		return response;
 	}
-
-
-
-//	public void test(String httpsUrl, boolean printCertificate) {
-//		try {
-//			URL url = new URL(httpsUrl);
-//			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-//			if (printCertificate) {
-//				try {
-//					System.out.println("Response Code : " + con.getResponseCode());
-//					System.out.println("Cipher Suite : " + con.getCipherSuite());
-//					System.out.println("\n");
-//					Certificate[] certs = con.getServerCertificates();
-//					for (Certificate cert : certs) {
-//						System.out.println("Cert Type : " + cert.getType());
-//						System.out.println("Cert Hash Code : " + cert.hashCode());
-//						System.out.println("Cert Public Key Algorithm : " + cert.getPublicKey().getAlgorithm());
-//						System.out.println("Cert Public Key Format : " + cert.getPublicKey().getFormat());
-//						System.out.println("\n");
-//					}
-//				} catch (SSLPeerUnverifiedException e) {
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		} catch (MalformedURLException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	/**
 	 * @return the dateFrom
@@ -315,4 +260,5 @@ public class SmsNotificationsJob implements NotificationService {
 	public void setDateTo(DateTime dateTo) {
 		this.dateTo = dateTo;
 	}
+
 }

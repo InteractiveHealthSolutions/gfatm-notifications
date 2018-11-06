@@ -26,6 +26,7 @@ import com.ihsinformatics.gfatmnotifications.common.model.FastFact;
 import com.ihsinformatics.gfatmnotifications.common.model.Observation;
 import com.ihsinformatics.gfatmnotifications.common.model.PatientScheduled;
 import com.ihsinformatics.gfatmnotifications.common.model.PetFact;
+import com.ihsinformatics.util.DatabaseUtil;
 
 /**
  * @author owais.hussain@ihsinformatics.com
@@ -57,7 +58,7 @@ public class CustomGfatmDatabaseUtil {
 		query.append("order by date_created desc ");
 		query.append("limit 1");
 		System.out.println(query);
-		Object[][] data = Context.getLocalDb().getTableData(query.toString());
+		Object[][] data = Context.getOpenmrsDb().getTableData(query.toString());
 		String encID = "";
 		if (data.length > 0) {
 			for (Object[] row : data) {
@@ -82,14 +83,14 @@ public class CustomGfatmDatabaseUtil {
 	 * @param encounter
 	 * @return
 	 */
-	public Boolean isTransferOrReferel(Encounter encounter) {
+	public Boolean isTransferOrReferel(Encounter encounter,DatabaseUtil dbUtil) {
 
 		StringBuilder query = new StringBuilder();
 		query.append("SELECT obs_id as obsId, value_coded as valueCoded FROM openmrs.obs where concept_id =159786");
 		query.append(" and person_id = (select patient_id from patient_identifier where identifier = '"
 				+ encounter.getIdentifier() + "')");
 
-		String jsonString = Context.queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString(),dbUtil);
 		List<Observation> codedValue = new ArrayList<Observation>();
 		Type listType = new TypeToken<List<Observation>>() {
 		}.getType();
@@ -107,7 +108,7 @@ public class CustomGfatmDatabaseUtil {
 		return false;
 	}
 
-	public List<FastFact> getFactFast(String todayDate) {
+	public List<FastFact> getFactFast(String todayDate,DatabaseUtil dbUtil) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" select ff.location_id as locationId,l.name as locationName,l.description as locationDescription,dd.full_date as dateTime, ");
@@ -129,7 +130,7 @@ public class CustomGfatmDatabaseUtil {
 		query.append("where dd.full_date='" + todayDate + "';");
 		// query.append("where dd.full_date='2017-12-11';");
 
-		String jsonString = Context.queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString(),dbUtil);
 		Type listType = new TypeToken<List<FastFact>>() {
 		}.getType();
 		Gson gson = new Gson();
@@ -138,7 +139,7 @@ public class CustomGfatmDatabaseUtil {
 
 	}
 
-	public List<ChilhoodFact> getFactChildhood(String todayDate) {
+	public List<ChilhoodFact> getFactChildhood(String todayDate,DatabaseUtil dbUtil) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" select dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription , dd.full_date as dateTime, fc.Screened_nurse as screenedByNurse, fc.Presumptive_nurse as presumptiveByNurse , ");
@@ -153,7 +154,7 @@ public class CustomGfatmDatabaseUtil {
 		query.append("where dd.full_date='" + todayDate + "';");
 		// query.append("where dd.full_date ='2018-01-13';");
 
-		String jsonString = Context.queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString(),dbUtil);
 		Type listType = new TypeToken<List<ChilhoodFact>>() {
 		}.getType();
 		Gson gson = new Gson();
@@ -161,7 +162,7 @@ public class CustomGfatmDatabaseUtil {
 		return factChildhood;
 	}
 
-	public List<PetFact> getPetFact(String todayDate) {
+	public List<PetFact> getPetFact(String todayDate,DatabaseUtil dbUtil) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" SELECT dl.location_id as locationId,dl.location_name as locationName,dl.description as locationDescription,dd.full_date as dateTime,fp.No_Of_Index_Patients_Registered as noOfIndexPatientRegistered ,fp.No_Of_DSTB_Patients as noOfDSTBPatients, ");
@@ -175,7 +176,7 @@ public class CustomGfatmDatabaseUtil {
 		query.append(" inner join dim_location dl on dl.location_id = fp.location_id ");
 		query.append(" inner join dim_datetime dd on dd.datetime_id = fp.datetime_id ");
 		query.append("where dd.full_date='" + todayDate + "';");
-		String jsonString = Context.queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString(),dbUtil);
 		Type listType = new TypeToken<List<PetFact>>() {
 		}.getType();
 		Gson gson = new Gson();
@@ -183,7 +184,7 @@ public class CustomGfatmDatabaseUtil {
 		return factsPet;
 	}
 
-	public List<PatientScheduled> getPatientScheduledForVisit(String startDate, String endDate) {
+	public List<PatientScheduled> getPatientScheduledForVisit(String startDate, String endDate,DatabaseUtil dbUtil) {
 		StringBuilder query = new StringBuilder();
 		query.append(
 				" SELECT distinct dp.external_id as externalId,GROUP_CONCAT(distinct p.name SEPARATOR ', ') as program ,dp.patient_identifier as patientIdentifier ,if(cctas.facility_scheduled is not null ,cctas.facility_scheduled,if(ccdtra.facility_scheduled is not null,ccdtra.facility_scheduled,ccifup.facility_scheduled) )  as facilityScheduled, ccifup.reason_for_call as reasonForCall,ccifup.facility_scheduled as fupFacilityScheduled ,date(ccifup.facility_visit_date) as fupFacilityVisitDate, ");
@@ -221,7 +222,7 @@ public class CustomGfatmDatabaseUtil {
 		query.append(
 				" where ( (ccifup.facility_visit_date is not null) OR (ccdtra.facility_visit_date is not null )OR (cctas.facility_visit_date is not null) OR  (mvf.return_visit_date is not null) ) GROUP BY basTable.patient_id ; ");
 
-		String jsonString = Context.queryToJson(query.toString());
+		String jsonString = Context.queryToJson(query.toString(),dbUtil);
 		Type listType = new TypeToken<List<PatientScheduled>>() {
 		}.getType();
 		Gson gson = new Gson();
