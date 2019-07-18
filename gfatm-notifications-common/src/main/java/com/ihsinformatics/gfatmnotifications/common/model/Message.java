@@ -23,8 +23,9 @@ public class Message {
 	private String encounterType;
 	private String recipient;
 	private Rule rule;
+	private String encounterDate;
 
-	public Message(String preparedMessage, String contactNumber, String encounterType, String preparedOn, String sendOn,
+	public Message(String preparedMessage, String contactNumber, String encounterType, String encounterDate,String preparedOn, String sendOn,
 			String recipient, Rule rule) {
 		super();
 		this.setPreparedMessage(preparedMessage);
@@ -34,6 +35,7 @@ public class Message {
 		this.setSendOn(sendOn);
 		this.setRecipient(recipient);
 		this.setRule(rule);
+		this.setEncounterDate(encounterDate);
 	}
 
 	/**
@@ -133,4 +135,14 @@ public class Message {
 	public void setRule(Rule rule) {
 		this.rule = rule;
 	}
+
+	public String getEncounterDate() {
+		return encounterDate;
+	}
+
+	public void setEncounterDate(String encounterDate) {
+		this.encounterDate = encounterDate;
+	}
+	
+	
 }

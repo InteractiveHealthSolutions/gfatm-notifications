@@ -1,11 +1,14 @@
 package com.ihsinformatics.gfatmnotifications.common.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -16,7 +19,7 @@ import com.ihsinformatics.util.DateTimeUtil;
 
 public class ExcelSheetWriter {
 
-	private static String[] columns = { "NotificationType", "EncounterType", "Message", "Contact", "PreparedOn",
+	private static String[] columns = { "NotificationType", "EncounterType","EncounterDate", "Message", "Contact", "PreparedOn",
 			"SendOn", "Recipient", "Rule" };
 
 	public static void writeFile(String fileName, List<Message> messageList)
@@ -27,6 +30,7 @@ public class ExcelSheetWriter {
 		 * Hyperlink, RichTextString etc, in a format (HSSF, XSSF) independent way
 		 */
 		// Create a Sheet
+		 			
 		Sheet sheet = workbook.createSheet("Notifications");
 		// Create a Font for styling header cells
 		Font headerFont = workbook.createFont();
@@ -56,6 +60,7 @@ public class ExcelSheetWriter {
 			Row row = sheet.createRow(rowNum++);
 			row.createCell(cellNum++).setCellValue(message.getRule().getType().toString());
 			row.createCell(cellNum++).setCellValue(message.getEncounterType());
+			row.createCell(cellNum++).setCellValue(message.getEncounterDate());
 			row.createCell(cellNum++).setCellValue(message.getPreparedMessage());
 			row.createCell(cellNum++).setCellValue(message.getContact());
 			row.createCell(cellNum++).setCellValue(message.getPreparedOn());
@@ -77,4 +82,75 @@ public class ExcelSheetWriter {
 		// Closing the workbook
 		workbook.close();
 	}
+	
+	@SuppressWarnings("resource")
+	public static void appendFile(String fileName, List<Message> messageList) throws IOException{
+	       
+	
+	        try
+	        {
+	            File xlsxFile = new File(fileName);
+	            Workbook workbook = null;
+	            Sheet sheet = null;
+	     	    int rowCount = 1;
+	            if(xlsxFile.exists()){
+	            	 System.err.println("Append existing file ....");
+	                FileInputStream fileInputStream = new FileInputStream(xlsxFile);
+	                workbook = new XSSFWorkbook(fileInputStream);
+	                sheet =   workbook.getSheet("Notifications");
+	                rowCount = sheet.getLastRowNum();
+
+	            }else{
+	                System.err.println("Creating excel file ....");
+	                workbook = new XSSFWorkbook();
+	                sheet = workbook.createSheet("Notifications");
+	            }        
+	            FileOutputStream fileOut;
+	            try 
+	            {
+		        		// Create a Font for styling header cells
+		        		Font headerFont = workbook.createFont();
+		        		headerFont.setBold(true);
+		        		headerFont.setFontHeightInPoints((short) 12);
+		        		headerFont.setColor(IndexedColors.BLUE.getIndex());
+		        		// Create a CellStyle with the font
+		        		CellStyle headerCellStyle = workbook.createCellStyle();
+		        		headerCellStyle.setFont(headerFont);
+		        		// Create a Row
+		        		Row headerRow = sheet.createRow(0);
+		        		// Create cells
+		        		for (int i = 0; i < columns.length; i++) {
+		        			Cell cell = headerRow.createCell(i);
+		        			cell.setCellValue(columns[i]);
+		        			cell.setCellStyle(headerCellStyle);
+		        		}
+		 
+		        		// Create Other rows and cells with employees data
+		        		for (Message message : messageList) {
+		        			int cellNum = 0;
+		        			Row row = sheet.createRow(rowCount++);
+		        			row.createCell(cellNum++).setCellValue(message.getRule().getType().toString());
+		        			row.createCell(cellNum++).setCellValue(message.getEncounterType());
+		        			row.createCell(cellNum++).setCellValue(message.getPreparedMessage());
+		        			row.createCell(cellNum++).setCellValue(message.getContact());
+		        			row.createCell(cellNum++).setCellValue(message.getPreparedOn());
+		        			row.createCell(cellNum++).setCellValue(message.getSendOn());
+		        			row.createCell(cellNum++).setCellValue(message.getRecipient());
+		        			row.createCell(cellNum).setCellValue(message.getRule().toString());
+		        		}
+	            	
+	                fileOut = new FileOutputStream(xlsxFile,true);
+	                workbook.write(fileOut);
+	                fileOut.close();
+	            } catch (FileNotFoundException e) {
+	                e.printStackTrace();
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+
+	        }catch(java.lang.IllegalArgumentException illegalArgumentException){
+	             System.err.println(illegalArgumentException.getMessage());
+	        }            
+	    }
+	
 }

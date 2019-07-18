@@ -21,6 +21,7 @@ public class Observation {
 	private Long valueDatetime;
 	private String valueText;
 	private String uuid;
+	private Integer obsGroupId;
 
 	public int getObsId() {
 		return obsId;
@@ -140,6 +141,14 @@ public class Observation {
 
 	public void setValueText(String valueText) {
 		this.valueText = valueText;
+	}
+
+	public Integer getObsGroupId() {
+		return obsGroupId;
+	}
+
+	public void setObsGroupId(Integer obsGroupId) {
+		this.obsGroupId = obsGroupId;
 	}
 
 	/**

@@ -61,10 +61,19 @@ public class Patient extends BaseEntity {
 	private String landmark;
 	private long dateCreated;
 	private String uuid;
+	private String healthCenterName;
 
 	public Patient() {
 	}
 
+	public String getHealthCenterName() {
+		return healthCenterName;
+	}
+
+
+	public void setHealthCenterName(String healthCenterName) {
+		this.healthCenterName = healthCenterName;
+	}
 	/**
 	 * @return the personId
 	 */

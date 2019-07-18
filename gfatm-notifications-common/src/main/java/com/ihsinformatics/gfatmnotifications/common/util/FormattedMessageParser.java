@@ -15,18 +15,23 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.joda.time.DateTime;
+
 import com.ihsinformatics.gfatmnotifications.common.Context;
 import com.ihsinformatics.gfatmnotifications.common.model.BaseEntity;
 import com.ihsinformatics.gfatmnotifications.common.model.Encounter;
+import com.ihsinformatics.gfatmnotifications.common.model.Observation;
 import com.ihsinformatics.gfatmnotifications.common.service.SearchService;
 import com.ihsinformatics.util.ClassLoaderUtil;
 import com.ihsinformatics.util.CommandType;
@@ -93,8 +98,38 @@ public class FormattedMessageParser {
 						|| resultPropertyVal.matches(DateTimeUtil.SQL_DATETIME)) {
 					resultPropertyVal = getReadableDate(DateTimeUtil.fromSqlDateString(resultPropertyVal));
 				}
+				if (dateValidate(resultPropertyVal)) {
+					 resultPropertyVal =  new SimpleDateFormat(DateTimeUtil.DATE_FORMATE_WITH_MONTH).format(DateTimeUtil.fromSqlDateString(resultPropertyVal)); 
+				}
 				values = resultPropertyVal;
 				output.append(values);
+			}else if (isEntityValuePairWithCondition(token)){
+				String[] pair = token.split("\\.");
+				String entityName = pair[0];
+				String propertyName = pair[1];
+				String condition = pair[2];
+				String values = "";
+				String resultPropertyVal ="";
+				Object object = null ;
+				try {
+					entityName = String.valueOf(entityName.charAt(0)).toUpperCase()
+							+ entityName.substring(1, entityName.length());
+					 object = getMatchingClassObject(entityName, objects);
+					 resultPropertyVal = getPropertyValue(object, propertyName).toString();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}		
+				if (resultPropertyVal.isEmpty() || resultPropertyVal.equals("") || resultPropertyVal == null) {
+					values = getObsValues(object, propertyName);
+				}else{
+					values = resultPropertyVal;
+				}
+				if (condition.equals("day") && !values.equals("") ) {
+					 output.append(getDayName(values));
+				}else{
+					  output.append(values);
+				}
+
 			} else {
 				output.append(token);
 			}
@@ -103,6 +138,55 @@ public class FormattedMessageParser {
 		String result = parseSqlQueries(output.toString());
 		return result;
 	}
+	
+	public String getDayName(String timestamp){
+		  java.util.Date parsedDate = null;
+		try {
+			parsedDate = new SimpleDateFormat("yyyy-MM-dd").parse(timestamp);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		DateTime date=new DateTime(parsedDate.getTime());
+		return DaysInUrdu.valueOf(date.dayOfWeek().getAsText(Locale.getDefault()).toUpperCase()).toString();
+	}
+	
+	public  String  getObsValues(Object  object ,String propertyName ){
+		String  obsVal ="";
+		if (object instanceof  Encounter){
+ 			List<Observation> observationList =((Encounter) object).getObservations();
+ 			if ( observationList != null && observationList.size()>0 ) {
+ 				for (Observation observation :((Encounter) object).getObservations() ) {
+		 			if (ValidationUtil.variableMatchesWithConcept(propertyName, observation)) {
+		 				obsVal = getValOfDataType(observation); //observation.getValueDatetime().toString(); //
+		 				 break;
+		 			}
+	 		      }
+			}else{
+				System.out.print("no observations found against this encounter");
+			}
+ 		 }
+		return obsVal;
+	}
+	
+	public String getValOfDataType(Observation observation){
+			
+			if (observation.getValueBoolean() != null) {
+				return observation.getValueBoolean().toString();
+			}else if(observation.getValue() != null){		 
+			  return observation.getValue().toString();	
+			}else if(observation.getValueDatetime() != null){
+				return observation.getValueDatetime().toString();
+			}else if(observation.getValueNumeric() != null){
+				return observation.getValueNumeric().toString();
+			}
+			else if(observation.getValueCodedName() != null){
+				return observation.getValueCodedName().toString();
+			}
+			else{
+				return "";
+			}		
+		}
+	
 
 	@SuppressWarnings("deprecation")
 	/**
@@ -180,7 +264,7 @@ public class FormattedMessageParser {
 	public Object getPropertyValue(Object object, String fieldOrMethod) throws ReflectiveOperationException, NullPointerException {
 		Object value = "";
 		try {
-			Field field = object.getClass().getDeclaredField(fieldOrMethod);
+  			Field field = object.getClass().getDeclaredField(fieldOrMethod);
 			boolean accessible = field.isAccessible();
 			field.setAccessible(true);
 			value = field.get(object);
@@ -206,6 +290,9 @@ public class FormattedMessageParser {
 	 */
 	public boolean isEntityValuePair(String token) {
 		return token.matches("^[\\w]+\\.[\\w]+$");
+	}
+	public boolean isEntityValuePairWithCondition (String token) {
+		return token.matches("^[\\w]+\\.[\\w]+\\.[\\w]+$");
 	}
 
 	/**
@@ -262,4 +349,23 @@ public class FormattedMessageParser {
 		}
 		return true;
 	}
+	
+	
+	private static boolean dateValidate(String inputDate) {
+	    try {
+	        String[] datePattern = {DateTimeUtil.SQL_DATE, DateTimeUtil.SQL_DATETIME};
+	        for (String pattern : datePattern) {
+	            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+	            Date date = sdf.parse(inputDate);
+	            String formattedDate = sdf.format(date);
+	            if (inputDate.equals(formattedDate)) {
+	                return true;
+	            }
+	        }
+	    } catch (ParseException ex) {
+	        return false;
+	    }
+	    return false;
+	}
+	
 }

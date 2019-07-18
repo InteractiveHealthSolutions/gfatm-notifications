@@ -55,6 +55,9 @@ public class SmsContext {
 
 	// What time to start schedule on
 	public static Date SMS_SCHEDULE_START_TIME;
+	
+	// Ghd Representer contact 
+    public static String CONTACT_NUMBER;
 
 	static {
 		try {
@@ -72,6 +75,7 @@ public class SmsContext {
 		SMS_REMINDER_SCHEDULE_INTERVAL_IN_HOURS = Integer
 				.parseInt(Context.getProps().getProperty("sms.reminder.job.interval", "24"));
 		String timeStr = Context.getProps().getProperty("sms.job.start_time", "00:00:00");
+		CONTACT_NUMBER = Context.getProps().getProperty("ghdrepresenter.contact.number", "03320129932");
 		SMS_SCHEDULE_START_TIME = new Date();
 		Date scheduleTime = DateTimeUtil.fromString(timeStr, DateTimeUtil.detectDateFormat(timeStr));
 		SMS_SCHEDULE_START_TIME.setHours(scheduleTime.getHours());
@@ -120,8 +124,7 @@ public class SmsContext {
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 		con.setRequestMethod("POST");
 		con.setRequestProperty("Accept", "application/json");
-		con.setRequestProperty("Content-Type", "text/html; charset=UTF-8");
-		con.setRequestProperty("Authorization", "Basic " + SmsContext.SMS_API_KEY);
+		con.setRequestProperty("Authorization", "Basic aWhzc21zOnVsNjJ6eDM=");
 		con.setDoOutput(true);
 		int responseCode = con.getResponseCode();
 		StringBuilder message = new StringBuilder("\n").append("Sending 'POST' request to URL : ").append(url)

@@ -307,9 +307,10 @@ public class Context {
 		List<Map<String, Object>> list = null;
 		QueryRunner queryRunner = new QueryRunner();
 		builder = new GsonBuilder().registerTypeAdapter(Date.class, new DateDeserializer())
-				.registerTypeAdapter(Date.class, new DateSerializer()).setPrettyPrinting().serializeNulls();
+		           .registerTypeAdapter(Date.class, new DateSerializer()).setPrettyPrinting().serializeNulls();
 		try {
 			list = queryRunner.query(dbUtil.getConnection(), query, new MapListHandler());
+			//System.out.println("Fetch size: " + list.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -483,9 +484,9 @@ public class Context {
 	public static void loadPatients(DatabaseUtil dbUtil) {
 		StringBuilder query = new StringBuilder();
 		query.append(
-				"select pt.patient_id as personId, pn.given_name as givenName, pn.family_name as lastName, p.gender as gender, p.birthdate as birthdate, p.birthdate_estimated as estimated, ");
+				"select distinct pt.patient_id as personId, pn.given_name as givenName, pn.family_name as lastName, p.gender as gender, p.birthdate as birthdate, p.birthdate_estimated as estimated, ");
 		query.append(
-				"bp.value as birthplace, ms.value as maritalStatus, pcontact.value as primaryContact, hd.value as healthDistrict, hc.value as healthCenter, lang.value as motherTongue, nic.value as nationalID, oin.value as otherIdentificationNumber, tg.value as transgender, pat.value as patientType, pt.creator as creator, pt.date_created as dateCreated,pa.address1, pa.address2, pa.county_district as district, pa.city_village as cityVillage, pa.country, pa.address3 as landmark, pi.identifier as patientIdentifier, pil.name as patientIdentifierLocation, pi.uuid, cons.value_coded as consent, p.dead as dead from patient pt ");
+				"bp.value as birthplace, ms.value as maritalStatus, pcontact.value as primaryContact, hd.value as healthDistrict, hc.value as healthCenter, lhc.description as healthCenterName ,lang.value as motherTongue, nic.value as nationalID, oin.value as otherIdentificationNumber, tg.value as transgender, pat.value as patientType, pt.creator as creator, pt.date_created as dateCreated,pa.address1, pa.address2, pa.county_district as district, pa.city_village as cityVillage, pa.country, pa.address3 as landmark, pi.identifier as patientIdentifier, pil.name as patientIdentifierLocation, pi.uuid, cons.value_coded as consent, p.dead as dead from patient pt ");
 		query.append(
 				"inner join patient_identifier pi on pi.patient_id = pt.patient_id and pi.identifier_type = 3 and pi.voided = 0 ");
 		query.append("inner join person as p on p.person_id = pi.patient_id and p.voided = 0 ");
@@ -497,6 +498,7 @@ public class Context {
 				"left outer join person_attribute as hd on hd.person_id = p.person_id and hd.person_attribute_type_id = 6 and hd.voided = 0 ");
 		query.append(
 				"left outer join person_attribute as hc on hc.person_id = p.person_id and hc.person_attribute_type_id = 7 and hc.voided = 0 ");
+		query.append(" left outer join location as lhc on lhc.location_id = hc.value ");
 		query.append(
 				"left outer join person_attribute as pcontact on pcontact.person_id = p.person_id and pcontact.person_attribute_type_id = 8 and pcontact.voided = 0 ");
 		query.append(
@@ -526,6 +528,7 @@ public class Context {
 				"and (select ifnull(encounter_type, 0) from encounter where patient_id = pt.patient_id and voided = 0 order by encounter_datetime desc limit 1) <> 190 ");
 		query.append("and ifnull(cons.value_coded, 1065) = 1065 ");
 		log.info(query.toString());
+		
 		String jsonString = queryToJson(query.toString(), dbUtil);
 		Type listType = new TypeToken<List<Patient>>() {
 		}.getType();
@@ -587,6 +590,7 @@ public class Context {
 		if (type != null) {
 			filter.append("and e.encounter_type = " + type);
 		}
+		filter.append(" and e.encounter_id = (select encounter_id from encounter where encounter_type = e.encounter_type and patient_id = e.patient_id  order by encounter_datetime desc limit 0,1) ");
 		StringBuilder query = new StringBuilder();
 		query.append(
 				"select e.encounter_id as encounterId, et.name as encounterType, pi.identifier, concat(pn.given_name, ' ', pn.family_name) as patientName, e.encounter_datetime as encounterDatetime, l.name as encounterLocation, pc.value as patientContact, lc.value_reference as locationContact, pr.identifier as provider, upc.value as providerContact, u.username, e.date_created as dateCreated, e.uuid from encounter as e ");
@@ -684,7 +688,7 @@ public class Context {
 	public static List<Observation> getEncounterObservations(Encounter encounter, DatabaseUtil dbUtil) {
 		StringBuilder query = new StringBuilder();
 		query.append(
-				"select o.obs_id as obsId, e.patient_id as patientId, o.concept_id as conceptId, cn.name as conceptName, c.name as conceptShortName, o.encounter_id as encounterId, o.order_id as orderId, o.location_id as locationId, o.value_numeric as valueNumeric, o.value_coded as valueCoded, vn.name as valueCodedName, o.value_datetime as valueDatetime, o.value_text as valueText, o.uuid from obs as o ");
+				"select o.obs_id as obsId,o.obs_group_id as obsGroupId, e.patient_id as patientId, o.concept_id as conceptId, cn.name as conceptName, c.name as conceptShortName, o.encounter_id as encounterId, o.order_id as orderId, o.location_id as locationId, o.value_numeric as valueNumeric, o.value_coded as valueCoded, vn.name as valueCodedName, o.value_datetime as valueDatetime, o.value_text as valueText, o.uuid from obs as o ");
 		query.append("inner join encounter as e on e.encounter_id = o.encounter_id ");
 		query.append(
 				"inner join concept_name as c on c.concept_id = o.concept_id and c.locale = 'en' and c.concept_name_type = 'SHORT' ");
@@ -888,7 +892,28 @@ public class Context {
 		}
 		return null;
 	}
-
+	
+	public static Patient getPatientByIdentifier(String patientIdentifier, Integer generatedId,
+			DatabaseUtil dbUtil){
+			if (patients == null || getPatients().isEmpty()) {
+				loadPatients(dbUtil);
+			}
+			for (Patient patient : getPatients()) {
+					if (patient == null) {
+						continue;
+					}
+					if (patientIdentifier != null) {
+						if (patient.getPatientIdentifier().equalsIgnoreCase(patientIdentifier)) {
+							return patient;
+						}
+					} else {
+						if (patient.getPersonId().equals(generatedId)) {
+							return patient;
+						}
+					}
+			}
+		return null;
+	}
 	/**
 	 * @return the encounterTypes
 	 */
@@ -998,14 +1023,14 @@ public class Context {
 			// Should send next minute
 			returnDate = referenceDate.withHourOfDay(now.getHourOfDay()).withMinuteOfHour(now.getMinuteOfHour() + 1);
 		} else if (plusMinusUnit.equalsIgnoreCase("hours")) {
-			if (plusMinus < 0) {
+			if (plusMinus < 0) { 
 				returnDate = referenceDate.minusHours(plusMinus.intValue());
 			} else {
 				returnDate = referenceDate.plusHours(plusMinus.intValue());
 			}
 		} else if (plusMinusUnit.equalsIgnoreCase("days")) {
 			if (plusMinus < 0) {
-				returnDate = referenceDate.minusDays(plusMinus.intValue());
+				returnDate = referenceDate.minusDays(Math.abs(plusMinus.intValue()));
 			} else {
 				returnDate = referenceDate.plusDays(plusMinus.intValue());
 			}

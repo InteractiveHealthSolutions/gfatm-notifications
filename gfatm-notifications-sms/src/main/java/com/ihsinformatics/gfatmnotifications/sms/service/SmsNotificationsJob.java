@@ -75,22 +75,25 @@ public class SmsNotificationsJob extends AbstractSmsNotificationsJob {
 		try {
 			Context.initialize();
 			if (GfatmSmsNotificationsMain.DEBUG_MODE) {
-				setDateFrom(getDateFrom().minusDays(90));
+				setDateFrom(getDateFrom().minusDays(3));
 				setDateTo(DateTime.now());
 			}
 			run(getDateFrom(), getDateTo());
 			String fileName = Context.getOutputFilePath() + "gfatm-notifications-sms-"
 					+ DateTimeUtil.toString(new Date(), DateTimeUtil.SQL_DATE) + ".xlsx";
+			log.info("Message Logs size :: "+messages.size());
 			ExcelSheetWriter.writeFile(fileName, messages);
 			log.info("Message log written on Excel file.");
 			System.exit(0);
 		} catch (IOException e) {
 			log.warning("Unable to initialize context.");
 			throw new JobExecutionException(e.getMessage());
-		} catch (ParseException | InvalidFormatException e) {
+		} catch (ParseException e) {
 			log.warning("Unable to parse messages.");
 			throw new JobExecutionException(e.getMessage());
-		}
+		} catch (InvalidFormatException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	/*
@@ -118,8 +121,8 @@ public class SmsNotificationsJob extends AbstractSmsNotificationsJob {
 			// Fetch all the encounters for this type
 			List<Encounter> encounters = Context.getEncounters(from, to,
 					Context.getEncounterTypeId(rule.getEncounterType()), dbUtil);
-			log.info("Running rule: " + rule.toString() + " for " + encounters.size() + " Encounters");
-			executeRule(encounters, rule);
+				log.info("Running rule: " + rule.toString() + " for " + encounters.size() + " Encounters");
+				executeRule(encounters, rule);
 		}
 	}
 
@@ -150,6 +153,7 @@ public class SmsNotificationsJob extends AbstractSmsNotificationsJob {
 			boolean isRulePassed = false;
 			try {
 				isRulePassed = ValidationUtil.validateRule(rule, patient, location, encounter, dbUtil);
+				log.info("isRulePassed :: "+isRulePassed);
 			} catch (Exception e1) {
 				StringBuilder sb = new StringBuilder().append("Exception thrown while validating rule: ").append(rule)
 						.append(" against objects:\r\n").append("Patient:").append(patient.toString()).append("\r\n")
@@ -163,6 +167,7 @@ public class SmsNotificationsJob extends AbstractSmsNotificationsJob {
 				if (sendOn == null) {
 					continue;
 				}
+				//handle the 
 				String contact;
 				try {
 					contact = getContactFromRule(patient, location, encounter, rule);
@@ -189,9 +194,10 @@ public class SmsNotificationsJob extends AbstractSmsNotificationsJob {
 				}
 				String preparedMessage = messageParser.parseFormattedMessage(
 						SmsContext.getMessage(rule.getMessageCode()), encounter, patient, user, location);
-				messages.add(new Message(preparedMessage, contact, encounter.getEncounterType(),
+				messages.add(new Message(preparedMessage, contact, encounter.getEncounterType(),DateTimeUtil.toSqlDateTimeString(new Date(encounter.getDateCreated())),
 						DateTimeUtil.toSqlDateTimeString(new Date()), DateTimeUtil.toSqlDateTimeString(sendOn),
 						rule.getSendTo(), rule));
+				
 				log.info("Sending message: \"" + preparedMessage + "\" to " + contact);
 				if (!rule.getRecordOnly()) {
 					sendNotification(contact, preparedMessage, Context.PROJECT_NAME, sendOn);

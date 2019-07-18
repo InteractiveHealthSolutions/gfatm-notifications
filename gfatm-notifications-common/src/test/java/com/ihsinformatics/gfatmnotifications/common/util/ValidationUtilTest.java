@@ -29,6 +29,7 @@ public class ValidationUtilTest extends TestUtil {
 
 	private static Patient harry;
 	private static Patient fast;
+	private static Patient reminderTestPatient;
 	private static Location ihk;
 
 	@BeforeClass
@@ -36,8 +37,20 @@ public class ValidationUtilTest extends TestUtil {
 		harry = Context.getPatientByIdentifierOrGeneratedId(null, 7, dbUtil);
 		fast = Context.getPatientByIdentifierOrGeneratedId(null, 2601, dbUtil);
 		ihk = Context.getLocationByName("IHK-KHI", dbUtil);
+		reminderTestPatient = Context.getPatientByIdentifierOrGeneratedId(null, 1546, dbUtil);
 	}
-
+	
+	@Test
+	   public void shoudlValidateInitialCondition(){
+		   String conditions = "{\"entity\":\"Encounter\",\"property\":\"reason_for_call\",\"validate\":\"EQUALS\",\"value\":\"166097\"}AND{\"entity\":\"Encounter\",\"property\":\"facility_visit_date\",\"validate\":\"NOTNULL\"}AND{\"entity\":\"Patient\",\"property\":\"getHealthCenterId()\",\"validate\":\"QUERY\",\"value\":\"SELECT location_id FROM location WHERE name not in ( 'SGHNK-KHI','IHK-KHI','GHAURI-CLINIC','ICD-KTR');\"}";
+			
+		   Encounter encounter = Context.getEncounterByPatientIdentifier(fast.getPatientIdentifier(),
+					Context.getEncounterTypeId("FAST-Referral Form"), true, dbUtil);
+		   
+		  assertTrue(ValidationUtil.validateConditions(conditions, fast, ihk, encounter, dbUtil));
+		}
+	
+	
 	@Test
 	public void shouldValidateSingleNotNullCondition() {
 		String conditions = "{\"entity\":\"encounter\",\"property\":referral_site,\"validate\":\"NOTNULL\"}";
@@ -99,6 +112,31 @@ public class ValidationUtilTest extends TestUtil {
 				Context.getEncounterTypeId("FAST-Treatment Followup"), true, dbUtil);
 		assertTrue(ValidationUtil.validateConditions(stopConditions, fast, ihk, encounter, dbUtil));
 	}
+	
+	@Test
+	public void shouldStopCondition() { 
+		String stopConditions = "{\"entity\":\"Encounter\",\"encounter\":\"FAST-Presumptive\",\"property\": \"patient_id\", \"validate\":\"NOTNULL\"}OR{\"entity\":\"Encounter\",\"encounter\":\"FAST-Presumptive\",\"property\":\"screening_type\",\"validate\":\"EQUALS\",\"value\":\"165988\"}OR{\"entity\":\"patient\",\"property\":\"getPersonId\",\"validate\":\"QUERY\",\"value\":\"SELECT distinct pt.patient_id from patient as pt INNER JOIN encounter as pres on pres.encounter_type = 21 and pres.patient_id = pt.patient_id and pres.voided = 0 WHERE exists (select * from encounter as e where e.voided = 0 and e.encounter_type = 175 and e.patient_id = pt.patient_id and e.encounter_datetime > pres.encounter_datetime);\"}";
+		Encounter encounter = Context.getEncounterByPatientIdentifier(fast.getPatientIdentifier(),
+				Context.getEncounterTypeId("FAST-Presumptive"), true, dbUtil);
+		assertTrue(ValidationUtil.validateConditions(stopConditions, fast, ihk, encounter, dbUtil));
+	}
+
+	
+	@Test
+	public void shouldEncounterNotNullStopCondition() { 
+		String stopConditions = "{\"entity\":\"Encounter\",\"encounter\":\"FAST-Presumptive\", \"validate\":\"NOTNULL\"}";
+		Encounter encounter = Context.getEncounterByPatientIdentifier(fast.getPatientIdentifier(),
+				Context.getEncounterTypeId("FAST-Presumptive"), true, dbUtil);
+		assertTrue(ValidationUtil.validateConditions(stopConditions, fast, ihk, encounter, dbUtil));
+	}
+	
+	@Test
+	public void shouldEncounterNullStopCondition() { 
+		String stopConditions = "{\"entity\":\"Encounter\",\"encounter\":\"FAST-Presumptive\", \"validate\":\"NULL\"}";
+		Encounter encounter = Context.getEncounterByPatientIdentifier(fast.getPatientIdentifier(),
+				Context.getEncounterTypeId("FAST-Presumptive"), true, dbUtil);
+		assertFalse(ValidationUtil.validateConditions(stopConditions, fast, ihk, encounter, dbUtil));
+	}
 
 	@Test
 	public void shouldValidateStopConditionWithQuery() {
@@ -109,6 +147,8 @@ public class ValidationUtilTest extends TestUtil {
 		fast.setTreatmentSupporter("owais.hussain");
 		assertTrue(ValidationUtil.validateConditions(stopConditions, fast, ihk, encounter, dbUtil));
 	}
+	
+	
 
 	@Test
 	public void testIsValidPatientId() {

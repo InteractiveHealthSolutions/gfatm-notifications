@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InvalidPropertiesFormatException;
 import java.util.List;
@@ -51,6 +52,7 @@ public class ValidationUtil {
 	public static final String ENTITY_STRING = "entity";
 	public static final String PROPERTY_STRING = "property";
 	public static final String VALUE_STRING = "value";
+	public static final String MULTISELECT_STRING = "multiselect";
 
 	public static final String EQUALS_STRING = "EQUALS";
 	public static final String NOTEQUALS_STRING = "NOTEQUALS";
@@ -60,8 +62,12 @@ public class ValidationUtil {
 	public static final String NOTINQUERY_STRING = "NOTQUERY";
 	public static final String LIST_STRING = "LIST";
 	public static final String NOTNULL_STRING = "NOTNULL";
+	public static final String NULL_STRING = "NULL";
 	public static final String PRESENT_STRING = "PRESENT";
 	public static final String EXISTS_STRING = "EXISTS";
+	
+	public static final String EXISTENT_STRING = "exist";
+	public static final String BOOLEAN_STRING = "false";
 
 	private ValidationUtil() {
 	}
@@ -232,7 +238,7 @@ public class ValidationUtil {
 		Object[][] data = Context.getOpenmrsDb().getTableData(query);
 		for (Object[] row : data) {
 			for (Object obj : row) {
-				if (Objects.equals(obj, value)) {
+				if (Objects.equals(obj.toString(), value)) {
 					return true;
 				}
 			}
@@ -267,6 +273,7 @@ public class ValidationUtil {
 			DatabaseUtil dbUtil) {
 		boolean conditions = false;
 		boolean stopConditions = true;
+		
 		if ("".equals(rule.getConditions())) {
 			conditions = true;
 		} else {
@@ -276,7 +283,7 @@ public class ValidationUtil {
 			return false;
 		}
 		if ("".equals(rule.getStopConditions())) {
-			stopConditions = false;
+		  	stopConditions = false;
 		} else {
 			stopConditions = validateConditions(rule.getStopConditions(), patient, location, encounter, dbUtil);
 		}
@@ -323,6 +330,10 @@ public class ValidationUtil {
 			return true;
 		}
 		if (conditions.matches(orPattern)) {
+			JSONObject jsonObject = JsonUtil.getJSONObject(conditions);
+			String validationType = jsonObject.getString(VALIDATE_STRING);
+			if (validationType.equalsIgnoreCase("QUERY")) 
+				return validateSingleCondition(conditions, patient, location, encounter, dbUtil);
 			String[] orConditions = conditions.split("( )?OR( )?");
 			for (String condition : orConditions) {
 				// No need to proceed even if one condition is true
@@ -330,11 +341,13 @@ public class ValidationUtil {
 					return true;
 				}
 			}
+
 		} else if (conditions.matches(andPattern)) {
 			String[] andConditions = conditions.split("( )?AND( )?");
 			for (String condition : andConditions) {
 				// No need to proceed even if one condition is false
-				if (!validateSingleCondition(condition, patient, location, encounter, dbUtil)) {
+				boolean singleCOndition = validateSingleCondition(condition, patient, location, encounter, dbUtil);
+				if (!singleCOndition) {
 					return false;
 				}
 			}
@@ -360,18 +373,40 @@ public class ValidationUtil {
 		JSONObject jsonObject = JsonUtil.getJSONObject(condition);
 		// Prerequisites must be checked
 		if (!(jsonObject.has(ENTITY_STRING) && jsonObject.has(PROPERTY_STRING) && jsonObject.has(VALIDATE_STRING))) {
-			throw new MissingFormatArgumentException(
-					"Condition must contain all required keys: entity, property and validate.");
+			
+			 if (jsonObject.has("encounter")) {
+				String encounterName = jsonObject.getString("encounter");
+				encounter = Context.getEncounterByPatientIdentifier(patient.getPatientIdentifier(),
+						Context.getEncounterTypeId(encounterName), true, dbUtil);
+			      if(encounter == null && jsonObject.getString(VALIDATE_STRING).equalsIgnoreCase(NULL_STRING)){
+			    	  return true;
+			       }else if(encounter == null && jsonObject.getString(VALIDATE_STRING).equalsIgnoreCase(NOTNULL_STRING)){
+			    	   return false;
+			       }else if(encounter != null && jsonObject.getString(VALIDATE_STRING).equalsIgnoreCase(NOTNULL_STRING)){
+			    	   return true;
+			       }
+			       else if(encounter != null && jsonObject.getString(VALIDATE_STRING).equalsIgnoreCase(NULL_STRING)){
+			    	   return false;
+			       }else{
+			    		throw new MissingFormatArgumentException(
+								"Condition must contain all required keys: entity, property and validate.");
+			       }
+			}else{
+	    		throw new MissingFormatArgumentException(
+						"Condition doesn't contain encounter.");
+	       }
+		
 		}
 		// Check if there's another encounter to retrieve
 		if (jsonObject.has("encounter")) {
 			String encounterName = jsonObject.getString("encounter");
 			encounter = Context.getEncounterByPatientIdentifier(patient.getPatientIdentifier(),
 					Context.getEncounterTypeId(encounterName), true, dbUtil);
-			if (encounter == null) {
-				return true;
-			}
+			 if(encounter == null){
+		    	  return true;
+		       }	
 		}
+		
 		// Clear to proceed
 		String entity = jsonObject.getString(ENTITY_STRING);
 		String validationType = jsonObject.getString(VALIDATE_STRING);
@@ -380,24 +415,38 @@ public class ValidationUtil {
 		if (jsonObject.has(VALUE_STRING)) {
 			expectedValue = jsonObject.getString(VALUE_STRING);
 		}
+		
+		
+		
 		String actualValue = null;
+		List<Observation> obsList = new ArrayList<Observation>();
 		// In case of Encounter, search through observations
 		try {
 			if (entity.equalsIgnoreCase("encounter")) {
 				if (encounter.getObservations() == null) {
 					return false;
 				}
+			
 				for (Observation obs : encounter.getObservations()) {
 					// Search for the observation's concept name matching the variable name
 					if (variableMatchesWithConcept(property, obs)) {
-						actualValue = obs.getValueCoded() == null ? obs.getValue().toString()
-								: obs.getValueCoded().toString();
-						return validateValue(validationType, expectedValue, actualValue);
+						if (obs.getValueCoded() == null && obs.getValue() == null){}
+						else{
+							obsList.add(obs);
+						}
 					}
 				}
+				for (Observation observation : obsList) {
+							actualValue = observation.getValueCoded() == null ? observation.getValue().toString()
+																					: observation.getValueCoded().toString();							
+							if(validateValue(validationType, expectedValue, actualValue)){
+								return true;
+							}
+				}
+				return false;
 			}
 			// In case of Patient or Location, search for the defined property
-			else if (entity.equals("Patient")) {
+			else if (entity.equalsIgnoreCase("Patient")) {
 				actualValue = getEntityPropertyValue(patient, property);
 			} else if (entity.equals("Location")) {
 				actualValue = getEntityPropertyValue(location, property);
@@ -421,8 +470,11 @@ public class ValidationUtil {
 	 * @throws SQLException
 	 */
 	private static boolean validateValue(String validationType, String expectedValue, String actualValue)
-			throws InvalidPropertiesFormatException, SQLException {
-		switch (validationType) {
+    			throws InvalidPropertiesFormatException, SQLException {
+//        	    if (expectedValue == null || actualValue == null ) {
+//        	    		throw new InvalidPropertiesFormatException("expected and actual value does not empty.");	
+//        		}
+		switch (validationType.toUpperCase()) {
 		case EQUALS_STRING:
 			return expectedValue.equalsIgnoreCase(actualValue);
 		case NOTEQUALS_STRING:

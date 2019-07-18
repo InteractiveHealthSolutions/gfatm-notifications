@@ -20,7 +20,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import org.joda.time.DateTime;
 
 import com.ihsinformatics.gfatmnotifications.common.Context;
@@ -34,7 +33,6 @@ import com.ihsinformatics.gfatmnotifications.common.service.NotificationService;
 import com.ihsinformatics.gfatmnotifications.common.service.SearchService;
 import com.ihsinformatics.gfatmnotifications.common.util.FormattedMessageParser;
 import com.ihsinformatics.gfatmnotifications.common.util.ValidationUtil;
-import com.ihsinformatics.gfatmnotifications.sms.GfatmSmsNotificationsMain;
 import com.ihsinformatics.gfatmnotifications.sms.SmsContext;
 import com.ihsinformatics.util.DatabaseUtil;
 import com.ihsinformatics.util.DateTimeUtil;
@@ -67,9 +65,9 @@ public abstract class AbstractSmsNotificationsJob implements NotificationService
 			StringBuffer content = new StringBuffer();
 			content.append("send_to=" + addressTo + "&");
 			content.append("message=" + URLEncoder.encode(message, "UTF-8") + "&");
-			content.append(
-					"schedule_time=" + URLEncoder.encode(DateTimeUtil.toSqlDateTimeString(sendOn), "UTF-8") + "&");
-			content.append("project_id=" + Context.PROJECT_NAME + "&");
+			content.append("schedule_time=" + URLEncoder.encode(DateTimeUtil.toSqlDateTimeString(sendOn), "UTF-8") + "&");
+			content.append("project_id=" + Context.PROJECT_NAME .replaceAll(" ", "%20")+ "&");
+			
 			if (SmsContext.SMS_USE_SSL) {
 				response = SmsContext.postSecure(SmsContext.SMS_SERVER_ADDRESS, content.toString());
 			} else {
@@ -77,7 +75,6 @@ public abstract class AbstractSmsNotificationsJob implements NotificationService
 			}
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			log.log(Level.SEVERE, e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.log(Level.SEVERE, e.getMessage());
@@ -165,9 +162,9 @@ public abstract class AbstractSmsNotificationsJob implements NotificationService
 			DateTime now = new DateTime();
 			DateTime beforeNow = now.minusHours(SmsContext.SMS_ALERT_SCHEDULE_INTERVAL_IN_HOURS);
 			if (!(sendOn.getTime() >= beforeNow.getMillis() && sendOn.getTime() <= now.getMillis())) {
-				if (!GfatmSmsNotificationsMain.DEBUG_MODE) {
+				/*if (!GfatmSmsNotificationsMain.DEBUG_MODE) {
 					return null;
-				}
+				}*/
 			}
 		} catch (Exception e) {
 			log.warning(e.getMessage());

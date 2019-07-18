@@ -1,14 +1,14 @@
 /* Copyright(C) 2018 Interactive Health Solutions, Pvt. Ltd.
 
-This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
-published by the Free Software Foundation; either version 3 of the License (GPLv3), or any later version.
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as
+ published by the Free Software Foundation; either version 3 of the License (GPLv3), or any later version.
+ This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Interactive Health Solutions, info@ihsinformatics.com
-You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
+ See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program; if not, write to the Interactive Health Solutions, info@ihsinformatics.com
+ You can also access the license on the internet at the address: http://www.gnu.org/licenses/gpl-3.0.html
 
-Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
-*/
+ Interactive Health Solutions, hereby disclaims all copyright interest in this program written by the contributors.
+ */
 package com.ihsinformatics.gfatmnotifications.sms.service;
 
 import java.io.IOException;
@@ -66,17 +66,23 @@ public class ReminderSmsNotificationsJob extends AbstractSmsNotificationsJob {
 	 * @see org.quartz.Job#execute(org.quartz.JobExecutionContext)
 	 */
 	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+	public void execute(JobExecutionContext context)
+			throws JobExecutionException {
 		JobDataMap dataMap = context.getMergedJobDataMap();
-		ReminderSmsNotificationsJob smsJob = (ReminderSmsNotificationsJob) dataMap.get("smsReminderJob");
+		ReminderSmsNotificationsJob smsJob = (ReminderSmsNotificationsJob) dataMap
+				.get("smsReminderJob");
 		this.setDateFrom(smsJob.getDateFrom());
 		this.setDateTo(smsJob.getDateTo());
 		try {
 			Context.initialize();
-			run(null, null);
-			String fileName = Context.getOutputFilePath() + "gfatm-notifications-sms-"
-					+ DateTimeUtil.toString(new Date(), DateTimeUtil.SQL_DATE) + ".xlsx";
+			run(getDateFrom(), getDateTo());
+			String fileName = Context.getOutputFilePath()
+					+ "gfatm-notifications-sms-"
+					+ DateTimeUtil.toString(new Date(), DateTimeUtil.SQL_DATE)
+					+ ".xlsx";
 			ExcelSheetWriter.writeFile(fileName, messages);
+			//sendNotification(SmsContext.CONTACT_NUMBER, "Today reminder sms is sent.", "Daily testing SMS", new Date());
+			// //just add responsible person contact know
 			log.info("Message log written on Excel file.");
 			System.exit(0);
 		} catch (IOException e) {
@@ -99,7 +105,8 @@ public class ReminderSmsNotificationsJob extends AbstractSmsNotificationsJob {
 		List<Rule> rules = Context.getRuleBook().getSmsRules();
 		// Read each rule and execute the decision
 		for (Rule rule : rules) {
-			if (rule.getDatabaseConnectionName().toLowerCase().contains("datawarehouse")) {
+			if (rule.getDatabaseConnectionName().toLowerCase()
+					.contains("datawarehouse")) {
 				dbUtil = Context.getDwDb();
 			} else {
 				dbUtil = Context.getOpenmrsDb();
@@ -108,11 +115,19 @@ public class ReminderSmsNotificationsJob extends AbstractSmsNotificationsJob {
 				continue;
 			}
 			// Fetch all the encounters for this type
-			List<Encounter> encounters = Context.getEncounters(rule.getFetchDurationDate(),
-					new DateTime().minusHours(SmsContext.SMS_REMINDER_SCHEDULE_INTERVAL_IN_HOURS),
-					Context.getEncounterTypeId(rule.getEncounterType()), dbUtil);
-			log.info("Running rule: " + rule.toString() + " for " + encounters.size() + " Encounters");
-			executeRule(encounters, rule);
+			List<Encounter> encounters = Context
+					.getEncounters(
+							rule.getFetchDurationDate(),
+							new DateTime()
+									.minusHours(SmsContext.SMS_REMINDER_SCHEDULE_INTERVAL_IN_HOURS),
+							Context.getEncounterTypeId(rule.getEncounterType()),
+							dbUtil);
+			if (encounters != null) {
+				log.info("Running rule: " + rule.toString() + " for "
+						+ encounters.size() + " Encounters");
+				executeRule(encounters, rule);
+			}
+
 		}
 	}
 
@@ -124,46 +139,84 @@ public class ReminderSmsNotificationsJob extends AbstractSmsNotificationsJob {
 	 * #executeRule(java.util.List,
 	 * com.ihsinformatics.gfatmnotifications.common.model.Rule)
 	 */
-	public void executeRule(List<Encounter> encounters, Rule rule) throws ParseException {
+	public void executeRule(List<Encounter> encounters, Rule rule)
+			throws ParseException {
 		// patient to whom sms is already sent ?
 		Map<Integer, Patient> informedPatients = new HashMap<>();
 		for (Encounter encounter : encounters) {
-			Patient patient = Context.getPatientByIdentifierOrGeneratedId(encounter.getIdentifier(), null, dbUtil);
+	
+			// Patient patient =
+			// Context.getPatientByIdentifierOrGeneratedId(encounter.getIdentifier(),
+			// null, dbUtil);
+			if (encounter.getIdentifier().endsWith("YTTAY-8")|| encounter.getIdentifier().endsWith("IRSGX-3") || encounter.getIdentifier().endsWith("J6X17-3")) {
+				  System.out.println("Patient Exist ...");
+		   }
+			Patient patient = Context.getPatientByIdentifier(
+					encounter.getIdentifier(), null, dbUtil);
+		
 			if (patient == null) {
-				log.info("Patient does not exits against patient identifier " + encounter.getIdentifier());
+				log.info("Patient does not exits against patient identifier "
+						+ encounter.getIdentifier());
 				continue;
 			}
+			
+			if (patient.getPersonId() == 1519408 || patient.getPersonId() == 1596574 || patient.getPersonId() ==1588906) {
+				  System.out.println("Patient Exist ...");
+		   }
+	
+		
 			if (informedPatients.get(patient.getPersonId()) != null) {
-				log.info("SMS already sent to " + patient.getPatientIdentifier());
+				log.info("SMS already sent to "
+						+ patient.getPatientIdentifier());
 				continue;
 			}
-			Location location = Context.getLocationByName(encounter.getLocation(), dbUtil);
-			List<Observation> observations = Context.getEncounterObservations(encounter, dbUtil);
+			Location location = Context.getLocationByName(
+					encounter.getLocation(), dbUtil);
+			List<Observation> observations = Context.getEncounterObservations(
+					encounter, dbUtil);
 			encounter.setObservations(observations);
 			boolean isRulePassed = false;
 			try {
-				isRulePassed = ValidationUtil.validateRule(rule, patient, location, encounter, dbUtil);
+				isRulePassed = ValidationUtil.validateRule(rule, patient,
+						location, encounter, dbUtil);
 			} catch (Exception e1) {
-				StringBuilder sb = new StringBuilder().append("Exception thrown while validating rule: ").append(rule)
-						.append(" against objects:\r\n").append("Patient:").append(patient.toString()).append("\r\n")
-						.append("Encounter:").append(encounter.toString()).append("\r\n").append(e1.getMessage());
+				StringBuilder sb = new StringBuilder()
+						.append("Exception thrown while validating rule: ")
+						.append(rule).append(" against objects:\r\n")
+						.append("Patient:").append(patient.toString())
+						.append("\r\n").append("Encounter:")
+						.append(encounter.toString()).append("\r\n")
+						.append(e1.getMessage());
 				log.warning(sb.toString());
 				e1.printStackTrace();
 			}
 			if (isRulePassed) {
-				User user = Context.getUserByUsername(encounter.getUsername(), dbUtil);
+				// check the latest encounter
+
+				User user = Context.getUserByUsername(encounter.getUsername(),
+						dbUtil);
 				Date sendOn = getSendDate(rule, encounter);
+				
 				if (sendOn == null) {
 					continue;
 				}
+				// check the retrospective
+				if (!(DateTimeUtil.toSqlDateString(sendOn)
+						.equals(DateTimeUtil.toSqlDateString(new Date())))) {
+					continue;
+				}
+
 				String contact;
 				try {
-					contact = getContactFromRule(patient, location, encounter, rule);
+					contact = getContactFromRule(patient, location, encounter,
+							rule);
 					if (contact == null) {
-						StringBuilder sb = new StringBuilder().append(patient.getPatientIdentifier()).append(" ")
-								.append(rule);
+						StringBuilder sb = new StringBuilder()
+								.append(patient.getPatientIdentifier())
+								.append(" ").append(rule);
 						throw new NullPointerException(
-								"Contact number is either not available or invalid for transaction " + sb.toString());
+								"Contact number is either not available or invalid for transaction "
+										+ sb.toString());
 					}
 				} catch (NullPointerException e) {
 					log.warning(e.getMessage());
@@ -172,8 +225,10 @@ public class ReminderSmsNotificationsJob extends AbstractSmsNotificationsJob {
 				boolean isPatient = false;
 				if (rule.getSendTo().equalsIgnoreCase("patient")) {
 					isPatient = true;
-					if (Context.getRuleBook().getBlacklistedPatient().contains(patient.getPatientIdentifier())) {
-						log.info("Patient : " + patient.getPatientIdentifier() + " is in blocked list.");
+					if (Context.getRuleBook().getBlacklistedPatient()
+							.contains(patient.getPatientIdentifier())) {
+						log.info("Patient : " + patient.getPatientIdentifier()
+								+ " is in blocked list.");
 						continue;
 					}
 				}
@@ -181,13 +236,19 @@ public class ReminderSmsNotificationsJob extends AbstractSmsNotificationsJob {
 					informedPatients.put(patient.getPersonId(), patient);
 				}
 				String preparedMessage = messageParser.parseFormattedMessage(
-						SmsContext.getMessage(rule.getMessageCode()), encounter, patient, user, location);
-				messages.add(new Message(preparedMessage, contact, encounter.getEncounterType(),
-						DateTimeUtil.toSqlDateTimeString(new Date()), DateTimeUtil.toSqlDateTimeString(sendOn),
-						rule.getSendTo(), rule));
-				log.info("Sending message: \"" + preparedMessage + "\" to " + contact);
+						SmsContext.getMessage(rule.getMessageCode()),
+						encounter, patient, user, location);
+				messages.add(new Message(preparedMessage, contact, encounter
+						.getEncounterType(), DateTimeUtil
+						.toSqlDateTimeString(new Date(encounter
+								.getEncounterDate())), DateTimeUtil
+						.toSqlDateTimeString(new Date()), DateTimeUtil
+						.toSqlDateTimeString(sendOn), rule.getSendTo(), rule));
+				log.info("Sending message: \"" + preparedMessage + "\" to "
+						+ contact);
 				if (!rule.getRecordOnly()) {
-					sendNotification(contact, preparedMessage, Context.PROJECT_NAME, sendOn);
+					sendNotification(contact, preparedMessage,
+							Context.PROJECT_NAME, sendOn);
 				}
 			}
 		}
